@@ -65,7 +65,7 @@ public class Inputs : MonoBehaviour
 
         if (_jump)
         {
-            _movement.Jump();
+            _player.Jump();
             _jump = false;
         }
     }
