@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Entity
 {
     Rigidbody _rb;
     Movement _movement;
     Inputs _inputs;
 
-    [Header("Stats")]
-    [SerializeField] float _maxHp, _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _jumpStr, _stepStr;
+    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _jumpStr, _stepStr;
 
     [Header("Stamina costs")]
     [SerializeField] float _jumpCost, _stepCost;
 
-    float _hp, _stamina, _currentStaminaDelay;
+    float _stamina, _currentStaminaDelay = 0;
 
     void Awake()
     {
@@ -24,9 +24,10 @@ public class PlayerController : MonoBehaviour
         _inputs = new Inputs(_movement, this);
     }
 
-    private void Start()
+    protected override void Start()
     {
-        _hp = _maxHp;
+        base.Start();
+
         UIManager.instance.UpdateHpBar(_hp, _maxHp);
 
         _stamina = _maxStamina;
@@ -59,8 +60,25 @@ public class PlayerController : MonoBehaviour
     {
         if (_movement.IsGrounded() && CheckAndReduceStamina(_stepCost))
         {
-            _movement.Step(horizontalInput, verticalInput);
+            StartCoroutine(Stepping(horizontalInput, verticalInput));
         }
+    }
+
+    public IEnumerator Stepping(float horizontalInput, float verticalInput)
+    {
+        _inputs.inputUpdate = _inputs.Stepping;
+
+        _movement.Step(horizontalInput, verticalInput);
+
+        yield return new WaitForSeconds(0.02f);
+
+        while (_rb.velocity.magnitude > 0)
+        {
+            Debug.Log("a");
+            yield return null;
+        }
+
+        _inputs.inputUpdate = _inputs.Unpaused;
     }
 
     void StaminaRegeneration()
@@ -92,5 +110,17 @@ public class PlayerController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public override void TakeDamage(float amount)
+    {
+        base.TakeDamage(amount);
+
+        UIManager.instance.UpdateHpBar(_hp);
+    }
+
+    public override void Die()
+    {
+        throw new System.NotImplementedException();
     }
 }

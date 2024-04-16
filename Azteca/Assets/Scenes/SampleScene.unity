@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -609,7 +609,6 @@ GameObject:
   - component: {fileID: 531128796}
   - component: {fileID: 531128799}
   - component: {fileID: 531128798}
-  - component: {fileID: 531128797}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -632,27 +631,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1620843371}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &531128797
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 531128795}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &531128798
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1242,9 +1220,9 @@ MonoBehaviour:
   _maxStamina: 100
   _staminaRegenRate: 5
   _staminaRegenDelay: 1
-  _speed: 10
+  _speed: 5
   _jumpStr: 500
-  _stepStr: 500
+  _stepStr: 750
   _jumpCost: 5
   _stepCost: 10
 --- !u!4 &1620843371

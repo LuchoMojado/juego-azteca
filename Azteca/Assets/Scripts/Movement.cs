@@ -56,13 +56,13 @@ public class Movement : MonoBehaviour
             cameraForward = Camera.main.transform.forward;
             cameraForward.MakeHorizontal();
             dir = -cameraForward;
-            Debug.Log(dir.y);
         }
         else
         {
             dir = GetDir(horizontalInput, verticalInput, out cameraForward);
         }
-        
+
+        _myRB.velocity = Vector3.zero;
         _myRB.AddForce(dir * _stepStrength);
         _playerTransform.forward = cameraForward;
     }
@@ -78,8 +78,8 @@ public class Movement : MonoBehaviour
     {
         var cameraForward = Camera.main.transform.forward;
         var cameraRight = Camera.main.transform.right;
-        cameraForward.y = 0;
-        cameraRight.y = 0;
+        cameraForward.MakeHorizontal();
+        cameraRight.MakeHorizontal();
 
         Vector3 direction = cameraForward * vInput + cameraRight * hInput;
 

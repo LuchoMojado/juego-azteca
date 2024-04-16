@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inputs : MonoBehaviour
+public class Inputs
 {
     public System.Action inputUpdate;
     float _inputHorizontal, _inputVertical;
@@ -44,6 +44,22 @@ public class Inputs : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _jump = true;
+        }
+    }
+
+    public void Stepping()
+    {
+        _inputMouseX = Input.GetAxisRaw("Mouse X");
+
+        _inputMouseY = Input.GetAxisRaw("Mouse Y");
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            //UIManager.instance.SetPauseMenu(true);
+            inputUpdate = Paused;
         }
     }
 
