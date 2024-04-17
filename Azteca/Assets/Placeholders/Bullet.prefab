@@ -120,5 +120,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0, z: 0}
   damage: 0
-  _speed: 15
+  _speed: 20
   _deathTimer: 5
