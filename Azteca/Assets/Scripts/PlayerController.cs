@@ -9,10 +9,15 @@ public class PlayerController : Entity
     Movement _movement;
     Inputs _inputs;
 
-    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _jumpStr, _stepStr;
+    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _speedOnCast, _jumpStr, _stepStr, _stepStopVelocity;
 
     [Header("Stamina costs")]
-    [SerializeField] float _jumpCost, _stepCost;
+    [SerializeField] float _jumpCost, _stepCost, _sunBaseCost, _sunHoldCost;
+
+    [Header("Placeholder")]
+    [SerializeField] SunMagicPlaceholder _sunMagic;
+    [SerializeField] Transform _magicSpawnPos;
+    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate;
 
     float _stamina, _currentStaminaDelay = 0;
 
@@ -20,7 +25,7 @@ public class PlayerController : Entity
     {
         _rb = GetComponent<Rigidbody>();
 
-        _movement = new Movement(transform, _rb, _speed, _jumpStr, _stepStr);
+        _movement = new Movement(transform, _rb, _speed, _speedOnCast, _jumpStr, _stepStr);
         _inputs = new Inputs(_movement, this);
     }
 
@@ -72,13 +77,43 @@ public class PlayerController : Entity
 
         yield return new WaitForSeconds(0.02f);
 
-        while (_rb.velocity.magnitude > 0)
+        while (_rb.velocity.magnitude > _stepStopVelocity)
         {
-            Debug.Log("a");
             yield return null;
         }
 
         _inputs.inputUpdate = _inputs.Unpaused;
+    }
+
+    public void ActivateSunMagic()
+    {
+        if (_movement.IsGrounded() && CheckAndReduceStamina(_sunBaseCost))
+        {
+            StartCoroutine(SunMagic());
+        }
+    }
+
+    public IEnumerator SunMagic()
+    {
+        _sunMagic.gameObject.SetActive(true);
+        _sunMagic.damage = _sunBaseDamage;
+        _movement.Casting();
+
+        while (_inputs.attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        {
+            var lookAt = Camera.main.transform.forward;
+            lookAt.MakeHorizontal();
+            transform.forward = lookAt;
+
+            _sunMagic.damage += _sunDamageGrowRate * Time.deltaTime;
+
+            yield return null;
+        }
+
+        _inputs.inputUpdate = _inputs.Unpaused;
+        _inputs.attack = false;
+        _movement.StopCasting();
+        _sunMagic.gameObject.SetActive(false);
     }
 
     void StaminaRegeneration()

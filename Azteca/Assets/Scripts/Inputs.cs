@@ -10,6 +10,7 @@ public class Inputs
     Movement _movement;
     PlayerController _player;
     bool _jump;
+    public bool attack;
 
     public Inputs(Movement movement, PlayerController player)
     {
@@ -45,10 +46,21 @@ public class Inputs
         {
             _jump = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            attack = true;
+            _player.ActivateSunMagic();
+            inputUpdate = Casting;
+        }
     }
 
     public void Stepping()
     {
+        _inputHorizontal = 0;
+
+        _inputVertical = 0;
+
         _inputMouseX = Input.GetAxisRaw("Mouse X");
 
         _inputMouseY = Input.GetAxisRaw("Mouse Y");
@@ -60,6 +72,46 @@ public class Inputs
             Cursor.visible = true;
             //UIManager.instance.SetPauseMenu(true);
             inputUpdate = Paused;
+        }
+    }
+
+    public void Casting()
+    {
+        _inputHorizontal = Input.GetAxis("Horizontal");
+
+        _inputVertical = Input.GetAxis("Vertical");
+
+        _inputMouseX = Input.GetAxisRaw("Mouse X");
+
+        _inputMouseY = Input.GetAxisRaw("Mouse Y");
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            //UIManager.instance.SetPauseMenu(true);
+            inputUpdate = Paused;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _player.Step(_inputHorizontal, _inputVertical);
+            attack = false;
+            inputUpdate = Unpaused;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _jump = true;
+            attack = false;
+            inputUpdate = Unpaused;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            attack = false;
+            inputUpdate = Unpaused;
         }
     }
 

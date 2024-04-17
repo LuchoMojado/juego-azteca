@@ -2,22 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Movement
 {
     public delegate void FloatsDelegate(float a, float b);
-    public event FloatsDelegate OnRotation;
+    //public event FloatsDelegate OnRotation;
 
-    float _currentSpeed, _normalSpeed, _sprintSpeed, _jumpStrength, _stepStrength;
+    float _currentSpeed, _normalSpeed, _speedOnCast, _jumpStrength, _stepStrength;
     Transform _playerTransform;
     Rigidbody _myRB;
 
-    public Movement(Transform transform, Rigidbody rigidbody, float speed, float jumpStrength, float stepStrength)
+    public Movement(Transform transform, Rigidbody rigidbody, float speed, float speedOnCast, float jumpStrength, float stepStrength)
     {
         _playerTransform = transform;
         _myRB = rigidbody;
         _currentSpeed = speed;
         _normalSpeed = speed;
-        _sprintSpeed = speed * 1.5f;
+        _speedOnCast = speedOnCast;
         _jumpStrength = jumpStrength;
         _stepStrength = stepStrength;
     }
@@ -32,15 +32,15 @@ public class Movement : MonoBehaviour
         _myRB.MovePosition(_playerTransform.position + _currentSpeed * Time.fixedDeltaTime * dir);
     }
 
-    /*public void Sprint()
+    public void Casting()
     {
-        _currentSpeed = _sprintSpeed;
+        _currentSpeed = _speedOnCast;
     }
 
-    public void StopSprint()
+    public void StopCasting()
     {
         _currentSpeed = _normalSpeed;
-    }*/
+    }
 
     public void Jump()
     {
@@ -61,6 +61,8 @@ public class Movement : MonoBehaviour
         {
             dir = GetDir(horizontalInput, verticalInput, out cameraForward);
         }
+
+        dir.Normalize();
 
         _myRB.velocity = Vector3.zero;
         _myRB.AddForce(dir * _stepStrength);
