@@ -28,8 +28,7 @@ public class Projectile : MonoBehaviour
         if (other.TryGetComponent(out PlayerController player))
         {
             player.TakeDamage(damage);
+            Destroy(gameObject);
         }
-
-        Destroy(gameObject);
     }
 }

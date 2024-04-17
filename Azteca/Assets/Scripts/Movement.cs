@@ -22,13 +22,15 @@ public class Movement
         _stepStrength = stepStrength;
     }
 
-    public void Move(float horizontalInput, float verticalInput)
+    public void Move(float horizontalInput, float verticalInput, bool changeForward)
     {
         if (horizontalInput == 0 && verticalInput == 0) return;
 
         var dir = GetDir(horizontalInput, verticalInput);
 
-        _playerTransform.forward = dir;
+        if(changeForward)
+            _playerTransform.forward = dir;
+
         _myRB.MovePosition(_playerTransform.position + _currentSpeed * Time.fixedDeltaTime * dir);
     }
 

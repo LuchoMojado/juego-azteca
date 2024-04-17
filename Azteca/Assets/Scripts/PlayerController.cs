@@ -101,19 +101,19 @@ public class PlayerController : Entity
         _sunMagic.damage = _sunBaseDamage;
         _movement.Casting();
 
-        while (_inputs.attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        while (_inputs.Attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
         {
             var lookAt = Camera.main.transform.forward;
             lookAt.MakeHorizontal();
             transform.forward = lookAt;
 
+            _sunMagic.pos = _magicSpawnPos;
             _sunMagic.damage += _sunDamageGrowRate * Time.deltaTime;
 
             yield return null;
         }
 
-        _inputs.inputUpdate = _inputs.Unpaused;
-        _inputs.attack = false;
+        _inputs.Attack = false;
         _movement.StopCasting();
         _sunMagic.gameObject.SetActive(false);
     }
@@ -153,6 +153,7 @@ public class PlayerController : Entity
     {
         base.TakeDamage(amount);
 
+        _inputs.Attack = false;
         UIManager.instance.UpdateBar(UIManager.Bar.PlayerHp, _hp);
     }
 

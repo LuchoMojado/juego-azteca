@@ -10,7 +10,33 @@ public class Inputs
     Movement _movement;
     PlayerController _player;
     bool _jump;
-    public bool attack;
+    bool _attack = false;
+
+    public bool Attack
+    {
+        get
+        {
+            return _attack;
+        }
+
+        set
+        {
+            if (value == !_attack)
+            {
+                if (value)
+                {
+                    _attack = value;
+                    inputUpdate = Casting;
+                    _player.ActivateSunMagic();
+                }
+                else
+                {
+                    _attack = value;
+                    inputUpdate = Unpaused;
+                }
+            }
+        }
+    }
 
     public Inputs(Movement movement, PlayerController player)
     {
@@ -49,9 +75,7 @@ public class Inputs
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            attack = true;
-            _player.ActivateSunMagic();
-            inputUpdate = Casting;
+            Attack = true;
         }
     }
 
@@ -97,20 +121,20 @@ public class Inputs
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _player.Step(_inputHorizontal, _inputVertical);
-            attack = false;
+            Attack = false;
             inputUpdate = Unpaused;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _jump = true;
-            attack = false;
+            Attack = false;
             inputUpdate = Unpaused;
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            attack = false;
+            Attack = false;
             inputUpdate = Unpaused;
         }
     }
@@ -129,7 +153,7 @@ public class Inputs
 
     public void InputsFixedUpdate()
     {
-        _movement.Move(_inputHorizontal, _inputVertical);
+        _movement.Move(_inputHorizontal, _inputVertical, !Attack);
 
         if (_jump)
         {
