@@ -18,26 +18,19 @@ public class SunMagicPlaceholder : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Entity entity))
-        {
-            if (entity.TryGetComponent(out PlayerController player))
-            {
-                return;
-            }
+        Debug.Log("hit");
 
-            _target = entity;
+        if (other.TryGetComponent(out TestEnemy enemy))
+        {
+            Debug.Log("hit en enemigo");
+            _target = enemy;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out Entity entity))
+        if (other.TryGetComponent(out TestEnemy entity))
         {
-            if (entity.TryGetComponent(out PlayerController player))
-            {
-                return;
-            }
-
             _target = null;
         }
     }

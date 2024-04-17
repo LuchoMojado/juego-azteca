@@ -6,32 +6,60 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    [SerializeField] Slider _hpBar, _staminaBar;
+    [SerializeField] Slider _hpBar, _staminaBar, _bossHpBar;
+
+    public enum Bar
+    {
+        PlayerHp,
+        PlayerStamina,
+        BossHp
+    }
 
     private void Awake()
     {
         instance = this;
     }
 
-    public void UpdateHpBar(float newValue)
+    public void UpdateBar(Bar bar, float newValue)
     {
-        _hpBar.value = newValue;
+        switch (bar)
+        {
+            case Bar.PlayerHp:
+                _hpBar.value = newValue;
+                break;
+            case Bar.PlayerStamina:
+                _staminaBar.value = newValue;
+                break;
+            case Bar.BossHp:
+                _bossHpBar.value = newValue;
+                break;
+            default:
+                break;
+        }
+    }
+    public void UpdateBar(Bar bar, float newValue, float maxValue)
+    {
+        switch (bar)
+        {
+            case Bar.PlayerHp:
+                _hpBar.maxValue = maxValue;
+                _hpBar.value = newValue;
+                break;
+            case Bar.PlayerStamina:
+                _staminaBar.maxValue = maxValue;
+                _staminaBar.value = newValue;
+                break;
+            case Bar.BossHp:
+                _bossHpBar.maxValue = maxValue;
+                _bossHpBar.value = newValue;
+                break;
+            default:
+                break;
+        }
     }
 
-    public void UpdateHpBar(float newValue, float maxValue)
+    public void TurnOffBossBar()
     {
-        _hpBar.value = newValue;
-        _hpBar.maxValue = maxValue;
-    }
-
-    public void UpdateStaminaBar(float newValue)
-    {
-        _staminaBar.value = newValue;
-    }
-
-    public void UpdateStaminaBar(float newValue, float maxValue)
-    {
-        _staminaBar.value = newValue;
-        _staminaBar.maxValue = maxValue;
+        _bossHpBar.gameObject.SetActive(false);
     }
 }

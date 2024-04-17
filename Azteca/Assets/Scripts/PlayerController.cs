@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : Entity
 {
@@ -33,10 +35,10 @@ public class PlayerController : Entity
     {
         base.Start();
 
-        UIManager.instance.UpdateHpBar(_hp, _maxHp);
+        UIManager.instance.UpdateBar(UIManager.Bar.PlayerHp, _hp, _maxHp);
 
         _stamina = _maxStamina;
-        UIManager.instance.UpdateStaminaBar(_stamina, _maxStamina);
+        UIManager.instance.UpdateBar(UIManager.Bar.PlayerStamina, _stamina, _maxStamina);
 
         _inputs.inputUpdate = _inputs.Unpaused;
     }
@@ -123,7 +125,7 @@ public class PlayerController : Entity
             if (_currentStaminaDelay <= 0)
             {
                 _stamina += Time.deltaTime * _staminaRegenRate;
-                UIManager.instance.UpdateStaminaBar(_stamina);
+                UIManager.instance.UpdateBar(UIManager.Bar.PlayerStamina, _stamina);
             }
             else
             {
@@ -137,7 +139,7 @@ public class PlayerController : Entity
         if (_stamina >= cost)
         {
             _stamina -= cost;
-            UIManager.instance.UpdateStaminaBar(_stamina);
+            UIManager.instance.UpdateBar(UIManager.Bar.PlayerStamina, _stamina);
             _currentStaminaDelay = _staminaRegenDelay;
             return true;
         }
@@ -151,11 +153,11 @@ public class PlayerController : Entity
     {
         base.TakeDamage(amount);
 
-        UIManager.instance.UpdateHpBar(_hp);
+        UIManager.instance.UpdateBar(UIManager.Bar.PlayerHp, _hp);
     }
 
     public override void Die()
     {
-        throw new System.NotImplementedException();
+        SceneManager.LoadScene(0);
     }
 }

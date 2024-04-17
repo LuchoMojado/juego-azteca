@@ -9,11 +9,21 @@ public class TestEnemy : Entity
     [SerializeField] PlayerController _player;
     [SerializeField] Projectile _bullet;
 
+    Rigidbody _rb;
+
     float _timer, _currentCD = 0;
+    bool _chasing = false;
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+    }
 
     protected override void Start()
     {
         base.Start();
+
+        UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp, _maxHp);
 
         _timer = _switchActionTimer * 2;
     }
@@ -24,10 +34,11 @@ public class TestEnemy : Entity
 
         if (_timer > _switchActionTimer)
         {
-            Chase();
+            _chasing = true;
         }
         else if (_timer > 0)
         {
+            _chasing = false;
             Shoot();
         }
         else
@@ -36,13 +47,20 @@ public class TestEnemy : Entity
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (_chasing) 
+        { 
+            Chase();
+        }
+    }
     public void Chase()
     {
         var dir = GetPlayerDir();
         dir.MakeHorizontal();
 
         transform.forward = dir;
-        transform.position += dir * _speed * Time.deltaTime;
+        _rb.MovePosition(transform.position + _speed * Time.fixedDeltaTime * dir);
     }
 
     public void Shoot()
@@ -73,8 +91,16 @@ public class TestEnemy : Entity
         return dir.normalized;
     }
 
+    public override void TakeDamage(float amount)
+    {
+        base.TakeDamage(amount);
+        print("taking damage: " + amount);
+        UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp);
+    }
+
     public override void Die()
     {
+        UIManager.instance.TurnOffBossBar();
         Destroy(gameObject);
     }
 
