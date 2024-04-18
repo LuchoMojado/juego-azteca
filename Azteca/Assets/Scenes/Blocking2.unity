@@ -9888,20 +9888,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: TuboBlender (1) Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 542971159064375090, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.026227
+      value: 0.021
       objectReference: {fileID: 0}
     - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4983
+      value: 2.881
       objectReference: {fileID: 0}
     - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.2837
+      value: -6.284
       objectReference: {fileID: 0}
     - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
         type: 3}
