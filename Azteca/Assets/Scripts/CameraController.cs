@@ -99,15 +99,18 @@ public class CameraController : MonoBehaviour
             if (dirTest.sqrMagnitude <= _minDistance * _minDistance)
             {
                 _camPos = transform.position + _direction * _minDistance;
+                Debug.Log("aaaaa");
             }
             else
             {
                 _camPos = transform.position + dirTest;
+                Debug.Log("bbbb");
             }
         }
         else
         {
             _camPos = transform.position + _direction * _maxDistance;
+            Debug.Log("ccc");
         }
 
         _myCamera.transform.position = _camPos;
