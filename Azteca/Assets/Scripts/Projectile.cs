@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [HideInInspector] public Vector3 moveDirection;
-    [HideInInspector] public float damage;
+    [HideInInspector] public float damage, speed;
 
-    [SerializeField] float _speed, _deathTimer;
+    [SerializeField] float _deathTimer;
 
     void Update()
     {
-        transform.position += moveDirection * _speed * Time.deltaTime;
+        transform.position += transform.forward * speed * Time.deltaTime;
 
         if (_deathTimer <= 0)
         {
@@ -25,10 +24,16 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.layer == 3)
+        {
+            return;
+        }
+
         if (other.TryGetComponent(out PlayerController player))
         {
             player.TakeDamage(damage);
-            Destroy(gameObject);
         }
+
+        Destroy(gameObject);
     }
 }

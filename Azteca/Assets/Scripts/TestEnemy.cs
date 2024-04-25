@@ -70,7 +70,7 @@ public class TestEnemy : Entity
         if (_currentCD <= 0)
         {
             var bullet = Instantiate(_bullet, transform.position, Quaternion.identity);
-            bullet.moveDirection = dir;
+            bullet.speed = 15;
             bullet.damage = _bulletDamage;
 
             _currentCD = _shootCooldown;

@@ -591,7 +591,7 @@ GameObject:
   - component: {fileID: 340518185}
   - component: {fileID: 340518184}
   - component: {fileID: 340518183}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Obsidian Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -613,18 +613,26 @@ MonoBehaviour:
   _maxHp: 100
   _player: {fileID: 1105152142}
   placeholderSwingHitboxFeedback: {fileID: 69919200}
-  _swingForwardForce: 1000
-  _swingHitboxDelay: 0.05
-  _swingDamage: 20
-  _swingDuration: 0.3
-  _swingRecovery: 1.5
   playerMask:
     serializedVersion: 2
     m_Bits: 64
   _meleeHitboxCenter: {fileID: 732383136}
+  _swingForwardForce: 1000
+  _swingPreparation: 0
+  _swingDamage: 20
+  _swingDuration: 0.3
+  _swingRecovery: 1.5
   _meleeBoxX: 1
   _meleeBoxY: 1
   _meleeBoxZ: 1
+  _shard: {fileID: 1309916077143301227, guid: 2f4126087bf62dc409dc61c37966898a, type: 3}
+  _shardAmount: 3
+  _shardsPreparation: 1
+  _shardAngle: 10
+  _shardSpeed: 20
+  _shardDamage: 10
+  _shardsInterval: 0.5
+  _shardsRecovery: 1
 --- !u!54 &340518184
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -693,6 +701,58 @@ Transform:
   - {fileID: 732383136}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &405988675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 405988677}
+  - component: {fileID: 405988676}
+  m_Layer: 0
+  m_Name: CameraController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &405988676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405988675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d351375a0c53b244daefa288ec551204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myTarget: {fileID: 499068057}
+  _mouseSensitivity: 100
+  _minDistance: 0.25
+  _maxDistance: 5
+  _minRotation: -80
+  _maxRotation: 80
+  _hitOffset: 0.1
+--- !u!4 &405988677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405988675}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 919527465}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &457399084
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,7 +1314,6 @@ GameObject:
   - component: {fileID: 919527464}
   - component: {fileID: 919527463}
   - component: {fileID: 919527462}
-  - component: {fileID: 919527461}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1262,25 +1321,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &919527461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919527460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d351375a0c53b244daefa288ec551204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myTarget: {fileID: 499068057}
-  _mouseSensitivity: 100
-  _minDistance: 0.25
-  _maxDistance: 5
-  _minRotation: -80
-  _maxRotation: 80
-  _hitOffset: 0.1
 --- !u!114 &919527462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1397,7 +1437,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 405988677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &944109107
 GameObject:
@@ -2432,9 +2472,9 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1033432184}
-  - {fileID: 919527465}
   - {fileID: 1105152143}
   - {fileID: 1798852976}
   - {fileID: 944109111}
   - {fileID: 590120398}
   - {fileID: 340518186}
+  - {fileID: 405988677}

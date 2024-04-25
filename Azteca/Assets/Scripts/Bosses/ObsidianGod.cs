@@ -10,12 +10,17 @@ public class ObsidianGod : Entity
 
     public GameObject placeholderSwingHitboxFeedback;
 
-    [SerializeField] float _swingForwardForce, _swingHitboxDelay, _swingDamage, _swingDuration, _swingRecovery;
     [SerializeField] LayerMask playerMask;
-    [SerializeField] Transform _meleeHitboxCenter;
 
-    [SerializeField] float _meleeBoxX, _meleeBoxY, _meleeBoxZ;
+    [Header("Swing")]
+    [SerializeField] Transform _meleeHitboxCenter;
+    [SerializeField] float _swingForwardForce, _swingPreparation, _swingDamage, _swingDuration, _swingRecovery, _meleeBoxX, _meleeBoxY, _meleeBoxZ;
     Vector3 _meleeBox;
+
+    [Header("Shards")]
+    [SerializeField] Projectile _shard;
+    [SerializeField] int _shardAmount;
+    [SerializeField] float _shardsPreparation, _shardAngle, _shardSpeed, _shardDamage, _shardsInterval, _shardsRecovery;
 
     bool _takingAction = false;
 
@@ -36,14 +41,16 @@ public class ObsidianGod : Entity
 
             if (_timer <= 0)
             {
-                Swing();
+                Shards(3);
             }
         }
     }
 
-    void Shards()
+    void Shards(int waves)
     {
+        _takingAction = true;
 
+        StartCoroutine(ThrowingShards(_shardAmount + waves));
     }
 
     void Spikes()
@@ -64,13 +71,15 @@ public class ObsidianGod : Entity
     void Swing()
     {
         _takingAction = true;
-        _rb.AddForce(transform.forward * _swingForwardForce);
+        
         StartCoroutine(Swinging());
     }
 
     IEnumerator Swinging()
     {
-        yield return new WaitForSeconds(_swingHitboxDelay);
+        yield return new WaitForSeconds(_swingPreparation);
+
+        _rb.AddForce(transform.forward * _swingForwardForce);
 
         placeholderSwingHitboxFeedback.SetActive(true);
 
@@ -94,6 +103,34 @@ public class ObsidianGod : Entity
         placeholderSwingHitboxFeedback.SetActive(false);
 
         yield return new WaitForSeconds(_swingRecovery);
+
+        _takingAction = false;
+        _timer = 1;
+    }
+
+    IEnumerator ThrowingShards(int shardLimit)
+    {
+        yield return new WaitForSeconds(_shardsPreparation);
+
+        for (int i = _shardAmount; i < shardLimit; i++)
+        {
+            var baseRotationChange = i % 2 == 0 ? _shardAngle * 0.5f : 0;
+
+            for (int j = 0; j < i; j++)
+            {
+                var individualRotationChange = j % 2 == 0 ? _shardAngle * Mathf.CeilToInt(j * 0.5f) : -_shardAngle * Mathf.CeilToInt(j * 0.5f);
+
+                var finalRotation = transform.rotation.AddYRotation(baseRotationChange + individualRotationChange);
+
+                var shard = Instantiate(_shard, transform.position, finalRotation);
+                shard.speed = _shardSpeed;
+                shard.damage = _shardDamage;
+            }
+
+            yield return new WaitForSeconds(_shardsInterval);
+        }
+
+        yield return new WaitForSeconds(_shardsRecovery);
 
         _takingAction = false;
         _timer = 1;

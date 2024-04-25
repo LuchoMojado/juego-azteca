@@ -11,4 +11,13 @@ public static class Extensions
     {
         vector = new Vector3(vector.x, 0, vector.z);
     }
+
+    /// <summary>
+    /// Changes Y value of a quaternion by 'amount'
+    /// </summary>
+    public static Quaternion AddYRotation(this Quaternion quaternion, float amount)
+    {
+        var euler = quaternion.eulerAngles;
+        return Quaternion.Euler(euler.x, euler.y + amount, euler.z);
+    }
 }
