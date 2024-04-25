@@ -487,10 +487,23 @@ MonoBehaviour:
   _stepCost: 10
   _sunBaseCost: 10
   _sunHoldCost: 2
-  _sunMagic: {fileID: 66084625}
-  _magicSpawnPos: {fileID: 2094986820}
+  _obsidianCost: 0
+  _sunMagic: {fileID: 0}
   _sunBaseDamage: 5
   _sunDamageGrowRate: 0.1
+  _sunHitboxX: 0
+  _sunHitboxY: 0
+  _sunHitboxZ: 0
+  _sunRange: 0
+  _obsidianShard: {fileID: 0}
+  _obsidianDamage: 0
+  _obsidianComboInterval: 0
+  _obsidianCooldown: 0
+  _shardAngleOffset: 0
+  _shardSpeed: 0
+  _shardsPerWave: 0
+  _maxWaves: 0
+  renderer: {fileID: 0}
 --- !u!1 &31379724
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,18 +1163,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &66084625 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 274756041841087223, guid: b909829dcf5832c4aaf8d438269734fb,
-    type: 3}
-  m_PrefabInstance: {fileID: 713072485}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd6b0157d68ada488c05a6d2e677889, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &68316886
 GameObject:
   m_ObjectHideFlags: 0
@@ -16720,6 +16721,74 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1001 &990325896
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 238576669420903024, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_Name
+      value: Fireflies
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -96.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.2925873
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 172.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7050634
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7050634
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.05371846
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.053718444
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 238576669420903025, guid: d36d634fd65ce29489a0fcf883d09e45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -8.714
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d36d634fd65ce29489a0fcf883d09e45, type: 3}
 --- !u!1 &1001365987
 GameObject:
   m_ObjectHideFlags: 0
@@ -25790,7 +25859,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -37842,3 +37911,4 @@ SceneRoots:
   - {fileID: 1914254006}
   - {fileID: 795928217}
   - {fileID: 765892474}
+  - {fileID: 990325896}
