@@ -616,9 +616,11 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 64
+  _walkSpeed: 1
+  _walkDuration: 3.5
   _meleeHitboxCenter: {fileID: 732383136}
   _swingForwardForce: 1000
-  _swingPreparation: 0
+  _swingPreparation: 1
   _swingDamage: 20
   _swingDuration: 0.3
   _swingRecovery: 1.5
@@ -633,6 +635,18 @@ MonoBehaviour:
   _shardDamage: 10
   _shardsInterval: 0.5
   _shardsRecovery: 1
+  _wave: {fileID: 2884197402541514313, guid: b7645203167be934199f605384e17338, type: 3}
+  _wavePreparation: 1.5
+  _waveSpeed: 30
+  _waveDamage: 30
+  _waveRecovery: 1.5
+  _spikes: {fileID: 3897651631740069319, guid: 1c5af27c615d3b2469f2babd33168086, type: 3}
+  _spikesPreparation: 2
+  _spikesDuration: 0.75
+  _spikesDamage: 15
+  _spikesRecovery: 1.25
+  takingAction: 0
+  renderer: {fileID: 2132572471}
 --- !u!54 &340518184
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -658,7 +672,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!136 &340518185
 CapsuleCollider:
@@ -1747,14 +1761,14 @@ MonoBehaviour:
   _staminaRegenDelay: 1
   _speed: 5
   _speedOnCast: 2
-  _jumpStr: 400
+  _jumpStr: 300
   _stepStr: 550
   _stepStopVelocity: 0.15
   _jumpCost: 5
   _stepCost: 10
   _sunBaseCost: 10
   _sunHoldCost: 3
-  _sunMagic: {fileID: 0}
+  _sunMagic: {fileID: 1559243915}
   _magicSpawnPos: {fileID: 1615532356}
   _sunBaseDamage: 5
   _sunDamageGrowRate: 0.1
@@ -1767,7 +1781,7 @@ Transform:
   m_GameObject: {fileID: 1105152139}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 30.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1866,6 +1880,91 @@ RectTransform:
   m_AnchoredPosition: {x: 230.5, y: -18}
   m_SizeDelta: {x: 450, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &1559243914
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 542971159064375090, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_Name
+      value: TuboBlender (1) Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.026227
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.4983
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.2837
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99999785
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.00022695077
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.00000046740752
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0020595063
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -0.026
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0.236
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625817586121592228, guid: b909829dcf5832c4aaf8d438269734fb,
+        type: 3}
+      propertyPath: ShapeModule.m_MeshRenderer
+      value: 
+      objectReference: {fileID: 246888890}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b909829dcf5832c4aaf8d438269734fb, type: 3}
+--- !u!114 &1559243915 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 274756041841087223, guid: b909829dcf5832c4aaf8d438269734fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1559243914}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd6b0157d68ada488c05a6d2e677889, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1615532355
 GameObject:
   m_ObjectHideFlags: 0
@@ -2478,3 +2577,4 @@ SceneRoots:
   - {fileID: 590120398}
   - {fileID: 340518186}
   - {fileID: 405988677}
+  - {fileID: 1559243914}
