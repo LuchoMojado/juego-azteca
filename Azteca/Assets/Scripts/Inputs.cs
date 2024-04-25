@@ -26,8 +26,7 @@ public class Inputs
                 if (value)
                 {
                     _attack = value;
-                    inputUpdate = Casting;
-                    _player.ActivateSunMagic();
+                    _player.ActivateMagic();
                 }
                 else
                 {
@@ -77,6 +76,18 @@ public class Inputs
         {
             Attack = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _player.ChangeActiveMagic(PlayerController.MagicType.Sun);
+            _player.renderer.material.color = Color.red;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _player.ChangeActiveMagic(PlayerController.MagicType.Obsidian);
+            _player.renderer.material.color = Color.black;
+        }
     }
 
     public void Stepping()
@@ -97,9 +108,65 @@ public class Inputs
             //UIManager.instance.SetPauseMenu(true);
             inputUpdate = Paused;
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _player.ChangeActiveMagic(PlayerController.MagicType.Sun);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _player.ChangeActiveMagic(PlayerController.MagicType.Obsidian);
+        }
     }
 
-    public void Casting()
+    public void FixedCast()
+    {
+        _inputHorizontal = 0;
+
+        _inputVertical = 0;
+
+        _inputMouseX = Input.GetAxisRaw("Mouse X");
+
+        _inputMouseY = Input.GetAxisRaw("Mouse Y");
+
+        if (Mathf.Abs(Input.GetAxis("Horizontal")) == 1 || Mathf.Abs(Input.GetAxis("Vertical")) == 1)
+        {
+            Attack = false;
+            inputUpdate = Unpaused;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            //UIManager.instance.SetPauseMenu(true);
+            inputUpdate = Paused;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _player.Step(_inputHorizontal, _inputVertical);
+            Attack = false;
+            inputUpdate = Unpaused;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _jump = true;
+            Attack = false;
+            inputUpdate = Unpaused;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            Attack = false;
+            inputUpdate = Unpaused;
+        }
+    }
+
+    public void MovingCast()
     {
         _inputHorizontal = Input.GetAxis("Horizontal");
 
