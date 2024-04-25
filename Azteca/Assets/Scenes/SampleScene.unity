@@ -6857,7 +6857,7 @@ MonoBehaviour:
   _jumpCost: 5
   _stepCost: 10
   _sunBaseCost: 10
-  _sunHoldCost: 2
+  _sunHoldCost: 3
   _sunMagic: {fileID: 1231913827}
   _magicSpawnPos: {fileID: 141565662}
   _sunBaseDamage: 5
