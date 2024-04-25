@@ -60,7 +60,7 @@ public class ObsidianGod : Entity
 
         set
         {
-            _rb.velocity = Vector3.zero;
+            _rb.constraints = value ? RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ : RigidbodyConstraints.FreezeRotation;
             _lookAtPlayer = value;
         }
     }

@@ -18,7 +18,7 @@ public class PlayerController : Entity
 
     [Header("Sun Magic")]
     [SerializeField] GameObject _sunMagic;
-    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
+    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
     [Header("Obsidian Magic")]
@@ -26,7 +26,7 @@ public class PlayerController : Entity
     [SerializeField] float _obsidianDamage, _obsidianComboInterval, _obsidianCooldown, _shardAngleOffset, _shardSpeed;
     [SerializeField] int _shardsPerWave, _maxWaves;
 
-    float _obsidianCurrentCooldown = 0;
+    float _obsidianCurrentCooldown = 0, _sunCurrentCooldown = 0;
 
     float _stamina, _currentStaminaDelay = 0;
 
@@ -68,10 +68,7 @@ public class PlayerController : Entity
     {
         if (_inputs.inputUpdate != null) _inputs.inputUpdate();
 
-        if (_obsidianCurrentCooldown > 0)
-        {
-            _obsidianCurrentCooldown -= Time.deltaTime;
-        }
+        ManageCooldowns();
 
         StaminaRegeneration();
     }
@@ -133,9 +130,13 @@ public class PlayerController : Entity
 
     void ActivateSunMagic()
     {
-        if (_movement.IsGrounded() && _obsidianCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
+        if (_movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
         {
             StartCoroutine(SunMagic());
+        }
+        else
+        {
+            _inputs.Attack = false;
         }
     }
 
@@ -164,6 +165,7 @@ public class PlayerController : Entity
             yield return null;
         }
 
+        _sunCurrentCooldown = _sunCooldown;
         _inputs.Attack = false;
         _movement.StopCasting();
         _sunMagic.gameObject.SetActive(false);
@@ -171,9 +173,13 @@ public class PlayerController : Entity
 
     void ActivateObsidianMagic()
     {
-        if (_movement.IsGrounded() && CheckAndReduceStamina(_obsidianCost))
+        if (_movement.IsGrounded() && _obsidianCurrentCooldown <= 0 && CheckAndReduceStamina(_obsidianCost))
         {
             StartCoroutine(ObsidianMagic());
+        }
+        else
+        {
+            _inputs.Attack = false;
         }
     }
 
@@ -224,6 +230,18 @@ public class PlayerController : Entity
         }
 
         _obsidianCurrentCooldown = _obsidianCooldown;
+    }
+
+    void ManageCooldowns()
+    {
+        if (_sunCurrentCooldown > 0)
+        {
+            _sunCurrentCooldown -= Time.deltaTime;
+        }
+        if (_obsidianCurrentCooldown > 0)
+        {
+            _obsidianCurrentCooldown -= Time.deltaTime;
+        }
     }
 
     void StaminaRegeneration()
