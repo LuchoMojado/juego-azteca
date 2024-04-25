@@ -102,8 +102,7 @@ public class PlayerController : Entity
 
         while (_inputs.Attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
         {
-            var lookAt = Camera.main.transform.forward;
-            lookAt.MakeHorizontal();
+            var lookAt = Camera.main.transform.forward.MakeHorizontal();
             transform.forward = lookAt;
 
             _sunMagic.pos = _magicSpawnPos;

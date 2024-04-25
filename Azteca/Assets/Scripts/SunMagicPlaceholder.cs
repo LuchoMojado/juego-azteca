@@ -37,7 +37,7 @@ public class SunMagicPlaceholder : MonoBehaviour
     {
         Debug.Log("hit");
 
-        if (other.TryGetComponent(out TestEnemy enemy))
+        if (other.TryGetComponent(out ObsidianGod enemy))
         {
             Debug.Log("hit en enemigo");
             _target = enemy;
@@ -46,7 +46,7 @@ public class SunMagicPlaceholder : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out TestEnemy entity))
+        if (other.TryGetComponent(out ObsidianGod entity))
         {
             _target = null;
         }

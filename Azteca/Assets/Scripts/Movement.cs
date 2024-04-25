@@ -55,8 +55,7 @@ public class Movement
 
         if (horizontalInput == 0 && verticalInput == 0)
         {
-            cameraForward = Camera.main.transform.forward;
-            cameraForward.MakeHorizontal();
+            cameraForward = Camera.main.transform.forward.MakeHorizontal();
             dir = -cameraForward;
         }
         else
@@ -80,10 +79,8 @@ public class Movement
 
     Vector3 GetDir(float hInput, float vInput)
     {
-        var cameraForward = Camera.main.transform.forward;
-        var cameraRight = Camera.main.transform.right;
-        cameraForward.MakeHorizontal();
-        cameraRight.MakeHorizontal();
+        var cameraForward = Camera.main.transform.forward.MakeHorizontal();
+        var cameraRight = Camera.main.transform.right.MakeHorizontal();
 
         Vector3 direction = cameraForward * vInput + cameraRight * hInput;
 
@@ -97,10 +94,8 @@ public class Movement
 
     Vector3 GetDir(float hInput, float vInput, out Vector3 cameraForward)
     {
-        cameraForward = Camera.main.transform.forward;
-        var cameraRight = Camera.main.transform.right;
-        cameraRight.MakeHorizontal();
-        cameraForward.MakeHorizontal();
+        cameraForward = Camera.main.transform.forward.MakeHorizontal();
+        var cameraRight = Camera.main.transform.right.MakeHorizontal();
 
 
         Vector3 direction = cameraForward * vInput + cameraRight * hInput;
