@@ -25,7 +25,7 @@ public class SpikesState : State
     {
         if (!_boss.takingAction)
         {
-            fsm.ChangeState(ObsidianGod.ObsidianStates.Walk);
+            fsm.ChangeState(_boss.GetAction());
         }
     }
 }

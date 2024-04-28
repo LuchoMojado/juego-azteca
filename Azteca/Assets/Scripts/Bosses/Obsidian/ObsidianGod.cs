@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ObsidianGod : Entity
 {
@@ -12,9 +13,11 @@ public class ObsidianGod : Entity
 
     [SerializeField] LayerMask playerMask;
 
+    [SerializeField] int _comboChanceReduction;
+
     [Header("Walk")]
     [SerializeField] float _walkSpeed;
-    [SerializeField] float _walkDuration;
+    [SerializeField] float _baseWalkDuration, _walkDurationPerCombo;
 
     [Header("Swing")]
     [SerializeField] Transform _meleeHitboxCenter;
@@ -34,6 +37,10 @@ public class ObsidianGod : Entity
     [SerializeField] Hazard _spikes;
     [SerializeField] float _spikesPreparation, _spikesDuration, _spikesDamage, _spikesRecovery;
 
+    [Header("Dash")]
+    [SerializeField] float _dashStrength;
+    [SerializeField] float _dashPreparation, _dashDuration, _dashRecovery;
+
     FiniteStateMachine _fsm;
 
     public enum ObsidianStates
@@ -42,14 +49,19 @@ public class ObsidianGod : Entity
         Swing,
         Spikes,
         Shards,
-        Wave
+        Wave,
+        Dash
     }
 
-    public bool takingAction = false;
+    [HideInInspector] public bool takingAction = false;
 
     public Renderer renderer;
 
     bool _lookAtPlayer, _move;
+
+    [HideInInspector] public int comboCount;
+
+    ObsidianStates _lastAction;
 
     public bool LookAtPlayer
     {
@@ -80,13 +92,15 @@ public class ObsidianGod : Entity
 
         _fsm = new FiniteStateMachine();
 
-        _fsm.AddState(ObsidianStates.Walk, new WalkState(this, _walkDuration));
+        _fsm.AddState(ObsidianStates.Walk, new WalkState(this, _baseWalkDuration, _walkDurationPerCombo));
         _fsm.AddState(ObsidianStates.Swing, new SwingState(this));
         _fsm.AddState(ObsidianStates.Spikes, new SpikesState(this));
         _fsm.AddState(ObsidianStates.Shards, new ShardsState(this));
         _fsm.AddState(ObsidianStates.Wave, new WaveState(this));
+        _fsm.AddState(ObsidianStates.Dash, new DashState(this));
 
         _fsm.ChangeState(ObsidianStates.Walk);
+        _lastAction = ObsidianStates.Walk;
     }
 
     private void Update()
@@ -106,15 +120,9 @@ public class ObsidianGod : Entity
         }
     }
 
-    public void Walk()
+    public void ToggleWalk(bool start)
     {
-        LookAtPlayer = true;
-        _move = true;
-    }
-
-    public void StopWalking()
-    {
-        _move = false;
+        _move = start;
     }
 
     public void Shards(int waves)
@@ -138,9 +146,11 @@ public class ObsidianGod : Entity
         StartCoroutine(ThrowingWave());
     }
 
-    public void Leap()
+    public void Dash()
     {
+        takingAction = true;
 
+        StartCoroutine(Dashing());
     }
 
     public void Swing()
@@ -181,6 +191,7 @@ public class ObsidianGod : Entity
 
         yield return new WaitForSeconds(_swingRecovery);
 
+        LookAtPlayer = true;
         takingAction = false;
     }
 
@@ -210,6 +221,7 @@ public class ObsidianGod : Entity
 
         yield return new WaitForSeconds(_shardsRecovery);
 
+        LookAtPlayer = true;
         takingAction = false;
     }
 
@@ -225,6 +237,7 @@ public class ObsidianGod : Entity
 
         yield return new WaitForSeconds(_waveRecovery);
 
+        LookAtPlayer = true;
         takingAction = false;
     }
 
@@ -240,9 +253,94 @@ public class ObsidianGod : Entity
 
         yield return new WaitForSeconds(_spikesRecovery);
 
+        LookAtPlayer = true;
         takingAction = false;
     }
-    
+
+    IEnumerator Dashing()
+    {
+        yield return new WaitForSeconds(_dashPreparation);
+
+        _rb.AddForce(transform.forward * _dashStrength);
+
+        LookAtPlayer = false;
+
+        float timer = 0;
+
+        while (timer < _dashDuration)
+        {
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        _rb.velocity = Vector3.zero;
+
+        yield return new WaitForSeconds(_spikesRecovery);
+
+        LookAtPlayer = true;
+        takingAction = false;
+    }
+
+    public ObsidianStates GetAction()
+    {
+        if (_lastAction == ObsidianStates.Dash)
+        {
+            _lastAction = PickAction(false);
+            Debug.Log("elijo accion que no sea dash sin subir combo");
+            return _lastAction;
+        }
+        else if (_lastAction == ObsidianStates.Walk)
+        {
+            _lastAction = PickAction(true);
+            Debug.Log("elijo primer accion del combo");
+            return _lastAction;
+        }
+        else if (Random.Range(0,100) < 100 - _comboChanceReduction * comboCount)
+        {
+            Debug.Log("gane la chance de combo, elijo accion");
+            comboCount++;
+            _lastAction = PickAction(true);
+            return _lastAction;
+        }
+        else
+        {
+            Debug.Log("perdi la chance de combo, camino");
+            _lastAction = ObsidianStates.Walk;
+            return _lastAction;
+        }
+    }
+
+    ObsidianStates PickAction(bool canDash)
+    {
+        var possibleActions = new List<ObsidianStates>();
+
+        var dist = GetPlayerDistance();
+
+        if (canDash) possibleActions.Add(ObsidianStates.Dash);
+
+        if (dist > 13)
+        {
+            possibleActions.Add(ObsidianStates.Wave);
+            possibleActions.Add(ObsidianStates.Shards);
+        }
+        else if (dist > 8.5f)
+        {
+            possibleActions.Add(ObsidianStates.Spikes);
+            possibleActions.Add(ObsidianStates.Shards);
+        }
+        else
+        {
+            possibleActions.Remove(ObsidianStates.Dash);
+            possibleActions.Add(ObsidianStates.Swing);
+            possibleActions.Add(ObsidianStates.Spikes);
+        }
+
+        possibleActions.Remove(_lastAction);
+
+        return possibleActions.Skip(Random.Range(0, possibleActions.Count)).First();
+    }
+
     public float GetPlayerDistance()
     {
         return Vector3.Distance(transform.position, _player.transform.position);

@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveState : State
+public class DashState : State
 {
-    public WaveState(ObsidianGod boss)
+    public DashState(ObsidianGod boss)
     {
         _boss = boss;
     }
 
     public override void OnEnter()
     {
-        _boss.renderer.material.color = Color.yellow;
+        _boss.renderer.material.color = Color.blue;
 
-        _boss.Wave();
+        _boss.Dash();
     }
 
     public override void OnExit()
     {
-        
+
     }
 
     public override void OnUpdate()

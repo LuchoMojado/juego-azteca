@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -826,14 +826,16 @@ MonoBehaviour:
   playerMask:
     serializedVersion: 2
     m_Bits: 64
-  _walkSpeed: 1
-  _walkDuration: 3.5
+  _comboChanceReduction: 20
+  _walkSpeed: 2
+  _baseWalkDuration: 1.5
+  _walkDurationPerCombo: 0.75
   _meleeHitboxCenter: {fileID: 732383136}
-  _swingForwardForce: 1300
-  _swingPreparation: 1
+  _swingForwardForce: 1100
+  _swingPreparation: 0.75
   _swingDamage: 20
-  _swingDuration: 0.3
-  _swingRecovery: 1.5
+  _swingDuration: 0.35
+  _swingRecovery: 1
   _meleeBoxX: 1
   _meleeBoxY: 1
   _meleeBoxZ: 1
@@ -844,19 +846,24 @@ MonoBehaviour:
   _shardSpeed: 20
   _shardDamage: 10
   _shardsInterval: 0.5
-  _shardsRecovery: 1
+  _shardsRecovery: 0.5
   _wave: {fileID: 2884197402541514313, guid: b7645203167be934199f605384e17338, type: 3}
-  _wavePreparation: 1.5
+  _wavePreparation: 1
   _waveSpeed: 30
   _waveDamage: 30
-  _waveRecovery: 1.5
+  _waveRecovery: 0.25
   _spikes: {fileID: 3897651631740069319, guid: 1c5af27c615d3b2469f2babd33168086, type: 3}
-  _spikesPreparation: 2
+  _spikesPreparation: 1.25
   _spikesDuration: 0.6
   _spikesDamage: 15
-  _spikesRecovery: 1.25
+  _spikesRecovery: 0.75
+  _dashStrength: 1000
+  _dashPreparation: 0.25
+  _dashDuration: 0.4
+  _dashRecovery: 0.2
   takingAction: 0
   renderer: {fileID: 2132572471}
+  comboCount: 0
 --- !u!54 &340518184
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2280,7 +2287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62917865e6307a749931380c7a7ca179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 100
+  _maxHp: 10000
   _maxStamina: 100
   _staminaRegenRate: 5
   _staminaRegenDelay: 1
