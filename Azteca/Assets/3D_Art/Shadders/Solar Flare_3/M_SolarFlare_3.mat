@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7240852771367431304
+--- !u!114 &-9128683136863638292
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_SolarFlare1
-  m_Shader: {fileID: -6465566751694194690, guid: e43ba0cec08aaf4428271d0276462928,
+  m_Name: M_SolarFlare_3
+  m_Shader: {fileID: -6465566751694194690, guid: 0c2934f76fb79604bb7c0950dd18936a,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
