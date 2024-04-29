@@ -2295,7 +2295,7 @@ MonoBehaviour:
   _speedOnCast: 2
   _jumpStr: 300
   _stepStr: 550
-  _stepStopVelocity: 0.3
+  _stepCooldown: 1
   _jumpCost: 5
   _stepCost: 10
   _sunBaseCost: 10
