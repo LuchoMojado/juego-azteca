@@ -9,12 +9,12 @@ public class Movement
 
     float _currentSpeed, _normalSpeed, _speedOnCast, _jumpStrength, _stepStrength;
     Transform _playerTransform;
-    Rigidbody _myRB;
+    Rigidbody _rb;
 
     public Movement(Transform transform, Rigidbody rigidbody, float speed, float speedOnCast, float jumpStrength, float stepStrength)
     {
         _playerTransform = transform;
-        _myRB = rigidbody;
+        _rb = rigidbody;
         _currentSpeed = speed;
         _normalSpeed = speed;
         _speedOnCast = speedOnCast;
@@ -31,7 +31,7 @@ public class Movement
         if(changeForward)
             _playerTransform.forward = dir;
 
-        _myRB.MovePosition(_playerTransform.position + _currentSpeed * Time.fixedDeltaTime * dir);
+        _rb.MovePosition(_playerTransform.position + _currentSpeed * Time.fixedDeltaTime * dir);
     }
 
     public void Casting()
@@ -46,7 +46,7 @@ public class Movement
 
     public void Jump()
     {
-        _myRB.AddForce(Vector3.up * _jumpStrength);
+        _rb.AddForce(Vector3.up * _jumpStrength);
     }
 
     public void Step(float horizontalInput, float verticalInput)
@@ -65,8 +65,8 @@ public class Movement
 
         dir.Normalize();
 
-        _myRB.velocity = Vector3.zero;
-        _myRB.AddForce(dir * _stepStrength);
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(dir * _stepStrength);
         _playerTransform.forward = cameraForward;
     }
 

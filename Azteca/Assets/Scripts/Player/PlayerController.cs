@@ -10,7 +10,7 @@ public class PlayerController : Entity
     Movement _movement;
     Inputs _inputs;
 
-    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _speedOnCast, _jumpStr, _stepStr, _stepStopVelocity;
+    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _speedOnCast, _jumpStr, _stepStr, _stepCooldown/*(variable del step viejo)_stepStopVelocity*/;
 
     [Header("Stamina costs")]
     [SerializeField] float _jumpCost;
@@ -26,7 +26,7 @@ public class PlayerController : Entity
     [SerializeField] float _obsidianDamage, _obsidianComboInterval, _obsidianCooldown, _shardAngleOffset, _shardSpeed;
     [SerializeField] int _shardsPerWave, _maxWaves;
 
-    float _obsidianCurrentCooldown = 0, _sunCurrentCooldown = 0;
+    float _stepCurrentCooldown = 0, _obsidianCurrentCooldown = 0, _sunCurrentCooldown = 0;
 
     float _stamina, _currentStaminaDelay = 0;
 
@@ -88,6 +88,16 @@ public class PlayerController : Entity
 
     public void Step(float horizontalInput, float verticalInput)
     {
+        if (_movement.IsGrounded() && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
+        {
+            _stepCurrentCooldown = _stepCooldown;
+            _movement.Step(horizontalInput, verticalInput);
+        }
+    }
+
+    /* Step viejo (desactiva inputs por su duracion)
+    public void Step(float horizontalInput, float verticalInput)
+    {
         if (_movement.IsGrounded() && CheckAndReduceStamina(_stepCost))
         {
             StartCoroutine(Stepping(horizontalInput, verticalInput));
@@ -108,7 +118,7 @@ public class PlayerController : Entity
         }
 
         _inputs.inputUpdate = _inputs.Unpaused;
-    }
+    }*/
 
     public void ChangeActiveMagic(MagicType type)
     {
@@ -234,6 +244,10 @@ public class PlayerController : Entity
 
     void ManageCooldowns()
     {
+        if (_stepCurrentCooldown > 0)
+        {
+            _stepCurrentCooldown -= Time.deltaTime;
+        }
         if (_sunCurrentCooldown > 0)
         {
             _sunCurrentCooldown -= Time.deltaTime;

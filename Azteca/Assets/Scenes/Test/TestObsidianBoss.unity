@@ -2287,7 +2287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62917865e6307a749931380c7a7ca179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 10000
+  _maxHp: 100
   _maxStamina: 100
   _staminaRegenRate: 5
   _staminaRegenDelay: 1
@@ -2295,7 +2295,7 @@ MonoBehaviour:
   _speedOnCast: 2
   _jumpStr: 300
   _stepStr: 550
-  _stepStopVelocity: 0.15
+  _stepStopVelocity: 0.3
   _jumpCost: 5
   _stepCost: 10
   _sunBaseCost: 10
