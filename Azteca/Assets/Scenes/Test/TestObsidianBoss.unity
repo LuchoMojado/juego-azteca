@@ -807,7 +807,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &340518183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,7 +941,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 405988677}
-  - component: {fileID: 405988676}
+  - component: {fileID: 405988678}
   m_Layer: 0
   m_Name: CameraController
   m_TagString: Untagged
@@ -949,25 +949,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &405988676
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 405988675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d351375a0c53b244daefa288ec551204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myTarget: {fileID: 499068057}
-  _mouseSensitivity: 100
-  _minDistance: 0.25
-  _maxDistance: 5
-  _minRotation: -80
-  _maxRotation: 80
-  _hitOffset: 0.1
 --- !u!4 &405988677
 Transform:
   m_ObjectHideFlags: 0
@@ -984,6 +965,25 @@ Transform:
   - {fileID: 919527465}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &405988678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405988675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d351375a0c53b244daefa288ec551204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myTarget: {fileID: 499068057}
+  _mouseSensitivity: 100
+  _minDistance: 0
+  _maxDistance: 5
+  _minRotation: -80
+  _maxRotation: 80
+  _hitOffset: 0.1
 --- !u!1 &457399084
 GameObject:
   m_ObjectHideFlags: 0
@@ -1845,7 +1845,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0

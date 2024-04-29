@@ -107,4 +107,9 @@ public class Movement
 
         return direction;
     }
+
+    Vector3 CalculateSteering(Vector3 desired)
+    {
+        return Vector3.ClampMagnitude(desired - _rb.velocity, 1 * Time.deltaTime);
+    }
 }
