@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: a3fb66cb2ac1e7d42aebcd1c6bc24add, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 0fc28499a7cc3ea48884e8ecd2670f2a, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0031433685, g: 0.0035183858, b: 0.004837892, a: 1}
+  m_IndirectSpecularColor: {r: 0.004730263, g: 0.003974962, b: 0.0064168763, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -474,38 +474,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62917865e6307a749931380c7a7ca179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 100
-  _maxStamina: 100
-  _staminaRegenRate: 5
-  _staminaRegenDelay: 1
-  _speed: 5
-  _speedOnCast: 2
-  _jumpStr: 300
-  _stepStr: 550
-  _stepStopVelocity: 0.15
-  _jumpCost: 5
-  _stepCost: 10
-  _sunBaseCost: 10
-  _sunHoldCost: 3
-  _obsidianCost: 10
-  _sunMagic: {fileID: 165762316}
-  _sunBaseDamage: 5
-  _sunDamageGrowRate: 0.1
-  _sunCooldown: 1.2
-  _sunHitboxX: 1.6
-  _sunHitboxY: 0.5
-  _sunHitboxZ: 0.25
-  _sunRange: 5
-  _obsidianShard: {fileID: 7368224545872901312, guid: bbf353276bca8914ab9dd10d650e9e57,
-    type: 3}
-  _obsidianDamage: 3
-  _obsidianComboInterval: 1.2
-  _obsidianCooldown: 2
-  _shardAngleOffset: 8
-  _shardSpeed: 15
-  _shardsPerWave: 3
-  _maxWaves: 3
-  renderer: {fileID: 1151716093}
 --- !u!1 &31379724
 GameObject:
   m_ObjectHideFlags: 0
@@ -2636,12 +2604,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b50a7e20b48e30f449a2119a3efb6d0a, type: 3}
---- !u!1 &165762316 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 542971159064375090, guid: b909829dcf5832c4aaf8d438269734fb,
-    type: 3}
-  m_PrefabInstance: {fileID: 713072485}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &169150267
 PrefabInstance:
   m_ObjectHideFlags: 0
