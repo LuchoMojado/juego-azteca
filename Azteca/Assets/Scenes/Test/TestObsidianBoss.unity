@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -807,7 +807,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &340518183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -827,7 +827,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _comboChanceReduction: 20
-  _walkSpeed: 2
+  _walkSpeed: 1.75
   _baseWalkDuration: 1.5
   _walkDurationPerCombo: 0.75
   _meleeHitboxCenter: {fileID: 732383136}
@@ -840,7 +840,7 @@ MonoBehaviour:
   _meleeBoxY: 1
   _meleeBoxZ: 1
   _shard: {fileID: 1309916077143301227, guid: 2f4126087bf62dc409dc61c37966898a, type: 3}
-  _shardAmount: 3
+  _shardAmount: 7
   _shardsPreparation: 1
   _shardAngle: 10
   _shardSpeed: 20
@@ -2289,7 +2289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHp: 100
   _maxStamina: 100
-  _staminaRegenRate: 5
+  _staminaRegenRate: 8
   _staminaRegenDelay: 1
   _speed: 5
   _speedOnCast: 2
@@ -2302,8 +2302,10 @@ MonoBehaviour:
   _sunHoldCost: 3
   _obsidianCost: 10
   _sunMagic: {fileID: 1670074319}
-  _sunBaseDamage: 5
+  _sunBaseDamage: 4
   _sunDamageGrowRate: 0.1
+  _sunCastDelay: 0.2
+  _sunRecovery: 0.25
   _sunCooldown: 1.2
   _sunHitboxX: 1.6
   _sunHitboxY: 0.5

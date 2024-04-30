@@ -5,16 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Test/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 0
-    path: Assets/Scenes/Blockings/Blocking2.unity
-    guid: 77c7b41cba2627e4599c05ab9f750632
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Scenes/SceneSelector.unity
+    guid: bc32b8742c3d79c458bc679ae056f7b5
+  - enabled: 1
     path: Assets/Scenes/Blockings/Blocking3.unity
     guid: ff59b4d7a6d064a45ac9e28f9cb68db9
   - enabled: 1
     path: Assets/Scenes/Test/TestObsidianBoss.unity
     guid: dd5578f6b69792f40bd884366e535995
+  - enabled: 1
+    path: Assets/Scenes/Test/Modelos.unity
+    guid: db46332b7e8e3d1418bdfbff922403d5
   m_configObjects: {}

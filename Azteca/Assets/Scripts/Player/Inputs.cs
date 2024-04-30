@@ -185,7 +185,7 @@ public class Inputs
             inputUpdate = Paused;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        /*if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _player.Step(_inputHorizontal, _inputVertical);
             Attack = false;
@@ -197,7 +197,7 @@ public class Inputs
             _jump = true;
             Attack = false;
             inputUpdate = Unpaused;
-        }
+        }*/
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {

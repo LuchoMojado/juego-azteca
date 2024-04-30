@@ -18,7 +18,7 @@ public class PlayerController : Entity
 
     [Header("Sun Magic")]
     [SerializeField] GameObject _sunMagic;
-    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
+    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunCastDelay, _sunRecovery, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
     [Header("Obsidian Magic")]
@@ -153,9 +153,12 @@ public class PlayerController : Entity
     IEnumerator SunMagic()
     {
         _inputs.inputUpdate = _inputs.MovingCast;
-        _sunMagic.gameObject.SetActive(true);
         var damage = _sunBaseDamage;
         _movement.Casting();
+
+        yield return new WaitForSeconds(_sunCastDelay);
+
+        _sunMagic.gameObject.SetActive(true);
 
         while (_inputs.Attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
         {
@@ -175,10 +178,13 @@ public class PlayerController : Entity
             yield return null;
         }
 
+        _sunMagic.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(_sunRecovery);
+
         _sunCurrentCooldown = _sunCooldown;
         _inputs.Attack = false;
         _movement.StopCasting();
-        _sunMagic.gameObject.SetActive(false);
     }
 
     void ActivateObsidianMagic()
@@ -299,6 +305,6 @@ public class PlayerController : Entity
 
     public override void Die()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

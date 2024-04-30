@@ -288,7 +288,6 @@ GameObject:
   - component: {fileID: 333747402}
   - component: {fileID: 333747401}
   - component: {fileID: 333747400}
-  - component: {fileID: 333747399}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -296,25 +295,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &333747399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 333747398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d351375a0c53b244daefa288ec551204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myTarget: {fileID: 1967794133}
-  _mouseSensitivity: 100
-  _minDistance: 0
-  _maxDistance: 5
-  _minRotation: -80
-  _maxRotation: 80
-  _hitOffset: 0.1
 --- !u!114 &333747400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,11 +406,63 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 333747398}
   serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 451164402}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &451164400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 451164402}
+  - component: {fileID: 451164401}
+  m_Layer: 0
+  m_Name: CameraController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &451164401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451164400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d351375a0c53b244daefa288ec551204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myTarget: {fileID: 1967794133}
+  _mouseSensitivity: 100
+  _minDistance: 0
+  _maxDistance: 5
+  _minRotation: -80
+  _maxRotation: 80
+  _hitOffset: 0.1
+--- !u!4 &451164402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451164400}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 333747403}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &595251327
@@ -603,18 +635,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 609731006}
   m_CullTransparentMesh: 1
---- !u!114 &693849418 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 274756041841087223, guid: b909829dcf5832c4aaf8d438269734fb,
-    type: 3}
-  m_PrefabInstance: {fileID: 38209304}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dd6b0157d68ada488c05a6d2e677889, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &780239314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1515,7 +1535,7 @@ RectTransform:
   m_Father: {fileID: 595251328}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.486, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1644,15 +1664,29 @@ MonoBehaviour:
   _speedOnCast: 2
   _jumpStr: 400
   _stepStr: 550
-  _stepStopVelocity: 0.15
+  _stepCooldown: 0
   _jumpCost: 5
   _stepCost: 10
   _sunBaseCost: 10
   _sunHoldCost: 2
-  _sunMagic: {fileID: 693849418}
-  _magicSpawnPos: {fileID: 937913105}
+  _obsidianCost: 0
+  _sunMagic: {fileID: 0}
   _sunBaseDamage: 5
   _sunDamageGrowRate: 0.1
+  _sunCooldown: 0
+  _sunHitboxX: 0
+  _sunHitboxY: 0
+  _sunHitboxZ: 0
+  _sunRange: 0
+  _obsidianShard: {fileID: 0}
+  _obsidianDamage: 0
+  _obsidianComboInterval: 0
+  _obsidianCooldown: 0
+  _shardAngleOffset: 0
+  _shardSpeed: 0
+  _shardsPerWave: 0
+  _maxWaves: 0
+  renderer: {fileID: 0}
 --- !u!4 &1967794133
 Transform:
   m_ObjectHideFlags: 0
@@ -1951,7 +1985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2144166635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2726,4 +2760,4 @@ SceneRoots:
   - {fileID: 38209304}
   - {fileID: 2124769007}
   - {fileID: 1144012857}
-  - {fileID: 333747403}
+  - {fileID: 451164402}

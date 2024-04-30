@@ -474,6 +474,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62917865e6307a749931380c7a7ca179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxHp: 100
+  _maxStamina: 100
+  _staminaRegenRate: 5
+  _staminaRegenDelay: 1
+  _speed: 8
+  _speedOnCast: 2
+  _jumpStr: 300
+  _stepStr: 550
+  _stepCooldown: 1
+  _jumpCost: 5
+  _stepCost: 10
+  _sunBaseCost: 10
+  _sunHoldCost: 3
+  _obsidianCost: 10
+  _sunMagic: {fileID: 713072487}
+  _sunBaseDamage: 5
+  _sunDamageGrowRate: 0.1
+  _sunCooldown: 1.2
+  _sunHitboxX: 1.6
+  _sunHitboxY: 0.5
+  _sunHitboxZ: 0.25
+  _sunRange: 5
+  _obsidianShard: {fileID: 7368224545872901312, guid: bbf353276bca8914ab9dd10d650e9e57,
+    type: 3}
+  _obsidianDamage: 3
+  _obsidianComboInterval: 1.2
+  _obsidianCooldown: 2
+  _shardAngleOffset: 8
+  _shardSpeed: 15
+  _shardsPerWave: 3
+  _maxWaves: 3
+  renderer: {fileID: 1151716093}
 --- !u!1 &31379724
 GameObject:
   m_ObjectHideFlags: 0
@@ -13012,6 +13044,12 @@ PrefabInstance:
 --- !u!4 &713072486 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 919532332830963080, guid: b909829dcf5832c4aaf8d438269734fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 713072485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &713072487 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 542971159064375090, guid: b909829dcf5832c4aaf8d438269734fb,
     type: 3}
   m_PrefabInstance: {fileID: 713072485}
   m_PrefabAsset: {fileID: 0}
@@ -27975,7 +28013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1509522232
 BoxCollider:
   m_ObjectHideFlags: 0

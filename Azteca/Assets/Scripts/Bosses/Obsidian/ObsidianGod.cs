@@ -101,6 +101,8 @@ public class ObsidianGod : Entity
 
         _fsm.ChangeState(ObsidianStates.Walk);
         _lastAction = ObsidianStates.Walk;
+
+        _lookAtPlayer = true;
     }
 
     private void Update()
@@ -204,6 +206,38 @@ public class ObsidianGod : Entity
         for (int i = _shardAmount; i < shardLimit; i++)
         {
             var baseRotationChange = i % 2 == 0 ? _shardAngle * 0.5f : 0;
+
+            for (int j = 0; j < i; j++)
+            {
+                var individualRotationChange = j % 2 == 0 ? _shardAngle * Mathf.CeilToInt(j * 0.5f) : -_shardAngle * Mathf.CeilToInt(j * 0.5f);
+
+                var finalRotation = transform.rotation.AddYRotation(baseRotationChange + individualRotationChange);
+
+                var shard = Instantiate(_shard, transform.position, finalRotation);
+                shard.speed = _shardSpeed;
+                shard.damage = _shardDamage;
+            }
+
+            yield return new WaitForSeconds(_shardsInterval);
+        }
+
+        yield return new WaitForSeconds(_shardsRecovery);
+
+        LookAtPlayer = true;
+        takingAction = false;
+    }
+
+    IEnumerator WIPThrowingShards(int shardLimit)
+    {
+        yield return new WaitForSeconds(_shardsPreparation);
+
+        LookAtPlayer = false;
+
+        for (int i = _shardAmount; i < shardLimit; i++)
+        {
+            var baseRotationChange = i % 2 == 0 ? _shardAngle * 0.5f : 0;
+
+            var baseRotation = 360 / i;
 
             for (int j = 0; j < i; j++)
             {
