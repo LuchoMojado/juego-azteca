@@ -23,19 +23,13 @@ public class CameraController : MonoBehaviour
     [SerializeField] float _minRotation;
     [SerializeField] float _maxRotation;
 
-
     [Header("Raycast Settings")]
     [SerializeField] float _hitOffset;
-
-    [Header("Lock On Settings")]
-    [SerializeField] Transform _lockOnPosition;
-    [SerializeField] float _lerpDuration;
 
     float _mouseX, _mouseY;
 
     Vector3 _direction;
     Vector3 _camPos;
-    Vector3 _lookAt;
 
     Ray _ray;
     RaycastHit _rHit;
