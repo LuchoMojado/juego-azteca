@@ -984,6 +984,8 @@ MonoBehaviour:
   _minRotation: -80
   _maxRotation: 80
   _hitOffset: 0.1
+  _lockOnPosition: {fileID: 1172311244}
+  _lerpDuration: 0.5
 --- !u!1 &457399084
 GameObject:
   m_ObjectHideFlags: 0
@@ -2294,7 +2296,7 @@ MonoBehaviour:
   _speed: 5
   _speedOnCast: 2
   _turnRate: 1000
-  _jumpStr: 300
+  _jumpStr: 275
   _stepStr: 550
   _stepCooldown: 1
   _jumpCost: 5
@@ -2321,6 +2323,7 @@ MonoBehaviour:
   _shardSpeed: 15
   _shardsPerWave: 3
   _maxWaves: 3
+  currentBoss: {fileID: 340518183}
   renderer: {fileID: 246888890}
 --- !u!4 &1105152143
 Transform:
@@ -2340,6 +2343,7 @@ Transform:
   - {fileID: 1615532356}
   - {fileID: 499068057}
   - {fileID: 1670074324}
+  - {fileID: 1172311244}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1167958965
@@ -2431,6 +2435,37 @@ RectTransform:
   m_AnchoredPosition: {x: 230.5, y: -18}
   m_SizeDelta: {x: 450, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1172311243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1172311244}
+  m_Layer: 6
+  m_Name: Camera Lock On
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1172311244
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172311243}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.781, z: -2.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1105152143}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1538648835
 GameObject:
   m_ObjectHideFlags: 0

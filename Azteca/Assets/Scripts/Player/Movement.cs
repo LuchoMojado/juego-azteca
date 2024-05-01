@@ -49,11 +49,21 @@ public class Movement
 
                 var yRotation = Vector3.Angle(_playerTransform.right, dir) < Vector3.Angle(-_playerTransform.right, dir) ? _turnRate : -_turnRate;
 
-                _rb.MoveRotation(Quaternion.Euler(eulerRotation.x, eulerRotation.y + yRotation * Time.fixedDeltaTime, eulerRotation.z));
-
                 var angleToDesired = Vector3.Angle(_playerTransform.forward, dir);
-                if (angleToDesired > 20) return;
-                else if (angleToDesired < 10) _playerTransform.forward = dir;
+
+                yRotation *= Time.fixedDeltaTime;
+                var absYRotation = Mathf.Abs(yRotation);
+
+                if (angleToDesired > absYRotation)
+                {
+                    _rb.MoveRotation(Quaternion.Euler(eulerRotation.x, eulerRotation.y + yRotation, eulerRotation.z));
+
+                    if (angleToDesired - absYRotation > 20) return;
+                }
+                else
+                {
+                    _playerTransform.forward = dir;
+                }
             }
         }
             

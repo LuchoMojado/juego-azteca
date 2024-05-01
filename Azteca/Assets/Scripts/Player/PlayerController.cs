@@ -30,6 +30,8 @@ public class PlayerController : Entity
 
     float _stamina, _currentStaminaDelay = 0;
 
+    public Entity currentBoss;
+
     MagicType _activeMagic;
 
     public Renderer renderer;
@@ -76,6 +78,11 @@ public class PlayerController : Entity
     private void FixedUpdate()
     {
         _inputs.InputsFixedUpdate();
+    }
+
+    private void LateUpdate()
+    {
+        _inputs.inputLateUpdate();
     }
 
     public void Jump()

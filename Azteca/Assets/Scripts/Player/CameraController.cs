@@ -27,10 +27,15 @@ public class CameraController : MonoBehaviour
     [Header("Raycast Settings")]
     [SerializeField] float _hitOffset;
 
+    [Header("Lock On Settings")]
+    [SerializeField] Transform _lockOnPosition;
+    [SerializeField] float _lerpDuration;
+
     float _mouseX, _mouseY;
 
     Vector3 _direction;
     Vector3 _camPos;
+    Vector3 _lookAt;
 
     Ray _ray;
     RaycastHit _rHit;
@@ -55,14 +60,19 @@ public class CameraController : MonoBehaviour
         _isCameraBlocked = Physics.SphereCast(_ray, 0.1f, out _rHit, _maxDistance);
     }
 
-    private void LateUpdate()
+    public void FreeLook(float x, float y)
     {
-        UpdateCameraRotation(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-
+        UpdateCameraRotation(x, y);
         UpdateSpringArm();
     }
 
-    void UpdateCameraRotation(float xAxi, float yAxi)
+    public void LockedOn(Vector3 target)
+    {
+        LockedOnTo(target);
+        UpdateSpringArm(target);
+    }
+
+    public void UpdateCameraRotation(float xAxi, float yAxi)
     {
         transform.position = _myTarget.position;
 
@@ -113,5 +123,38 @@ public class CameraController : MonoBehaviour
         _myCamera.transform.position = _camPos;
         //Y le digo a mi camara que mire hacia el personaje
         _myCamera.transform.LookAt(transform.position);
+    }
+
+    void UpdateSpringArm(Vector3 LookAt)
+    {
+        _direction = -transform.forward;
+
+        if (_isCameraBlocked)
+        {
+            var dirTest = (_rHit.point - transform.position) + (_rHit.normal * _hitOffset);
+
+            if (dirTest.sqrMagnitude <= _minDistance * _minDistance)
+            {
+                _camPos = transform.position + _direction * _minDistance;
+            }
+            else
+            {
+                _camPos = transform.position + dirTest;
+            }
+        }
+        else
+        {
+            _camPos = transform.position + _direction * _maxDistance;
+        }
+
+        _myCamera.transform.position = _camPos;
+        //Y le digo a mi camara que mire hacia el personaje
+        _myCamera.transform.LookAt(LookAt);
+    }
+
+    public void LockedOnTo(Vector3 target)
+    {
+        transform.position = _myTarget.position;
+        transform.LookAt(target - Vector3.up * Vector3.Distance(transform.position, target) * 0.5f);
     }
 }

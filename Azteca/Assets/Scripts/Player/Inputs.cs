@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Inputs
 {
-    public System.Action inputUpdate;
+    public System.Action inputUpdate, inputLateUpdate;
     float _inputHorizontal, _inputVertical;
     float _inputMouseX, _inputMouseY;
     Movement _movement;
     PlayerController _player;
-    bool _jump;
-    bool _attack = false;
+    CameraController _camera;
+    bool _jump, _attack = false, _locked = false;
 
     public bool Attack
     {
@@ -41,6 +41,8 @@ public class Inputs
     {
         _movement = movement;
         _player = player;
+        _camera = Camera.main.GetComponentInParent<CameraController>();
+        inputLateUpdate = FreeLook;
     }
 
     public void Unpaused()
@@ -75,6 +77,11 @@ public class Inputs
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Attack = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            ToggleLock();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -117,6 +124,11 @@ public class Inputs
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             _player.ChangeActiveMagic(PlayerController.MagicType.Obsidian);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            ToggleLock();
         }
     }
 
@@ -164,6 +176,11 @@ public class Inputs
             Attack = false;
             inputUpdate = Unpaused;
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            ToggleLock();
+        }
     }
 
     public void MovingCast()
@@ -204,6 +221,11 @@ public class Inputs
             Attack = false;
             inputUpdate = Unpaused;
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            ToggleLock();
+        }
     }
 
     public void Paused()
@@ -227,5 +249,21 @@ public class Inputs
             _player.Jump();
             _jump = false;
         }
+    }
+
+    void ToggleLock()
+    {
+        _locked = !_locked;
+        inputLateUpdate = _locked ? LockedOn : FreeLook;
+    }
+
+    void FreeLook()
+    {
+        _camera.FreeLook(_inputMouseX, _inputMouseY);
+    }
+
+    void LockedOn()
+    {
+        _camera.LockedOn(_player.currentBoss.transform.position);
     }
 }
