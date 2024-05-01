@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2555397309104866292}
   - component: {fileID: 1969467020812625667}
-  - component: {fileID: 7368224545872901312}
+  - component: {fileID: 4082922280325094675}
   m_Layer: 0
   m_Name: Obsidian Magic
   m_TagString: Untagged
@@ -47,7 +47,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -57,7 +57,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7368224545872901312
+--- !u!114 &4082922280325094675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

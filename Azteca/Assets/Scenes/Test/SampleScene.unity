@@ -6851,6 +6851,7 @@ MonoBehaviour:
   _staminaRegenDelay: 1
   _speed: 5
   _speedOnCast: 2
+  _turnRate: 500
   _jumpStr: 300
   _stepStr: 550
   _stepCooldown: 1
@@ -6862,6 +6863,8 @@ MonoBehaviour:
   _sunMagic: {fileID: 1231913824}
   _sunBaseDamage: 5
   _sunDamageGrowRate: 0.1
+  _sunCastDelay: 0
+  _sunRecovery: 0
   _sunCooldown: 1.2
   _sunHitboxX: 1.6
   _sunHitboxY: 0.5
