@@ -57,9 +57,9 @@ public class Inputs
     }
     public void CameraInputsJoystick()
     {
-        _inputMouseX = Input.GetAxisRaw("JoyHorizontal");
+        _inputMouseX = Input.GetAxisRaw("Mouse X");
 
-        _inputMouseY = Input.GetAxisRaw("JoyVertical");
+        _inputMouseY = Input.GetAxisRaw("Mouse Y");
     }
 
     public void Altern(bool joystick)
