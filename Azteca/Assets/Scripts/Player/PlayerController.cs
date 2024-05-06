@@ -35,6 +35,7 @@ public class PlayerController : Entity
     MagicType _activeMagic;
 
     public Renderer renderer;
+    private bool _joystickActive=true;
 
     public enum MagicType
     {
@@ -64,6 +65,7 @@ public class PlayerController : Entity
         UIManager.instance.UpdateBar(UIManager.Bar.PlayerStamina, _stamina, _maxStamina);
 
         _inputs.inputUpdate = _inputs.Unpaused;
+        Joistick();
     }
 
     void Update()
@@ -313,5 +315,11 @@ public class PlayerController : Entity
     public override void Die()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void Joistick()
+    {
+        _joystickActive = !_joystickActive;
+        _inputs.Altern(_joystickActive);
     }
 }

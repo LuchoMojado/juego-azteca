@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     [SerializeField] Slider _hpBar, _staminaBar, _bossHpBar;
+    [SerializeField] Button _joystick;
+    [SerializeField] Image _paused;
 
     public enum Bar
     {
@@ -61,5 +63,16 @@ public class UIManager : MonoBehaviour
     public void TurnOffBossBar()
     {
         _bossHpBar.gameObject.SetActive(false);
+    }
+
+    public void Paused()
+    {
+        _paused.gameObject.SetActive(true);
+        _joystick.gameObject.SetActive(true);
+    }
+    public void UnPaused()
+    {
+        _paused.gameObject.SetActive(false);
+        _joystick.gameObject.SetActive(false);
     }
 }
