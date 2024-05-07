@@ -71,6 +71,8 @@ Material:
     - _Brightness: 0.7
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Saturation: 1
     - _Smoothness_1: 0.5
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
