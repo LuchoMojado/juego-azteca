@@ -294,6 +294,7 @@ public class Inputs
 
     void ToggleLock()
     {
+        if (_player.currentBoss == null) return;
         _locked = !_locked;
         inputLateUpdate = _locked ? LockedOn : FreeLook;
     }
