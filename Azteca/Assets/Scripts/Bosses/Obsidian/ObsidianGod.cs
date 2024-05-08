@@ -14,6 +14,7 @@ public class ObsidianGod : Entity
     [SerializeField] LayerMask playerMask;
 
     [SerializeField] int _comboChanceReduction;
+    [SerializeField] float _fightTriggerRange;
 
     [Header("Walk")]
     [SerializeField] float _walkSpeed;
@@ -45,6 +46,7 @@ public class ObsidianGod : Entity
 
     public enum ObsidianStates
     {
+        Inactive,
         Walk,
         Swing,
         Spikes,
@@ -92,6 +94,7 @@ public class ObsidianGod : Entity
 
         _fsm = new FiniteStateMachine();
 
+        _fsm.AddState(ObsidianStates.Inactive, new InactiveState(this, _player.transform, _fightTriggerRange));
         _fsm.AddState(ObsidianStates.Walk, new WalkState(this, _baseWalkDuration, _walkDurationPerCombo));
         _fsm.AddState(ObsidianStates.Swing, new SwingState(this));
         _fsm.AddState(ObsidianStates.Spikes, new SpikesState(this));
@@ -99,10 +102,8 @@ public class ObsidianGod : Entity
         _fsm.AddState(ObsidianStates.Wave, new WaveState(this));
         _fsm.AddState(ObsidianStates.Dash, new DashState(this));
 
-        _fsm.ChangeState(ObsidianStates.Walk);
-        _lastAction = ObsidianStates.Walk;
-
-        _lookAtPlayer = true;
+        _fsm.ChangeState(ObsidianStates.Inactive);
+        _lastAction = ObsidianStates.Inactive;
     }
 
     private void Update()
