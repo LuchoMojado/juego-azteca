@@ -24,6 +24,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 98371210ffb5a6544a1a3f04bbfe452a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha:
+        m_Texture: {fileID: 2800000, guid: 01cbbb9cae9e7b14fbe6ccd43aae8f0d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_Map:
+        m_Texture: {fileID: 2800000, guid: a36f1e9e29611e24da93dba8c826ab59, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_09086f4efa864b2ea6bb38f9503f5a9e_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 01cbbb9cae9e7b14fbe6ccd43aae8f0d, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -50,11 +62,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Bend_Intensity: 0.2
     - _Clip_Threshold: 0.663
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 0.138
-    m_Colors: []
+    - _Tiling: 1
+    - _Wiggleness: 1.5
+    m_Colors:
+    - _Bend_Direction: {r: 33.4, g: 0, b: 16.7, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &253811595834484205
 MonoBehaviour:
