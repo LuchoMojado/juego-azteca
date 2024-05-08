@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.004730263, g: 0.003974962, b: 0.0064168763, a: 1}
+  m_IndirectSpecularColor: {r: 0.0047007883, g: 0.0039700624, b: 0.0063906754, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -25325,13 +25325,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 100
-  _player: {fileID: 73933419}
+  _player: {fileID: 23911759}
   placeholderSwingHitboxFeedback: {fileID: 120399339}
+  _arena: {fileID: 895894768}
   playerMask:
     serializedVersion: 2
     m_Bits: 64
   _comboChanceReduction: 20
-  _fightTriggerRange: 5
+  _fightTriggerRange: 30
   _walkSpeed: 1.75
   _baseWalkDuration: 1.5
   _walkDurationPerCombo: 0.75
@@ -35516,7 +35517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &895894769
 Transform:
   m_ObjectHideFlags: 0
@@ -35560,7 +35561,7 @@ Animation:
   m_GameObject: {fileID: 895894768}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 0}
+  m_Animation: {fileID: 7400000, guid: 5432dba3a30116346bb3615ed636d2bc, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 5432dba3a30116346bb3615ed636d2bc, type: 2}
   m_WrapMode: 0

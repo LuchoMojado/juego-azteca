@@ -11,6 +11,8 @@ public class ObsidianGod : Entity
 
     public GameObject placeholderSwingHitboxFeedback;
 
+    [SerializeField] GameObject _arena;
+
     [SerializeField] LayerMask playerMask;
 
     [SerializeField] int _comboChanceReduction;
@@ -94,7 +96,7 @@ public class ObsidianGod : Entity
 
         _fsm = new FiniteStateMachine();
 
-        _fsm.AddState(ObsidianStates.Inactive, new InactiveState(this, _player.transform, _fightTriggerRange));
+        _fsm.AddState(ObsidianStates.Inactive, new InactiveState(this, _fightTriggerRange));
         _fsm.AddState(ObsidianStates.Walk, new WalkState(this, _baseWalkDuration, _walkDurationPerCombo));
         _fsm.AddState(ObsidianStates.Swing, new SwingState(this));
         _fsm.AddState(ObsidianStates.Spikes, new SpikesState(this));
@@ -121,6 +123,13 @@ public class ObsidianGod : Entity
         {
             _rb.MoveRotation(Quaternion.LookRotation((_player.transform.position - transform.position).MakeHorizontal()));
         }
+    }
+
+    public void StartFight()
+    {
+        _player.currentBoss = this;
+        _arena.gameObject.SetActive(true);
+        LookAtPlayer = true;
     }
 
     public void ToggleWalk(bool start)
@@ -390,6 +399,11 @@ public class ObsidianGod : Entity
     public override void Die()
     {
         UIManager.instance.TurnOffBossBar();
+        //hacer funcion del player de derrotar jefe (desactivar lockon y poner currentboss en null)
+        _player.currentBoss = null;
+        //animacion de que las piedras bajan
+        _arena.gameObject.SetActive(false);
+        //animacion de muerte
         Destroy(gameObject);
     }
 

@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class InactiveState : State
 {
-    Transform player;
-
     float _aggroRange;
 
-    public InactiveState(ObsidianGod boss, Transform playerT, float range)
+    public InactiveState(ObsidianGod boss, float range)
     {
         _boss = boss;
-        player = playerT;
         _aggroRange = range;
     }
 
@@ -23,12 +20,12 @@ public class InactiveState : State
 
     public override void OnExit()
     {
-        _boss.LookAtPlayer = true;
+        _boss.StartFight();
     }
 
     public override void OnUpdate()
     {
-        if (Vector3.Distance(player.position, _boss.transform.position) <= _aggroRange)
+        if (_boss.GetPlayerDistance() <= _aggroRange)
         {
             fsm.ChangeState(ObsidianGod.ObsidianStates.Walk);
         }
