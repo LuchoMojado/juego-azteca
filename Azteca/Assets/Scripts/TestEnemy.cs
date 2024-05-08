@@ -100,7 +100,7 @@ public class TestEnemy : Entity
 
     public override void Die()
     {
-        UIManager.instance.TurnOffBossBar();
+        UIManager.instance.ToggleBossBar(false);
         Destroy(gameObject);
     }
 

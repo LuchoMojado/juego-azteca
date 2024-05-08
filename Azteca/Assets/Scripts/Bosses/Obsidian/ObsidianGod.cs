@@ -129,6 +129,7 @@ public class ObsidianGod : Entity
     {
         _player.currentBoss = this;
         _arena.gameObject.SetActive(true);
+        UIManager.instance.ToggleBossBar(true);
         LookAtPlayer = true;
     }
 
@@ -174,8 +175,9 @@ public class ObsidianGod : Entity
 
     IEnumerator Swinging()
     {
+        //espero el tiempo de preparacion
         yield return new WaitForSeconds(_swingPreparation);
-
+        //comienza el ataque
         LookAtPlayer = false;
 
         _rb.AddForce(transform.forward * _swingForwardForce);
@@ -197,10 +199,10 @@ public class ObsidianGod : Entity
 
             yield return null;
         }
-
+        //termina el ataque
         _rb.velocity = Vector3.zero;
         placeholderSwingHitboxFeedback.SetActive(false);
-
+        //espero un tiempo como recuperacion
         yield return new WaitForSeconds(_swingRecovery);
 
         LookAtPlayer = true;
@@ -209,12 +211,14 @@ public class ObsidianGod : Entity
 
     IEnumerator ThrowingShards(int shardLimit)
     {
+        //preparacion
         yield return new WaitForSeconds(_shardsPreparation);
 
         LookAtPlayer = false;
 
         for (int i = _shardAmount; i < shardLimit; i++)
         {
+            // lanzo oleada y espero, son 3 oleadas
             var baseRotationChange = i % 2 == 0 ? _shardAngle * 0.5f : 0;
 
             for (int j = 0; j < i; j++)
@@ -230,13 +234,14 @@ public class ObsidianGod : Entity
 
             yield return new WaitForSeconds(_shardsInterval);
         }
-
+        //recuperacion
         yield return new WaitForSeconds(_shardsRecovery);
 
         LookAtPlayer = true;
         takingAction = false;
     }
 
+    //esto no se usa
     IEnumerator WIPThrowingShards(int shardLimit)
     {
         yield return new WaitForSeconds(_shardsPreparation);
@@ -271,14 +276,15 @@ public class ObsidianGod : Entity
 
     IEnumerator ThrowingWave()
     {
+        //preparacion
         yield return new WaitForSeconds(_wavePreparation);
-
+        //lanzo ataque
         LookAtPlayer = false;
 
         var wave = Instantiate(_wave, transform.position + transform.forward, transform.rotation);
         wave.speed = _waveSpeed;
         wave.damage = _waveDamage;
-
+        //recuperacion
         yield return new WaitForSeconds(_waveRecovery);
 
         LookAtPlayer = true;
@@ -288,13 +294,13 @@ public class ObsidianGod : Entity
     IEnumerator Spiking()
     {
         LookAtPlayer = false;
-
+        //preparacion
         yield return new WaitForSeconds(_spikesPreparation);
-
+        //salen spikes del suelo
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.35f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
-
+        //recuperacion
         yield return new WaitForSeconds(_spikesRecovery);
 
         LookAtPlayer = true;
@@ -303,8 +309,9 @@ public class ObsidianGod : Entity
 
     IEnumerator Dashing()
     {
+        //preparacion
         yield return new WaitForSeconds(_dashPreparation);
-
+        //comienza dash
         _rb.AddForce(transform.forward * _dashStrength);
 
         LookAtPlayer = false;
@@ -317,10 +324,10 @@ public class ObsidianGod : Entity
 
             yield return null;
         }
-
+        //termina dash
         _rb.velocity = Vector3.zero;
-
-        yield return new WaitForSeconds(_spikesRecovery);
+        //espero
+        yield return new WaitForSeconds(_dashRecovery);
 
         LookAtPlayer = true;
         takingAction = false;
@@ -398,7 +405,7 @@ public class ObsidianGod : Entity
 
     public override void Die()
     {
-        UIManager.instance.TurnOffBossBar();
+        UIManager.instance.ToggleBossBar(false);
         //hacer funcion del player de derrotar jefe (desactivar lockon y poner currentboss en null)
         _player.currentBoss = null;
         //animacion de que las piedras bajan

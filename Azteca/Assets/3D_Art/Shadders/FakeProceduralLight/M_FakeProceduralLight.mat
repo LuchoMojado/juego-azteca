@@ -53,6 +53,7 @@ Material:
     m_Floats:
     - _MaxDistance: 7
     - _MinDistance: 2
+    - _Opacity_Height: 2.02
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:

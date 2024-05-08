@@ -10,7 +10,8 @@ public class PlayerController : Entity
     Movement _movement;
     Inputs _inputs;
 
-    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _stepCooldown/*(variable del step viejo)_stepStopVelocity*/;
+    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _stepCooldown/*(variable del step viejo)_stepStopVelocity*/;
+    [SerializeField] LayerMask _groundLayer;
 
     [Header("Stamina costs")]
     [SerializeField] float _jumpCost;
@@ -47,7 +48,7 @@ public class PlayerController : Entity
     {
         _rb = GetComponent<Rigidbody>();
 
-        _movement = new Movement(transform, _rb, _speed, _speedOnCast, _turnRate, _jumpStr, _stepStr);
+        _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _groundLayer);
         _inputs = new Inputs(_movement, this);
 
         _activeMagic = MagicType.Sun;
@@ -250,7 +251,7 @@ public class PlayerController : Entity
             if (!CheckAndReduceStamina(_obsidianCost))
             {
                 _obsidianCurrentCooldown = _obsidianCooldown;
-                yield break;
+                break;
             }
         }
 
@@ -321,5 +322,6 @@ public class PlayerController : Entity
     {
         _joystickActive = !_joystickActive;
         _inputs.Altern(_joystickActive);
+        _inputs.Attack = false;
     }
 }
