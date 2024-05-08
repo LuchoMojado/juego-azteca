@@ -688,7 +688,7 @@ MonoBehaviour:
   _sunHitboxY: 0.5
   _sunHitboxZ: 0.25
   _sunRange: 5
-  _obsidianShard: {fileID: 7368224545872901312, guid: bbf353276bca8914ab9dd10d650e9e57,
+  _obsidianShard: {fileID: 4082922280325094675, guid: bbf353276bca8914ab9dd10d650e9e57,
     type: 3}
   _obsidianDamage: 3
   _obsidianComboInterval: 1.2

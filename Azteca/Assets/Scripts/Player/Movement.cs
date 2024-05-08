@@ -7,17 +7,18 @@ public class Movement
     public delegate void FloatsDelegate(float a, float b);
     //public event FloatsDelegate OnRotation;
 
-    float _currentSpeed, _normalSpeed, _speedOnCast, _turnRate, _jumpStrength, _stepStrength;
+    float _currentSpeed, _normalSpeed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStrength, _stepStrength;
     Transform _playerTransform;
     Rigidbody _rb;
     LayerMask _groundLayer;
 
-    public Movement(Transform transform, Rigidbody rigidbody, float speed, float speedOnCast, float turnRate, float jumpStrength, float stepStrength, LayerMask groundLayer)
+    public Movement(Transform transform, Rigidbody rigidbody, float speed, float explorationSpeed, float speedOnCast, float turnRate, float jumpStrength, float stepStrength, LayerMask groundLayer)
     {
         _playerTransform = transform;
         _rb = rigidbody;
         _currentSpeed = speed;
         _normalSpeed = speed;
+        _explorationSpeed = explorationSpeed;
         _turnRate = turnRate;
         _speedOnCast = speedOnCast;
         _jumpStrength = jumpStrength;
