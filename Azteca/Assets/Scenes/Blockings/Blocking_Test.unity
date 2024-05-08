@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.004730263, g: 0.003974962, b: 0.0064168763, a: 1}
+  m_IndirectSpecularColor: {r: 0.0047007883, g: 0.0039700624, b: 0.0063906754, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -25302,16 +25302,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 649116228}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -71.53753, y: 74.75223, z: 15.642855}
+  m_LocalRotation: {x: -0, y: 0.2648788, z: -0, w: -0.96428174}
+  m_LocalPosition: {x: -132.13753, y: -33.51, z: 353.64285}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1222433994}
   - {fileID: 384222310}
   - {fileID: 1170796287}
-  m_Father: {fileID: 1668650044}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 329.28, z: 0}
 --- !u!114 &649116230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25331,6 +25331,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _comboChanceReduction: 20
+  _fightTriggerRange: 5
   _walkSpeed: 1.75
   _baseWalkDuration: 1.5
   _walkDurationPerCombo: 0.75
@@ -69752,7 +69753,6 @@ Transform:
   m_Children:
   - {fileID: 73933422}
   - {fileID: 955870443}
-  - {fileID: 649116229}
   - {fileID: 1187162094}
   - {fileID: 1109653624}
   m_Father: {fileID: 0}
@@ -91111,6 +91111,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 676617218}
   - {fileID: 1008940063}
+  - {fileID: 649116229}
   - {fileID: 1668650044}
   - {fileID: 1456550217}
   - {fileID: 1438671620}
