@@ -60,9 +60,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void TurnOffBossBar()
+    public void ToggleBossBar(bool turnOn)
     {
-        _bossHpBar.gameObject.SetActive(false);
+        _bossHpBar.gameObject.SetActive(turnOn);
     }
 
     public void Paused()

@@ -10,8 +10,9 @@ public class Movement
     float _currentSpeed, _normalSpeed, _speedOnCast, _turnRate, _jumpStrength, _stepStrength;
     Transform _playerTransform;
     Rigidbody _rb;
+    LayerMask _groundLayer;
 
-    public Movement(Transform transform, Rigidbody rigidbody, float speed, float speedOnCast, float turnRate, float jumpStrength, float stepStrength)
+    public Movement(Transform transform, Rigidbody rigidbody, float speed, float speedOnCast, float turnRate, float jumpStrength, float stepStrength, LayerMask groundLayer)
     {
         _playerTransform = transform;
         _rb = rigidbody;
@@ -21,6 +22,7 @@ public class Movement
         _speedOnCast = speedOnCast;
         _jumpStrength = jumpStrength;
         _stepStrength = stepStrength;
+        _groundLayer = groundLayer;
     }
 
     /*public void Move(float horizontalInput, float verticalInput, bool changeForward)
@@ -110,7 +112,7 @@ public class Movement
     {
         Ray groundedRay = new Ray(_playerTransform.position, -_playerTransform.up);
 
-        return Physics.Raycast(groundedRay, 1.1f);
+        return Physics.BoxCast(_playerTransform.position, new Vector3(0.25f, 0.1f, 0.25f), -_playerTransform.up, Quaternion.identity, 1, _groundLayer);
     }
 
     Vector3 GetDir(float hInput, float vInput)
