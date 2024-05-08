@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Plant
-  m_Shader: {fileID: -6465566751694194690, guid: 21911c44aad14ac499ae9b6e964643bf,
+  m_Shader: {fileID: -6465566751694194690, guid: 93571e3783e480c4ebc79efd84de9557,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -73,6 +73,8 @@ Material:
     - _QueueOffset: 0
     - _Saturation: 1
     - _Smoothness_1: 0.5
+    - _Top_Movements: 1
+    - _Wind_Intensity: 1
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

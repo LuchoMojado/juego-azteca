@@ -85,6 +85,8 @@ Material:
     - _QueueOffset: 0
     - _Saturation: 1
     - _Smoothness_1: 0.5
+    - _Top_Movements: 0.19
+    - _Wind_Intensity: 0
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
