@@ -48,6 +48,8 @@ public class ObsidianGod : Entity
 
     [SerializeField] GameObject preJumpParticles;
 
+    [SerializeField] Animator anim;
+
     public enum ObsidianStates
     {
         Inactive,
@@ -98,13 +100,13 @@ public class ObsidianGod : Entity
 
         _fsm = new FiniteStateMachine();
 
-        _fsm.AddState(ObsidianStates.Inactive, new InactiveState(this, _fightTriggerRange));
-        _fsm.AddState(ObsidianStates.Walk, new WalkState(this, _baseWalkDuration, _walkDurationPerCombo));
-        _fsm.AddState(ObsidianStates.Swing, new SwingState(this));
-        _fsm.AddState(ObsidianStates.Spikes, new SpikesState(this));
-        _fsm.AddState(ObsidianStates.Shards, new ShardsState(this));
-        _fsm.AddState(ObsidianStates.Wave, new WaveState(this));
-        _fsm.AddState(ObsidianStates.Dash, new DashState(this));
+        _fsm.AddState(ObsidianStates.Inactive, new InactiveState(this, _fightTriggerRange,anim));
+        _fsm.AddState(ObsidianStates.Walk, new WalkState(this, _baseWalkDuration, _walkDurationPerCombo, anim));
+        _fsm.AddState(ObsidianStates.Swing, new SwingState(this, anim));
+        _fsm.AddState(ObsidianStates.Spikes, new SpikesState(this, anim));
+        _fsm.AddState(ObsidianStates.Shards, new ShardsState(this, anim));
+        _fsm.AddState(ObsidianStates.Wave, new WaveState(this, anim));
+        _fsm.AddState(ObsidianStates.Dash, new DashState(this, anim));
 
         _fsm.ChangeState(ObsidianStates.Inactive);
         _lastAction = ObsidianStates.Inactive;
@@ -411,7 +413,8 @@ public class ObsidianGod : Entity
         UIManager.instance.ToggleBossBar(false);
         _player.FightEnds();
         //animacion de que las piedras bajan
-        _arena.gameObject.SetActive(false);
+        _arena.GetComponent<Animation>().Play("BajanPicos");
+        StartCoroutine(ApagarArena());
         //animacion de muerte
         Destroy(gameObject);
     }
@@ -419,5 +422,10 @@ public class ObsidianGod : Entity
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(_meleeHitboxCenter.position, _meleeBox * 2);
+    }
+    IEnumerator ApagarArena()
+    {
+        yield return new WaitForSeconds(1f);
+        _arena.SetActive(false);
     }
 }
