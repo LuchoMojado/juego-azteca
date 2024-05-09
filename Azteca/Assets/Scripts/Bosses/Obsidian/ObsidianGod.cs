@@ -304,7 +304,7 @@ public class ObsidianGod : Entity
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
-        Destroy(preJumpParticles);
+        //Destroy(preJumpParticles);
         //recuperacion
         yield return new WaitForSeconds(_spikesRecovery);
 
