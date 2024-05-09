@@ -199,7 +199,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 1.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -252,7 +252,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -0.5
+      scalar: -1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5198,7 +5198,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.8
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9825,7 +9825,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -136.149, y: -66.088, z: 551.872}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7277605131247582055}
@@ -9869,10 +9869,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   speed: 0
-  _deathTimer: 4
+  _deathTimer: 3
   _chargingParticles: {fileID: 5707163424339147529}
   _readyParticles: {fileID: 982347917356346416}
   _destroyedParticles: {fileID: 7978981101926682636}
+  player: {fileID: 0}
 --- !u!1 &8845878377210068754
 GameObject:
   m_ObjectHideFlags: 0

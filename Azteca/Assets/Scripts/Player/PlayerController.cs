@@ -98,6 +98,7 @@ public class PlayerController : Entity
         {
             anim.SetBool("IsJumping", true);
             _movement.Jump();
+            anim.SetBool("IsJumping", false);
         }
     }
 
@@ -211,7 +212,7 @@ public class PlayerController : Entity
 
         yield return new WaitForSeconds(_sunCastDelay);
 
-        var sun = Instantiate(_sunMagic, transform.position + transform.forward * 0.6f, transform.rotation, transform);
+        var sun = Instantiate(_sunMagic, transform.position + transform.forward * 1f + transform.up * 0.6f, transform.rotation, transform);
         sun.player = this;
         sun.damage = _sunBaseDamage;
 
@@ -244,6 +245,9 @@ public class PlayerController : Entity
 
         while (_inputs.Attack)
         {
+            var lookAt = Camera.main.transform.forward.MakeHorizontal();
+            transform.forward = lookAt;
+
             CheckAndReduceStamina(0);
             yield return null;
         }
@@ -259,6 +263,7 @@ public class PlayerController : Entity
             sun.Shoot();
         }
 
+        anim.SetBool("IsAttacking", false);
         _sunCurrentCooldown = _sunCooldown;
         _inputs.Attack = false;
         _movement.Cast(false);
@@ -310,6 +315,7 @@ public class PlayerController : Entity
                 if (!_inputs.Attack)
                 {
                     _obsidianCurrentCooldown = _obsidianCooldown;
+                    anim.SetBool("IsAttacking", false);
                     yield break;
                 }
 
@@ -322,7 +328,7 @@ public class PlayerController : Entity
                 break;
             }
         }
-
+        anim.SetBool("IsAttacking", false);
         _obsidianCurrentCooldown = _obsidianCooldown;
     }
 
@@ -386,6 +392,7 @@ public class PlayerController : Entity
         _damageCurrentCooldown = _damageCooldown;
 
         anim.SetBool("IsHit", true);
+        anim.SetBool("IsHit", false);
 
         base.TakeDamage(amount);
         

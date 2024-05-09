@@ -6,11 +6,13 @@ public class Hazard : MonoBehaviour
 {
     [HideInInspector] public float damage, duration;
 
+    [SerializeField] Animation _animation;
+
     private void Update()
     {
         if (duration <= 0)
         {
-            Destroy(gameObject);
+            StartCoroutine(Die());
         }
         else
         {
@@ -24,5 +26,14 @@ public class Hazard : MonoBehaviour
         {
             player.TakeDamage(damage);
         }
+    }
+
+    IEnumerator Die()
+    {
+        _animation.Play("SpikesLower");
+
+        yield return new WaitForSeconds(0.1f);
+
+        Destroy(gameObject);
     }
 }

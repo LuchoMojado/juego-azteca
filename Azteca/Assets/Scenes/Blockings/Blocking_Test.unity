@@ -696,7 +696,7 @@ MonoBehaviour:
   _sunDamageGrowRate: 2
   _sunSpeed: 10
   _sunMaxChargeTime: 5
-  _sunCastDelay: 0
+  _sunCastDelay: 0.5
   _sunRecovery: 0
   _sunCooldown: 1.2
   _sunHitboxX: 1.6
@@ -19735,7 +19735,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 492483261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18910754, y: -0.000000008447957, z: 0.0000000016269279, w: 0.9819564}
+  m_LocalRotation: {x: 0.18910754, y: 0.0000000084479606, z: -0.0000000016269286,
+    w: 0.9819564}
   m_LocalPosition: {x: -160.36, y: -31.5, z: 389.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -26389,8 +26390,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _comboChanceReduction: 20
-  _fightTriggerRange: 40
-  _walkSpeed: 1.75
+  _fightTriggerRange: 35
+  _walkSpeed: 2.25
   _baseWalkDuration: 1.5
   _walkDurationPerCombo: 0.75
   _meleeHitboxCenter: {fileID: 1170796287}
@@ -26411,12 +26412,11 @@ MonoBehaviour:
   _shardsInterval: 0.5
   _shardsRecovery: 0.5
   _wave: {fileID: 2884197402541514313, guid: b7645203167be934199f605384e17338, type: 3}
-  _wavePreparation: 1
+  _wavePreparation: 0.95
   _waveSpeed: 30
   _waveDamage: 30
   _waveRecovery: 0.25
-  _spikes: {fileID: -2377666967069994849, guid: 54c91611373e22743b48170b6b491f1e,
-    type: 3}
+  _spikes: {fileID: 3897651631740069319, guid: 1c5af27c615d3b2469f2babd33168086, type: 3}
   _preJumpParticles:
   - {fileID: 2111157727}
   - {fileID: 1127747273}
@@ -26424,9 +26424,9 @@ MonoBehaviour:
   _spikesDuration: 0.6
   _spikesDamage: 15
   _spikesRecovery: 0.75
-  _dashStrength: 1000
+  _dashStrength: 1500
   _dashPreparation: 0.25
-  _dashDuration: 0.4
+  _dashDuration: 0.5
   _dashRecovery: 0.2
   anim: {fileID: 1913438191}
   takingAction: 0
@@ -57989,8 +57989,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349599303}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18910751, y: 0.0000000084479606, z: -0.0000000016269286,
-    w: 0.9819564}
+  m_LocalRotation: {x: 0.18910751, y: -0.000000008447955, z: 0.0000000016269276, w: 0.9819564}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -83018,8 +83017,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932205383}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18910754, y: 0.0000000084479606, z: -0.0000000016269286,
-    w: 0.9819564}
+  m_LocalRotation: {x: 0.18910754, y: -0.000000008447957, z: 0.0000000016269279, w: 0.9819564}
   m_LocalPosition: {x: -160.36, y: -31.5, z: 389.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

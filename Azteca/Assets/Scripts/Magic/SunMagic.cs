@@ -14,7 +14,7 @@ public class SunMagic : PlayerProjectile
     {
         if (_charging)
         {
-            transform.localScale += Vector3.one * Time.deltaTime * 0.25f;
+            transform.localScale += Vector3.one * Time.deltaTime * 0.3f;
         }
         else if (_shot && !_dead)
         {
