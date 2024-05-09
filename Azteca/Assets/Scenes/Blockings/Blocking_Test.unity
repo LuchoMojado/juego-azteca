@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.004730263, g: 0.003974962, b: 0.0064168763, a: 1}
+  m_IndirectSpecularColor: {r: 0.0047007883, g: 0.0039700624, b: 0.0063906754, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -693,8 +693,9 @@ MonoBehaviour:
   _sunMagic: {fileID: 1097402135425091426, guid: 9be6616c1c304bb41a01789ea4efb0f6,
     type: 3}
   _sunBaseDamage: 5
-  _sunDamageGrowRate: 0.1
+  _sunDamageGrowRate: 2
   _sunSpeed: 10
+  _sunMaxChargeTime: 5
   _sunCastDelay: 0
   _sunRecovery: 0
   _sunCooldown: 1.2

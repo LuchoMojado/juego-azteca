@@ -19,7 +19,7 @@ public class PlayerController : Entity
 
     [Header("Sun Magic")]
     [SerializeField] SunMagic _sunMagic;
-    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunCastDelay, _sunRecovery, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
+    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunMaxChargeTime, _sunCastDelay, _sunRecovery, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
     [Header("Obsidian Magic")]
@@ -204,10 +204,14 @@ public class PlayerController : Entity
 
         yield return new WaitForSeconds(_sunCastDelay);
 
-        var sun = Instantiate(_sunMagic, transform.position + transform.forward, transform.rotation, transform);
+        var sun = Instantiate(_sunMagic, transform.position + transform.forward * 0.6f, transform.rotation, transform);
 
-        while (_inputs.Attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        float timer = 0;
+
+        while (_inputs.Attack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
         {
+            timer += Time.deltaTime;
+
             var lookAt = Camera.main.transform.forward.MakeHorizontal();
             transform.forward = lookAt;
 
@@ -224,6 +228,17 @@ public class PlayerController : Entity
             yield return null;
         }
 
+        if (timer >= _sunMaxChargeTime)
+        {
+            sun.ChargeFinished();
+        }
+
+        while (_inputs.Attack)
+        {
+            CheckAndReduceStamina(0);
+            yield return null;
+        }
+
         if (_damageCurrentCooldown > 0)
         {
             sun.Die();
@@ -232,7 +247,7 @@ public class PlayerController : Entity
         {
             sun.transform.SetParent(null);
             sun.speed = _sunSpeed;
-            sun.Shoot(damage);
+            sun.Shoot(damage + timer * _sunDamageGrowRate);
         }
 
         _sunCurrentCooldown = _sunCooldown;

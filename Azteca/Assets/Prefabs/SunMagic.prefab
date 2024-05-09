@@ -9869,7 +9869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   speed: 0
-  _deathTimer: 10
+  _deathTimer: 4
   _chargingParticles: {fileID: 5707163424339147529}
   _readyParticles: {fileID: 982347917356346416}
   _destroyedParticles: {fileID: 7978981101926682636}

@@ -182,11 +182,11 @@ public class Inputs
 
         cameraInputs();
 
-        if (Mathf.Abs(Input.GetAxis("Horizontal")) == 1 || Mathf.Abs(Input.GetAxis("Vertical")) == 1)
+        /*if (Mathf.Abs(Input.GetAxis("Horizontal")) == 1 || Mathf.Abs(Input.GetAxis("Vertical")) == 1)
         {
             Attack = false;
             inputUpdate = Unpaused;
-        }
+        }*/
 
         if (Input.GetKeyDown(_Kscape))
         {

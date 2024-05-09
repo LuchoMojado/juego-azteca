@@ -6,7 +6,7 @@ public class PlayerProjectile : MonoBehaviour
 {
     [HideInInspector] public float damage, speed;
 
-    [SerializeField] float _deathTimer;
+    [SerializeField] protected float _deathTimer;
 
     protected virtual void Update()
     {
