@@ -94,6 +94,7 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && CheckAndReduceStamina(_jumpCost))
         {
+            anim.SetBool("IsJumping", true);
             _movement.Jump();
         }
     }
@@ -102,6 +103,7 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
+            anim.SetBool("IsStrafeRight", true);
             _stepCurrentCooldown = _stepCooldown;
             _movement.Step(horizontalInput, verticalInput);
         }
@@ -203,6 +205,7 @@ public class PlayerController : Entity
     {
         _inputs.inputUpdate = _inputs.FixedCast;
         var damage = _sunBaseDamage;
+        anim.SetBool("IsAttacking", true);
 
         yield return new WaitForSeconds(_sunCastDelay);
 
@@ -275,6 +278,7 @@ public class PlayerController : Entity
         _inputs.inputUpdate = _inputs.FixedCast;
         var lookAt = Camera.main.transform.forward.MakeHorizontal();
         transform.forward = lookAt;
+        anim.SetBool("IsAttacking", true);
 
         for (int i = _shardsPerWave; i < _shardsPerWave + _maxWaves; i++)
         {
@@ -378,6 +382,8 @@ public class PlayerController : Entity
 
         _damageCurrentCooldown = _damageCooldown;
 
+        anim.SetBool("IsHit", true);
+
         base.TakeDamage(amount);
         
         UIManager.instance.UpdateBar(UIManager.Bar.PlayerHp, _hp);
@@ -410,6 +416,7 @@ public class PlayerController : Entity
 
     public void StopCast()
     {
+        anim.SetBool("IsAttacking",false);
         _inputs.Attack = false;
     }
 }
