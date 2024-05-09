@@ -11,6 +11,7 @@ public class Movement
     Transform _playerTransform;
     Rigidbody _rb;
     LayerMask _groundLayer;
+    PlayerController _player;
 
     public Movement(Transform transform, Rigidbody rigidbody, float speed, float explorationSpeed, float speedOnCast, float turnRate, float jumpStrength, float stepStrength, LayerMask groundLayer)
     {
@@ -25,6 +26,7 @@ public class Movement
         _stepStrength = stepStrength;
         _groundLayer = groundLayer;
         _currentMoveSpeed = explorationSpeed;
+        _player = _playerTransform.gameObject.GetComponent<PlayerController>();
     }
 
     /*public void Move(float horizontalInput, float verticalInput, bool changeForward)
@@ -41,7 +43,16 @@ public class Movement
 
     public void Move(float horizontalInput, float verticalInput, bool changeForward)
     {
-        if (horizontalInput == 0 && verticalInput == 0) return;
+        if (horizontalInput == 0 && verticalInput == 0)
+        {
+            _player.RunningAnimation(false);
+            _rb.constraints = RigidbodyConstraints.FreezeRotation;
+            return;
+        }
+
+        _player.RunningAnimation(true);
+
+        _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
         var dir = GetDir(horizontalInput, verticalInput);
 
@@ -88,7 +99,7 @@ public class Movement
     {
         Vector3 dir, cameraForward;
 
-        if (Mathf.Abs(horizontalInput) < 1 && Mathf.Abs(verticalInput) < 1)
+        if (Mathf.Abs(horizontalInput) < 0.5f && Mathf.Abs(verticalInput) < 0.5f)
         {
             cameraForward = Camera.main.transform.forward.MakeHorizontal();
             dir = -cameraForward;

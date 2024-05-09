@@ -268,6 +268,11 @@ public class Inputs
         }
     }
 
+    public void Nothing()
+    {
+
+    }
+
     public void Paused()
     {
         if (Input.GetKeyDown(_Kscape))

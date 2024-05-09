@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button _joystick;
     [SerializeField] Image _paused;
 
+    public GameObject textoFinal;
+
     public enum Bar
     {
         PlayerHp,
@@ -74,5 +76,12 @@ public class UIManager : MonoBehaviour
     {
         _paused.gameObject.SetActive(false);
         _joystick.gameObject.SetActive(false);
+    }
+
+    public void Final()
+    {
+        _hpBar.gameObject.SetActive(false);
+        _staminaBar.gameObject.SetActive(false);
+        textoFinal.SetActive(true);
     }
 }

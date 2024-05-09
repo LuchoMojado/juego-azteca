@@ -24,7 +24,7 @@ public class PlayerController : Entity
 
     [Header("Obsidian Magic")]
     [SerializeField] PlayerProjectile _obsidianShard;
-    [SerializeField] float _obsidianDamage, _obsidianComboInterval, _obsidianCooldown, _shardAngleOffset, _shardSpeed;
+    [SerializeField] float _obsidianDamage, _obsidianCastDelay, _obsidianComboInterval, _obsidianCooldown, _shardAngleOffset, _shardSpeed;
     [SerializeField] int _shardsPerWave, _maxWaves;
 
     float _stepCurrentCooldown = 0, _obsidianCurrentCooldown = 0, _sunCurrentCooldown = 0, _damageCurrentCooldown = 0;
@@ -36,6 +36,8 @@ public class PlayerController : Entity
     MagicType _activeMagic;
 
     [SerializeField] CinemachineCameraController _cameraController;
+
+    public GameObject camaraFinal;
 
     public Renderer renderer;
     private bool _joystickActive=true;
@@ -75,6 +77,8 @@ public class PlayerController : Entity
 
     void Update()
     {
+        if (transform.position.y < -87) Die();
+
         if (_inputs.inputUpdate != null) _inputs.inputUpdate();
 
         ManageCooldowns();
@@ -106,7 +110,7 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
-            anim.SetBool("IsStrafeRight", true);
+            //anim.SetBool("IsStrafeRight", true);
             _stepCurrentCooldown = _stepCooldown;
             _movement.Step(horizontalInput, verticalInput);
         }
@@ -260,8 +264,11 @@ public class PlayerController : Entity
         {
             sun.transform.SetParent(null);
             sun.speed = _sunSpeed;
+            _rb.AddForce(-transform.forward * 75 * timer);
             sun.Shoot();
         }
+        
+        yield return new WaitForSeconds(_sunRecovery);
 
         anim.SetBool("IsAttacking", false);
         _sunCurrentCooldown = _sunCooldown;
@@ -287,6 +294,8 @@ public class PlayerController : Entity
         var lookAt = Camera.main.transform.forward.MakeHorizontal();
         transform.forward = lookAt;
         anim.SetBool("IsAttacking", true);
+
+        yield return new WaitForSeconds(_obsidianCastDelay);
 
         for (int i = _shardsPerWave; i < _shardsPerWave + _maxWaves; i++)
         {
@@ -389,6 +398,8 @@ public class PlayerController : Entity
 
         if (_damageCurrentCooldown > 0) return;
 
+        _cameraController.CameraShake(1, 0.5f);
+
         _damageCurrentCooldown = _damageCooldown;
 
         anim.SetBool("IsHit", true);
@@ -413,12 +424,14 @@ public class PlayerController : Entity
 
     public void FightStarts(Entity boss)
     {
+        _cameraController.CameraShake(2, 1);
         _movement.Combat(true);
         currentBoss = boss;
     }
 
     public void FightEnds()
     {
+        _cameraController.CameraShake(2, 1);
         _movement.Combat(false);
         currentBoss = null;
         _inputs.inputLateUpdate = _inputs.FreeLook;
@@ -428,5 +441,23 @@ public class PlayerController : Entity
     {
         anim.SetBool("IsAttacking",false);
         _inputs.Attack = false;
+    }
+
+    public void RunningAnimation(bool play)
+    {
+        anim.SetBool("IsRunning", play);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 9)
+        {
+            _rb.velocity = Vector3.zero;
+            _rb.constraints = RigidbodyConstraints.FreezeAll;
+            _inputs.inputUpdate = _inputs.Nothing;
+            camaraFinal.SetActive(true);
+            _cameraController.Final();
+            UIManager.instance.Final();
+        }
     }
 }
