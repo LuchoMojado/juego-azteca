@@ -12,7 +12,7 @@ public class SunMagic : PlayerProjectile
     {
         if (_charging)
         {
-            transform.localScale += Vector3.one * Time.deltaTime;
+            transform.localScale += Vector3.one * Time.deltaTime * 0.15f;
         }
         else if (_shot)
         {
@@ -42,11 +42,11 @@ public class SunMagic : PlayerProjectile
         damage = dmg;
     }
 
-    protected override void Die()
+    public override void Die()
     {
         _destroyedParticles.Play();
 
-        //apagar renderer? esperar a que terminen las particulas de destruir (con corrutina)
+        //apagar renderer? esperar a que terminen las particulas de destruir (con corrutina?)
 
         base.Die();
     }

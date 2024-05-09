@@ -10,7 +10,7 @@ public class PlayerController : Entity
     Movement _movement;
     Inputs _inputs;
 
-    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _stepCooldown/*(variable del step viejo)_stepStopVelocity*/;
+    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _damageCooldown, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _stepCooldown/*(variable del step viejo)_stepStopVelocity*/;
     [SerializeField] LayerMask _groundLayer;
 
     [Header("Stamina costs")]
@@ -19,7 +19,7 @@ public class PlayerController : Entity
 
     [Header("Sun Magic")]
     [SerializeField] SunMagic _sunMagic;
-    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunCastDelay, _sunRecovery, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
+    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunCastDelay, _sunRecovery, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
     [Header("Obsidian Magic")]
@@ -27,7 +27,7 @@ public class PlayerController : Entity
     [SerializeField] float _obsidianDamage, _obsidianComboInterval, _obsidianCooldown, _shardAngleOffset, _shardSpeed;
     [SerializeField] int _shardsPerWave, _maxWaves;
 
-    float _stepCurrentCooldown = 0, _obsidianCurrentCooldown = 0, _sunCurrentCooldown = 0;
+    float _stepCurrentCooldown = 0, _obsidianCurrentCooldown = 0, _sunCurrentCooldown = 0, _damageCurrentCooldown = 0;
 
     float _stamina, _currentStaminaDelay = 0;
 
@@ -152,7 +152,7 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
         {
-            StartCoroutine(SunMagic());
+            StartCoroutine(NewSunMagic());
         }
         else
         {
@@ -204,7 +204,40 @@ public class PlayerController : Entity
 
         yield return new WaitForSeconds(_sunCastDelay);
 
+        var sun = Instantiate(_sunMagic, transform.position + transform.forward, transform.rotation, transform);
 
+        while (_inputs.Attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        {
+            var lookAt = Camera.main.transform.forward.MakeHorizontal();
+            transform.forward = lookAt;
+
+            /*if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
+            {
+                if (hit.collider.TryGetComponent(out Entity entity))
+                {
+                    entity.TakeDamage(damage * Time.deltaTime);
+                }
+            }*/
+
+            damage += _sunDamageGrowRate * Time.deltaTime;
+
+            yield return null;
+        }
+
+        if (_damageCurrentCooldown > 0)
+        {
+            sun.Die();
+        }
+        else
+        {
+            sun.transform.SetParent(null);
+            sun.speed = _sunSpeed;
+            sun.Shoot(damage);
+        }
+
+        _sunCurrentCooldown = _sunCooldown;
+        _inputs.Attack = false;
+        _movement.Cast(false);
     }
 
     void ActivateObsidianMagic()
@@ -282,6 +315,10 @@ public class PlayerController : Entity
         {
             _obsidianCurrentCooldown -= Time.deltaTime;
         }
+        if (_damageCurrentCooldown > 0)
+        {
+            _damageCurrentCooldown -= Time.deltaTime;
+        }
     }
 
     void StaminaRegeneration()
@@ -317,9 +354,14 @@ public class PlayerController : Entity
 
     public override void TakeDamage(float amount)
     {
-        base.TakeDamage(amount);
-
         _inputs.Attack = false;
+
+        if (_damageCurrentCooldown > 0) return;
+
+        _damageCurrentCooldown = _damageCooldown;
+
+        base.TakeDamage(amount);
+        
         UIManager.instance.UpdateBar(UIManager.Bar.PlayerHp, _hp);
     }
 
