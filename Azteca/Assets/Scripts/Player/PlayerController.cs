@@ -100,9 +100,9 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && CheckAndReduceStamina(_jumpCost))
         {
-            anim.SetBool("IsJumping", true);
+            anim.SetTrigger("IsJumping");
             _movement.Jump();
-            anim.SetBool("IsJumping", false);
+            //anim.SetBool("IsJumping", false);
         }
     }
 
