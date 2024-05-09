@@ -299,7 +299,7 @@ public class ObsidianGod : Entity
         //preparacion
         yield return new WaitForSeconds(_spikesPreparation);
         //salen spikes del suelo
-        var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.35f, transform.rotation);
+        var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
         Destroy(preJumpParticles);
