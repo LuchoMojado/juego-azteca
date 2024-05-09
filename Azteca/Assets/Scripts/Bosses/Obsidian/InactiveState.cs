@@ -6,20 +6,23 @@ public class InactiveState : State
 {
     float _aggroRange;
 
-    public InactiveState(ObsidianGod boss, float range)
+    public InactiveState(ObsidianGod boss, float range, Animator anim)
     {
         _boss = boss;
         _aggroRange = range;
+        _anim = anim;
     }
 
     public override void OnEnter()
     {
         _boss.renderer.material.color = Color.white;
         //animacion idle
+        _anim.SetBool("IsIdle", true);
     }
 
     public override void OnExit()
     {
+        _anim.SetBool("IsIdle", false);
         _boss.StartFight();
     }
 

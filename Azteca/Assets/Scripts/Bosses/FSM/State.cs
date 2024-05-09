@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class State
 {
     protected ObsidianGod _boss;
+    protected Animator _anim;
 
     public abstract void OnEnter();
     public abstract void OnUpdate();

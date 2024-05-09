@@ -38,6 +38,8 @@ public class PlayerController : Entity
     public Renderer renderer;
     private bool _joystickActive=true;
 
+    [SerializeField] Animator anim;
+
     public enum MagicType
     {
         Sun,
