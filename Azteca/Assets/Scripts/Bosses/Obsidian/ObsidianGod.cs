@@ -127,7 +127,7 @@ public class ObsidianGod : Entity
 
     public void StartFight()
     {
-        _player.currentBoss = this;
+        _player.FightStarts(this);
         _arena.gameObject.SetActive(true);
         UIManager.instance.ToggleBossBar(true);
         LookAtPlayer = true;
@@ -227,7 +227,7 @@ public class ObsidianGod : Entity
 
                 var finalRotation = transform.rotation.AddYRotation(baseRotationChange + individualRotationChange);
 
-                var shard = Instantiate(_shard, transform.position, finalRotation);
+                var shard = Instantiate(_shard, transform.position + transform.forward * 0.6f, finalRotation);
                 shard.speed = _shardSpeed;
                 shard.damage = _shardDamage;
             }
@@ -406,8 +406,7 @@ public class ObsidianGod : Entity
     public override void Die()
     {
         UIManager.instance.ToggleBossBar(false);
-        //hacer funcion del player de derrotar jefe (desactivar lockon y poner currentboss en null)
-        _player.currentBoss = null;
+        _player.FightEnds();
         //animacion de que las piedras bajan
         _arena.gameObject.SetActive(false);
         //animacion de muerte

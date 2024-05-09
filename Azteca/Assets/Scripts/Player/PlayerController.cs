@@ -18,7 +18,7 @@ public class PlayerController : Entity
     [SerializeField] float _stepCost, _sunBaseCost, _sunHoldCost, _obsidianCost;
 
     [Header("Sun Magic")]
-    [SerializeField] GameObject _sunMagic;
+    [SerializeField] SunMagic _sunMagic;
     [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunCastDelay, _sunRecovery, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
@@ -164,7 +164,7 @@ public class PlayerController : Entity
     {
         _inputs.inputUpdate = _inputs.MovingCast;
         var damage = _sunBaseDamage;
-        _movement.Casting();
+        _movement.Cast(true);
 
         yield return new WaitForSeconds(_sunCastDelay);
 
@@ -194,7 +194,17 @@ public class PlayerController : Entity
 
         _sunCurrentCooldown = _sunCooldown;
         _inputs.Attack = false;
-        _movement.StopCasting();
+        _movement.Cast(false);
+    }
+
+    IEnumerator NewSunMagic()
+    {
+        _inputs.inputUpdate = _inputs.FixedCast;
+        var damage = _sunBaseDamage;
+
+        yield return new WaitForSeconds(_sunCastDelay);
+
+
     }
 
     void ActivateObsidianMagic()
@@ -225,7 +235,7 @@ public class PlayerController : Entity
 
                 var finalRotation = transform.rotation.AddYRotation(baseRotationChange + individualRotationChange);
 
-                var shard = Instantiate(_obsidianShard, transform.position, finalRotation);
+                var shard = Instantiate(_obsidianShard, transform.position + transform.forward * 0.65f, finalRotation);
                 shard.speed = _shardSpeed;
                 shard.damage = _obsidianDamage;
             }
@@ -323,5 +333,18 @@ public class PlayerController : Entity
         _joystickActive = !_joystickActive;
         _inputs.Altern(_joystickActive);
         _inputs.Attack = false;
+    }
+
+    public void FightStarts(Entity boss)
+    {
+        _movement.Combat(true);
+        currentBoss = boss;
+    }
+
+    public void FightEnds()
+    {
+        _movement.Combat(false);
+        currentBoss = null;
+        _inputs.inputLateUpdate = _inputs.FreeLook;
     }
 }

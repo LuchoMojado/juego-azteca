@@ -299,7 +299,7 @@ public class Inputs
         inputLateUpdate = _locked ? LockedOn : FreeLook;
     }
 
-    void FreeLook()
+    public void FreeLook()
     {
         _camera.FreeLook(_inputMouseX, _inputMouseY);
     }

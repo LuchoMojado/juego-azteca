@@ -8,13 +8,13 @@ public class PlayerProjectile : MonoBehaviour
 
     [SerializeField] float _deathTimer;
 
-    void Update()
+    protected virtual void Update()
     {
         transform.position += transform.forward * speed * Time.deltaTime;
 
         if (_deathTimer <= 0)
         {
-            Destroy(gameObject);
+            Die();
         }
         else
         {
@@ -22,7 +22,7 @@ public class PlayerProjectile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 6 || other.gameObject.layer == 7)
         {
@@ -34,6 +34,11 @@ public class PlayerProjectile : MonoBehaviour
             entity.TakeDamage(damage);
         }
 
+        Die();
+    }
+
+    protected virtual void Die()
+    {
         Destroy(gameObject);
     }
 }

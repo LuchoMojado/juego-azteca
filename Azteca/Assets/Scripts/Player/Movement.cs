@@ -7,7 +7,7 @@ public class Movement
     public delegate void FloatsDelegate(float a, float b);
     //public event FloatsDelegate OnRotation;
 
-    float _currentSpeed, _normalSpeed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStrength, _stepStrength;
+    float _currentSpeed, _normalSpeed, _explorationSpeed, _currentMoveSpeed, _speedOnCast, _turnRate, _jumpStrength, _stepStrength;
     Transform _playerTransform;
     Rigidbody _rb;
     LayerMask _groundLayer;
@@ -16,7 +16,7 @@ public class Movement
     {
         _playerTransform = transform;
         _rb = rigidbody;
-        _currentSpeed = speed;
+        _currentSpeed = explorationSpeed;
         _normalSpeed = speed;
         _explorationSpeed = explorationSpeed;
         _turnRate = turnRate;
@@ -24,6 +24,7 @@ public class Movement
         _jumpStrength = jumpStrength;
         _stepStrength = stepStrength;
         _groundLayer = groundLayer;
+        _currentMoveSpeed = explorationSpeed;
     }
 
     /*public void Move(float horizontalInput, float verticalInput, bool changeForward)
@@ -73,14 +74,9 @@ public class Movement
         _rb.MovePosition(_playerTransform.position + _currentSpeed * Time.fixedDeltaTime * dir);
     }
 
-    public void Casting()
+    public void Cast(bool starts)
     {
-        _currentSpeed = _speedOnCast;
-    }
-
-    public void StopCasting()
-    {
-        _currentSpeed = _normalSpeed;
+        _currentSpeed = starts ? _speedOnCast : _currentMoveSpeed;
     }
 
     public void Jump()
@@ -114,6 +110,12 @@ public class Movement
         Ray groundedRay = new Ray(_playerTransform.position, -_playerTransform.up);
 
         return Physics.BoxCast(_playerTransform.position, new Vector3(0.25f, 0.1f, 0.25f), -_playerTransform.up, Quaternion.identity, 1, _groundLayer);
+    }
+
+    public void Combat(bool starts)
+    {
+        _currentMoveSpeed = starts ? _normalSpeed : _explorationSpeed;
+        _currentSpeed = _currentMoveSpeed;
     }
 
     Vector3 GetDir(float hInput, float vInput)
