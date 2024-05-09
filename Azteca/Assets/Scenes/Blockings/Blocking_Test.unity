@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0047007883, g: 0.0039700624, b: 0.0063906754, a: 1}
+  m_IndirectSpecularColor: {r: 0.004730263, g: 0.003974962, b: 0.0064168763, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -25765,7 +25765,8 @@ MonoBehaviour:
   _waveSpeed: 30
   _waveDamage: 30
   _waveRecovery: 0.25
-  _spikes: {fileID: 3897651631740069319, guid: 1c5af27c615d3b2469f2babd33168086, type: 3}
+  _spikes: {fileID: -2377666967069994849, guid: 54c91611373e22743b48170b6b491f1e,
+    type: 3}
   _spikesPreparation: 1.25
   _spikesDuration: 0.6
   _spikesDamage: 15
