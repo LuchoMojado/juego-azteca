@@ -38,6 +38,7 @@ public class ObsidianGod : Entity
 
     [Header("Spikes")]
     [SerializeField] Hazard _spikes;
+    [SerializeField] ParticleSystem[] _preJumpParticles;
     [SerializeField] float _spikesPreparation, _spikesDuration, _spikesDamage, _spikesRecovery;
 
     [Header("Dash")]
@@ -45,8 +46,6 @@ public class ObsidianGod : Entity
     [SerializeField] float _dashPreparation, _dashDuration, _dashRecovery;
 
     FiniteStateMachine _fsm;
-
-    [SerializeField] GameObject preJumpParticles;
 
     [SerializeField] Animator anim;
 
@@ -152,7 +151,10 @@ public class ObsidianGod : Entity
     public void Spikes()
     {
         takingAction = true;
-        Instantiate(preJumpParticles, this.transform.position, Quaternion.identity);
+        for (int i = 0; i < _preJumpParticles.Length; i++)
+        {
+            _preJumpParticles[i].Play();
+        }
         StartCoroutine(Spiking());
     }
 
@@ -304,7 +306,10 @@ public class ObsidianGod : Entity
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
-        //Destroy(preJumpParticles);
+        for (int i = 0; i < _preJumpParticles.Length; i++)
+        {
+            _preJumpParticles[i].Stop();
+        }
         //recuperacion
         yield return new WaitForSeconds(_spikesRecovery);
 

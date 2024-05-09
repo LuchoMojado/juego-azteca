@@ -206,13 +206,14 @@ public class PlayerController : Entity
     IEnumerator NewSunMagic()
     {
         _inputs.inputUpdate = _inputs.FixedCast;
-        var damage = _sunBaseDamage;
+        
         anim.SetBool("IsAttacking", true);
 
         yield return new WaitForSeconds(_sunCastDelay);
 
         var sun = Instantiate(_sunMagic, transform.position + transform.forward * 0.6f, transform.rotation, transform);
         sun.player = this;
+        sun.damage = _sunBaseDamage;
 
         float timer = 0;
 
@@ -231,7 +232,7 @@ public class PlayerController : Entity
                 }
             }*/
 
-            damage += _sunDamageGrowRate * Time.deltaTime;
+            sun.damage += _sunDamageGrowRate * Time.deltaTime;
 
             yield return null;
         }
