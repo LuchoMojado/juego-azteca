@@ -6,6 +6,8 @@ public class SunMagic : PlayerProjectile
 {
     [SerializeField] ParticleSystem _chargingParticles, _readyParticles, _destroyedParticles;
 
+    [HideInInspector] public PlayerController player;
+
     bool _charging = true, _shot = false, _dead = false;
 
     protected override void Update()
@@ -36,6 +38,8 @@ public class SunMagic : PlayerProjectile
             return;
         }
 
+        if (_charging) player.StopCast();
+
         if (other.TryGetComponent(out Entity entity))
         {
             entity.TakeDamage(damage);
@@ -51,12 +55,11 @@ public class SunMagic : PlayerProjectile
         _charging = false;
     }
 
-    public void Shoot(float dmg)
+    public void Shoot()
     {
         _chargingParticles.Stop();
         _charging = false;
         _shot = true;
-        damage = dmg;
     }
 
     protected IEnumerator Death()

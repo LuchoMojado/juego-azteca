@@ -205,6 +205,7 @@ public class PlayerController : Entity
         yield return new WaitForSeconds(_sunCastDelay);
 
         var sun = Instantiate(_sunMagic, transform.position + transform.forward * 0.6f, transform.rotation, transform);
+        sun.player = this;
 
         float timer = 0;
 
@@ -247,7 +248,7 @@ public class PlayerController : Entity
         {
             sun.transform.SetParent(null);
             sun.speed = _sunSpeed;
-            sun.Shoot(damage + timer * _sunDamageGrowRate);
+            sun.Shoot();
         }
 
         _sunCurrentCooldown = _sunCooldown;
@@ -403,5 +404,10 @@ public class PlayerController : Entity
         _movement.Combat(false);
         currentBoss = null;
         _inputs.inputLateUpdate = _inputs.FreeLook;
+    }
+
+    public void StopCast()
+    {
+        _inputs.Attack = false;
     }
 }

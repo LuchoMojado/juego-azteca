@@ -31,6 +31,8 @@ public class CameraController : MonoBehaviour
     Vector3 _direction;
     Vector3 _camPos;
 
+    Vector3 _shakeModifier;
+
     Ray _ray;
     RaycastHit _rHit;
     bool _isCameraBlocked;
@@ -52,6 +54,30 @@ public class CameraController : MonoBehaviour
         _ray = new Ray(transform.position, _direction);
 
         _isCameraBlocked = Physics.SphereCast(_ray, 0.1f, out _rHit, _maxDistance);
+    }
+
+    public void StartShake(float magnitude, float duration)
+    {
+        StartCoroutine(CameraShake(magnitude, duration));
+    }
+
+    IEnumerator CameraShake(float magnitude, float duration)
+    {
+        Vector3 orignalPosition = transform.position;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            _shakeModifier = transform.right * x + transform.up * y;
+            time += Time.deltaTime;
+
+            yield return new WaitForEndOfFrame();
+        }
+        transform.position = orignalPosition;
+        _shakeModifier = Vector3.zero;
     }
 
     public void FreeLook(float x, float y)
@@ -114,9 +140,9 @@ public class CameraController : MonoBehaviour
             _camPos = transform.position + _direction * _maxDistance;
         }
 
-        _myCamera.transform.position = _camPos;
+        _myCamera.transform.position = _camPos + _shakeModifier;
         //Y le digo a mi camara que mire hacia el personaje
-        _myCamera.transform.LookAt(transform.position);
+        _myCamera.transform.LookAt(transform.position + _shakeModifier);
     }
 
     void UpdateSpringArm(Vector3 LookAt)
@@ -141,9 +167,9 @@ public class CameraController : MonoBehaviour
             _camPos = transform.position + _direction * _maxDistance;
         }
 
-        _myCamera.transform.position = _camPos;
+        _myCamera.transform.position = _camPos + _shakeModifier;
         //Y le digo a mi camara que mire hacia el personaje
-        _myCamera.transform.LookAt(LookAt);
+        _myCamera.transform.LookAt(LookAt + _shakeModifier);
     }
 
     public void LockedOnTo(Vector3 target)
