@@ -1635,7 +1635,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.277553
+      value: -126.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
@@ -1645,7 +1645,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.813
+      value: -19.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
@@ -11064,7 +11064,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4548990de97080f42a8ca34564f93854,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.93
+      value: -27.24
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4548990de97080f42a8ca34564f93854,
         type: 3}
@@ -11219,7 +11219,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.334
+      value: 150.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
@@ -11229,7 +11229,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.079
+      value: 4.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 155e82ab072165f468eca37ca0932ff7,
         type: 3}
@@ -11947,6 +11947,7 @@ MonoBehaviour:
   _maxStamina: 100
   _staminaRegenRate: 5
   _staminaRegenDelay: 1
+  _damageCooldown: 0
   _speed: 5
   _explorationSpeed: 0
   _speedOnCast: 2
@@ -11965,6 +11966,8 @@ MonoBehaviour:
   _sunMagic: {fileID: 83256091}
   _sunBaseDamage: 5
   _sunDamageGrowRate: 0.1
+  _sunSpeed: 0
+  _sunMaxChargeTime: 0
   _sunCastDelay: 0
   _sunRecovery: 0
   _sunCooldown: 0
@@ -11982,6 +11985,7 @@ MonoBehaviour:
   _maxWaves: 0
   currentBoss: {fileID: 0}
   renderer: {fileID: 1514190600}
+  anim: {fileID: 0}
 --- !u!4 &1967794133
 Transform:
   m_ObjectHideFlags: 0

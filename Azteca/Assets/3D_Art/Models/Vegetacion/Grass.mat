@@ -28,7 +28,7 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -85,8 +85,10 @@ Material:
     - _QueueOffset: 0
     - _Saturation: 1
     - _Smoothness_1: 0.5
-    - _Top_Movements: 0.19
-    - _Wind_Intensity: 0
+    - _Top_Movements: 45
+    - _Wind_Intensity: 377.34
+    - _Wind_Scale_1: 10.8
+    - _Wind_Scale_2: 5.6
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
