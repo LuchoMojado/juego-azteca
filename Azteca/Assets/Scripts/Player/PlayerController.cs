@@ -35,6 +35,8 @@ public class PlayerController : Entity
 
     MagicType _activeMagic;
 
+    [SerializeField] CinemachineCameraController _cameraController;
+
     public Renderer renderer;
     private bool _joystickActive=true;
 
@@ -51,7 +53,7 @@ public class PlayerController : Entity
         _rb = GetComponent<Rigidbody>();
 
         _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _groundLayer);
-        _inputs = new Inputs(_movement, this);
+        _inputs = new Inputs(_movement, this, _cameraController);
 
         _activeMagic = MagicType.Sun;
         renderer.material.color = Color.red;

@@ -9,7 +9,7 @@ public class Inputs
     float _inputMouseX, _inputMouseY;
     Movement _movement;
     PlayerController _player;
-    CameraController _camera;
+    CinemachineCameraController _cameraController;
     bool _jump, _attack = false, _locked = false;
 
     KeyCode _Kstep, _Kjump, _Kattack, _Klock, _Ksun, _Kobssidian, _Kscape;
@@ -39,11 +39,11 @@ public class Inputs
         }
     }
 
-    public Inputs(Movement movement, PlayerController player)
+    public Inputs(Movement movement, PlayerController player, CinemachineCameraController camera)
     {
         _movement = movement;
         _player = player;
-        _camera = Camera.main.GetComponentInParent<CameraController>();
+        _cameraController = camera;
         inputLateUpdate = FreeLook;
         cameraInputs = CameraInputsMouse;
     }
@@ -301,11 +301,11 @@ public class Inputs
 
     public void FreeLook()
     {
-        _camera.FreeLook(_inputMouseX, _inputMouseY);
+        _cameraController.FreeLook();
     }
 
     void LockedOn()
     {
-        _camera.LockedOn(_player.currentBoss.transform.position);
+        _cameraController.LockOn(_player.currentBoss.transform);
     }
 }
