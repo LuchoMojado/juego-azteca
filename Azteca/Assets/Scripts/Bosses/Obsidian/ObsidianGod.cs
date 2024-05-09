@@ -46,6 +46,8 @@ public class ObsidianGod : Entity
 
     FiniteStateMachine _fsm;
 
+    [SerializeField] GameObject preJumpParticles;
+
     public enum ObsidianStates
     {
         Inactive,
@@ -148,7 +150,7 @@ public class ObsidianGod : Entity
     public void Spikes()
     {
         takingAction = true;
-
+        Instantiate(preJumpParticles, this.transform.position, Quaternion.identity);
         StartCoroutine(Spiking());
     }
 
@@ -300,6 +302,7 @@ public class ObsidianGod : Entity
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.35f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
+        Destroy(preJumpParticles);
         //recuperacion
         yield return new WaitForSeconds(_spikesRecovery);
 
