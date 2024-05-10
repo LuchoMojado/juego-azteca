@@ -45,6 +45,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: e7abd4dbc6d2324439947bf2dcfc68e8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Normal:
         m_Texture: {fileID: 2800000, guid: 60accd589069c4c4885273250c494b1b, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -81,14 +85,20 @@ Material:
     m_Floats:
     - _Alpha_Clip_Threshold: 0.5
     - _Brightness: 1
+    - _Hue: 10.05
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Saturation: 1
+    - _SSS: 0
+    - _Saturation: 1.5
     - _Smoothness_1: 0.5
-    - _Top_Movements: 45
-    - _Wind_Intensity: 377.34
-    - _Wind_Scale_1: 10.8
-    - _Wind_Scale_2: 5.6
+    - _Top_Movement: 23.7
+    - _Top_Movements: 5
+    - _Var_Brightness: 0.04
+    - _Variation_Scale: 0.3
+    - _Wind_Intensity: 358.89
+    - _Wind_Scale_1: 15
+    - _Wind_Scale_2: 2
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Color_Variation: {r: 1, g: 0.4536016, b: 0, a: 1}
   m_BuildTextureStacks: []
