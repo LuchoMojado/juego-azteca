@@ -83,13 +83,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AO: 0.2
     - _Alpha_Clip_Threshold: 0.5
     - _Brightness: 1
-    - _Hue: 10.05
+    - _Hue: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SSS: 0
-    - _Saturation: 1.5
+    - _Saturation: 1
     - _Smoothness_1: 0.5
     - _Top_Movement: 23.7
     - _Top_Movements: 5
