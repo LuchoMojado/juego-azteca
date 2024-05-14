@@ -68,7 +68,7 @@ Material:
     - _QueueOffset: 0
     - _Smoothness: 0.138
     - _Tiling: 1
-    - _Wiggleness: 1.5
+    - _Wiggleness: 0
     m_Colors:
     - _Bend_Direction: {r: 33.4, g: 0, b: 16.7, a: 0}
   m_BuildTextureStacks: []
