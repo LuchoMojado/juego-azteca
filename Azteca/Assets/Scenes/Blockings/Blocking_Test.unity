@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0047007883, g: 0.0039700624, b: 0.0063906754, a: 1}
+  m_IndirectSpecularColor: {r: 0.004730263, g: 0.003974962, b: 0.0064168763, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -19850,7 +19850,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 492483261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702473, y: 0.98991585, z: -0.08515788, w: 0.112786196}
+  m_LocalRotation: {x: 0.0097024795, y: 0.98991585, z: -0.085157886, w: 0.11278623}
   m_LocalPosition: {x: -165.3297, y: -47.82, z: 449.04623}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37211,7 +37211,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 907670086}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702472, y: 0.98991585, z: -0.08515788, w: 0.112786196}
+  m_LocalRotation: {x: 0.009702477, y: 0.98991585, z: -0.08515789, w: 0.11278619}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -58219,7 +58219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349599303}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702471, y: 0.98991585, z: -0.08515786, w: 0.11278618}
+  m_LocalRotation: {x: 0.0097024795, y: 0.98991585, z: -0.085157886, w: 0.11278623}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -83254,7 +83254,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932205383}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702471, y: 0.98991585, z: -0.08515786, w: 0.11278618}
+  m_LocalRotation: {x: 0.0097024795, y: 0.98991585, z: -0.085157886, w: 0.11278623}
   m_LocalPosition: {x: -165.3297, y: -47.82, z: 449.04623}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -88518,7 +88518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 2
+  m_AmplitudeGain: 0
   m_FrequencyGain: 1
   mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1001 &2068868402
