@@ -2283,6 +2283,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7348,6 +7353,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11495,6 +11505,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12794,6 +12809,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20265,7 +20285,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 492483261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702477, y: 0.98991585, z: -0.08515789, w: 0.11278619}
+  m_LocalRotation: {x: 0.0097024795, y: 0.98991585, z: -0.085157886, w: 0.11278623}
   m_LocalPosition: {x: -165.3297, y: -47.82, z: 449.04623}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -21969,6 +21989,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24933,6 +24958,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26701,6 +26731,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -32576,6 +32611,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -38038,7 +38078,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 907670086}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702475, y: 0.98991585, z: -0.085157864, w: 0.11278622}
+  m_LocalRotation: {x: 0.0097024795, y: 0.98991585, z: -0.085157886, w: 0.11278623}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -42305,6 +42345,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45085,6 +45130,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -55462,6 +55512,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -59355,7 +59410,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1349599303}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702477, y: 0.98991585, z: -0.08515789, w: 0.11278619}
+  m_LocalRotation: {x: 0.0097024795, y: 0.98991585, z: -0.085157886, w: 0.11278623}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -62141,6 +62196,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -70308,6 +70368,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -71345,6 +71410,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -76895,6 +76965,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -84802,7 +84877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932205383}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.009702477, y: 0.98991585, z: -0.08515789, w: 0.11278619}
+  m_LocalRotation: {x: 0.0097024795, y: 0.98991585, z: -0.085157886, w: 0.11278623}
   m_LocalPosition: {x: -165.3297, y: -47.82, z: 449.04623}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -86874,6 +86949,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -87113,6 +87193,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -88390,6 +88475,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperCasa (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -89064,6 +89154,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -93293,6 +93388,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SuperCasa (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2fcdb684800827f4b862fd8bb2bf00a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
