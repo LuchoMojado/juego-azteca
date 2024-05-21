@@ -10,29 +10,54 @@ public class Inputs
     Movement _movement;
     PlayerController _player;
     CinemachineCameraController _cameraController;
-    bool _jump, _attack = false, _locked = false;
+    bool _jump, _primaryAttack = false, _secondaryAttack = false, _locked = false;
 
-    KeyCode _Kstep, _Kjump, _Kattack, _Klock, _Ksun, _Kobssidian, _Kscape;
+    KeyCode _Kstep, _Kjump, _KprimaryAttack, _KsecondaryAttack, _Klock, _Ksun, _Kobssidian, _Kscape;
 
-    public bool Attack
+    public bool PrimaryAttack
     {
         get
         {
-            return _attack;
+            return _primaryAttack;
         }
 
         set
         {
-            if (value == !_attack)
+            if (value == !_primaryAttack)
             {
+                _primaryAttack = value;
+
                 if (value)
                 {
-                    _attack = value;
                     _player.ActivateMagic();
                 }
                 else
                 {
-                    _attack = value;
+                    inputUpdate = Unpaused;
+                }
+            }
+        }
+    }
+
+    public bool SecondaryAttack
+    {
+        get
+        {
+            return _secondaryAttack;
+        }
+
+        set
+        {
+            if (value == !_secondaryAttack)
+            {
+                _secondaryAttack = value;
+
+                if (value)
+                {
+                    _player.ActivateMagic();
+                }
+                else
+                {
                     inputUpdate = Unpaused;
                 }
             }
@@ -69,7 +94,8 @@ public class Inputs
             cameraInputs = CameraInputsJoystick;
             _Kstep = KeyCode.Joystick1Button2;
             _Kjump = KeyCode.Joystick1Button1;
-            _Kattack = KeyCode.Joystick1Button7;
+            _KprimaryAttack = KeyCode.Joystick1Button7;
+            _KsecondaryAttack = KeyCode.Joystick1Button8; //ayuda juli
             _Klock = KeyCode.Joystick1Button11;
             _Ksun = KeyCode.Joystick1Button4;
             _Kobssidian = KeyCode.Joystick1Button6;
@@ -80,8 +106,9 @@ public class Inputs
             cameraInputs = CameraInputsMouse;
             _Kstep = KeyCode.LeftShift;
             _Kjump = KeyCode.Space;
-            _Kattack = KeyCode.Mouse0;
-            _Klock = KeyCode.Mouse1;
+            _KprimaryAttack = KeyCode.Mouse0;
+            _KsecondaryAttack = KeyCode.Mouse1;
+            _Klock = KeyCode.Q; //no se que tecla estaria bien para esto
             _Ksun = KeyCode.Alpha1;
             _Kobssidian = KeyCode.Alpha2;
             _Kscape = KeyCode.Escape;
@@ -117,9 +144,14 @@ public class Inputs
             _jump = true;
         }
 
-        if (Input.GetKeyDown(_Kattack))
+        if (Input.GetKeyDown(_KprimaryAttack))
         {
-            Attack = true;
+            PrimaryAttack = true;
+        }
+
+        if (Input.GetKeyDown(_KsecondaryAttack))
+        {
+            SecondaryAttack = true;
         }
 
         if (Input.GetKeyDown(_Klock))
@@ -186,7 +218,7 @@ public class Inputs
         {
             Attack = false;
             inputUpdate = Unpaused;
-        }*/
+        }
 
         if (Input.GetKeyDown(_Kscape))
         {
@@ -201,22 +233,22 @@ public class Inputs
         if (Input.GetKeyDown(_Kstep))
         {
             _player.Step(_inputHorizontal, _inputVertical);
-            Attack = false;
+            PrimaryAttack = false;
             inputUpdate = Unpaused;
         }
 
         if (Input.GetKeyDown(_Kjump))
         {
             _jump = true;
-            Attack = false;
+            PrimaryAttack = false;
             inputUpdate = Unpaused;
         }
 
-        if (Input.GetKeyUp(_Kattack))
+        if (Input.GetKeyUp(_KprimaryAttack))
         {
-            Attack = false;
+            PrimaryAttack = false;
             inputUpdate = Unpaused;
-        }
+        }*/
 
         if (Input.GetKeyDown(_Klock))
         {
@@ -256,9 +288,9 @@ public class Inputs
             inputUpdate = Unpaused;
         }*/
 
-        if (Input.GetKeyUp(_Kattack))
+        if (Input.GetKeyUp(_KprimaryAttack))
         {
-            Attack = false;
+            PrimaryAttack = false;
             inputUpdate = Unpaused;
         }
 
@@ -288,7 +320,7 @@ public class Inputs
 
     public void InputsFixedUpdate()
     {
-        _movement.Move(_inputHorizontal, _inputVertical, !Attack);
+        _movement.Move(_inputHorizontal, _inputVertical, !PrimaryAttack);
 
         if (_jump)
         {

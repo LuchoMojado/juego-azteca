@@ -7,13 +7,13 @@ public class Movement
     public delegate void FloatsDelegate(float a, float b);
     //public event FloatsDelegate OnRotation;
 
-    float _currentSpeed, _normalSpeed, _explorationSpeed, _currentMoveSpeed, _speedOnCast, _turnRate, _jumpStrength, _stepStrength;
+    float _currentSpeed, _normalSpeed, _explorationSpeed, _currentMoveSpeed, _speedOnCast, _turnRate, _jumpStrength, _currentStepStrength, _stepStrength, _castStepStrength;
     Transform _playerTransform;
     Rigidbody _rb;
     LayerMask _groundLayer;
     PlayerController _player;
 
-    public Movement(Transform transform, Rigidbody rigidbody, float speed, float explorationSpeed, float speedOnCast, float turnRate, float jumpStrength, float stepStrength, LayerMask groundLayer)
+    public Movement(Transform transform, Rigidbody rigidbody, float speed, float explorationSpeed, float speedOnCast, float turnRate, float jumpStrength, float stepStrength, float castStepStrength, LayerMask groundLayer)
     {
         _playerTransform = transform;
         _rb = rigidbody;
@@ -23,7 +23,9 @@ public class Movement
         _turnRate = turnRate;
         _speedOnCast = speedOnCast;
         _jumpStrength = jumpStrength;
+        _currentStepStrength = stepStrength;
         _stepStrength = stepStrength;
+        _castStepStrength = castStepStrength;
         _groundLayer = groundLayer;
         _currentMoveSpeed = explorationSpeed;
         _player = _playerTransform.gameObject.GetComponent<PlayerController>();
@@ -87,7 +89,16 @@ public class Movement
 
     public void Cast(bool starts)
     {
-        _currentSpeed = starts ? _speedOnCast : _currentMoveSpeed;
+        if (starts)
+        {
+            _currentSpeed = _speedOnCast;
+            _currentStepStrength = _castStepStrength;
+        }
+        else
+        {
+            _currentSpeed = _currentMoveSpeed;
+            _currentStepStrength = _stepStrength;
+        }
     }
 
     public void Jump()
@@ -112,7 +123,7 @@ public class Movement
         dir.Normalize();
 
         _rb.velocity = Vector3.zero;
-        _rb.AddForce(dir * _stepStrength);
+        _rb.AddForce(dir * _currentStepStrength);
         _playerTransform.forward = cameraForward;
     }
 

@@ -10,7 +10,7 @@ public class PlayerController : Entity
     Movement _movement;
     Inputs _inputs;
 
-    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _damageCooldown, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _stepCooldown/*(variable del step viejo)_stepStopVelocity*/;
+    [SerializeField] float _maxStamina, _staminaRegenRate, _staminaRegenDelay, _damageCooldown, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _castStepStr, _stepCooldown/*(variable del step viejo)_stepStopVelocity*/;
     [SerializeField] LayerMask _groundLayer;
 
     [Header("Stamina costs")]
@@ -19,7 +19,7 @@ public class PlayerController : Entity
 
     [Header("Sun Magic")]
     [SerializeField] SunMagic _sunMagic;
-    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunMaxChargeTime, _sunCastDelay, _sunRecovery, _sunCooldown, _sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
+    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunMaxChargeTime, _sunCastDelay, _sunRecovery, _sunCooldown, _sunAbsorbTime, _sunMeleeDuration,_sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
     [Header("Obsidian Magic")]
@@ -40,7 +40,7 @@ public class PlayerController : Entity
     public GameObject camaraFinal;
 
     public Renderer renderer;
-    private bool _joystickActive=true;
+    private bool _joystickActive=true, _usingSun = false;
 
     [SerializeField] Animator anim;
 
@@ -54,7 +54,7 @@ public class PlayerController : Entity
     {
         _rb = GetComponent<Rigidbody>();
 
-        _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _groundLayer);
+        _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _castStepStr, _groundLayer);
         _inputs = new Inputs(_movement, this, _cameraController);
 
         _activeMagic = MagicType.Sun;
@@ -151,6 +151,19 @@ public class PlayerController : Entity
         switch (_activeMagic)
         {
             case MagicType.Sun:
+                if (!_usingSun) ActivateSunMagic();
+                break;
+            case MagicType.Obsidian:
+                ActivateObsidianMagic();
+                break;
+        }
+    }
+
+    public void ActivateSecondaryMagic()
+    {
+        switch (_activeMagic)
+        {
+            case MagicType.Sun:
                 ActivateSunMagic();
                 break;
             case MagicType.Obsidian:
@@ -163,11 +176,12 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
         {
-            StartCoroutine(NewSunMagic());
+            StartCoroutine(NewerSunMagic());
         }
         else
         {
-            _inputs.Attack = false;
+            _inputs.PrimaryAttack = false;
+            _inputs.SecondaryAttack = false;
         }
     }
 
@@ -181,7 +195,7 @@ public class PlayerController : Entity
 
         _sunMagic.gameObject.SetActive(true);
 
-        while (_inputs.Attack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        while (_inputs.PrimaryAttack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
         {
             var lookAt = Camera.main.transform.forward.MakeHorizontal();
             transform.forward = lookAt;
@@ -204,7 +218,7 @@ public class PlayerController : Entity
         yield return new WaitForSeconds(_sunRecovery);
 
         _sunCurrentCooldown = _sunCooldown;
-        _inputs.Attack = false;
+        _inputs.PrimaryAttack = false;
         _movement.Cast(false);
     }
 
@@ -222,7 +236,7 @@ public class PlayerController : Entity
 
         float timer = 0;
 
-        while (_inputs.Attack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        while (_inputs.PrimaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
         {
             timer += Time.deltaTime;
 
@@ -247,7 +261,7 @@ public class PlayerController : Entity
             sun.ChargeFinished();
         }
 
-        while (_inputs.Attack)
+        while (_inputs.PrimaryAttack)
         {
             var lookAt = Camera.main.transform.forward.MakeHorizontal();
             transform.forward = lookAt;
@@ -272,7 +286,118 @@ public class PlayerController : Entity
 
         anim.SetBool("IsAttacking", false);
         _sunCurrentCooldown = _sunCooldown;
-        _inputs.Attack = false;
+        _inputs.PrimaryAttack = false;
+    }
+
+    IEnumerator NewerSunMagic()
+    {
+        _usingSun = true;
+        _inputs.inputUpdate = _inputs.FixedCast;
+
+        anim.SetBool("IsAttacking", true);
+
+        yield return new WaitForSeconds(_sunCastDelay);
+
+        _movement.Cast(true);
+        anim.SetBool("IsAttacking", false);
+        _inputs.PrimaryAttack = false;
+        _inputs.SecondaryAttack = false;
+
+        var sun = Instantiate(_sunMagic, transform.position + transform.forward * 0.75f + transform.up * 0.6f, transform.rotation, transform);
+        sun.player = this;
+        sun.damage = _sunBaseDamage;
+
+        float timer = 0;
+
+        while (_damageCurrentCooldown <= 0 && !_inputs.PrimaryAttack && !_inputs.SecondaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        {
+            timer += Time.deltaTime;
+
+            sun.damage += _sunDamageGrowRate * Time.deltaTime;
+
+            yield return null;
+        }
+
+        if (timer >= _sunMaxChargeTime || !CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        {
+            sun.ChargeFinished();
+        }
+
+        while (!_inputs.PrimaryAttack && !_inputs.SecondaryAttack)
+        {
+            if (_damageCurrentCooldown > 0)
+            {
+                sun.StartCoroutine(sun.Death());
+                _usingSun = false;
+                _sunCurrentCooldown = _sunCooldown;
+                _movement.Cast(false);
+                yield break;
+            }
+
+            CheckAndReduceStamina(0);
+            yield return null;
+        }
+
+        var lookAt = Camera.main.transform.forward.MakeHorizontal();
+        transform.forward = lookAt;
+
+        _inputs.inputUpdate = _inputs.FixedCast;
+
+        if (_inputs.PrimaryAttack)
+        {
+            anim.SetBool("IsAttacking", true);
+
+            yield return new WaitForSeconds(_sunCastDelay);
+
+            sun.transform.SetParent(null);
+            sun.speed = _sunSpeed;
+            _rb.AddForce(-transform.forward * 75 * timer);
+            sun.Shoot();
+        }
+        else if (_inputs.SecondaryAttack)
+        {
+            var hitDamage = sun.damage * 1.5f;
+            sun.Absorb(_sunAbsorbTime);
+
+            //podria ir una animacion de absorber y cuando termine pasar a la piña
+            anim.SetBool("IsAttacking", true); //aca iria animacion de piña
+
+            yield return new WaitForSeconds(_sunAbsorbTime);
+
+            bool hasHit = false;
+            _rb.velocity = Vector3.zero;
+            _rb.AddForce(transform.forward * _stepStr);
+
+            timer = 0;
+
+            while (_sunMeleeDuration > timer)
+            {
+                timer += Time.deltaTime;
+
+                if (!hasHit)
+                {
+                    if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
+                    {
+                        if (hit.collider.gameObject.layer == 3)
+                        {
+                            currentBoss.TakeDamage(hitDamage);
+                            hasHit = true;
+                        }
+                    }
+                }
+
+                yield return null;
+            }
+        }
+
+        _sunCurrentCooldown = _sunCooldown;
+
+        yield return new WaitForSeconds(_sunRecovery);
+
+        anim.SetBool("IsAttacking", false);
+        _usingSun = false;
+        _inputs.PrimaryAttack = false;
+        _inputs.SecondaryAttack = false;
         _movement.Cast(false);
     }
 
@@ -284,7 +409,7 @@ public class PlayerController : Entity
         }
         else
         {
-            _inputs.Attack = false;
+            _inputs.PrimaryAttack = false;
         }
     }
 
@@ -321,7 +446,7 @@ public class PlayerController : Entity
 
                 timer += Time.deltaTime;
 
-                if (!_inputs.Attack)
+                if (!_inputs.PrimaryAttack)
                 {
                     _obsidianCurrentCooldown = _obsidianCooldown;
                     anim.SetBool("IsAttacking", false);
@@ -394,7 +519,7 @@ public class PlayerController : Entity
 
     public override void TakeDamage(float amount)
     {
-        _inputs.Attack = false;
+        //_inputs.PrimaryAttack = false;
 
         if (_damageCurrentCooldown > 0) return;
 
@@ -419,7 +544,7 @@ public class PlayerController : Entity
     {
         _joystickActive = !_joystickActive;
         _inputs.Altern(_joystickActive);
-        _inputs.Attack = false;
+        _inputs.PrimaryAttack = false;
     }
 
     public void FightStarts(Entity boss)
@@ -440,7 +565,7 @@ public class PlayerController : Entity
     public void StopCast()
     {
         anim.SetBool("IsAttacking",false);
-        _inputs.Attack = false;
+        _inputs.PrimaryAttack = false;
     }
 
     public void RunningAnimation(bool play)

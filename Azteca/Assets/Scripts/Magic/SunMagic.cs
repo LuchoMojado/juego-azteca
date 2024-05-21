@@ -14,7 +14,7 @@ public class SunMagic : PlayerProjectile
     {
         if (_charging)
         {
-            transform.localScale += Vector3.one * Time.deltaTime * 0.3f;
+            transform.localScale += Vector3.one * Time.deltaTime * 0.2f;
         }
         else if (_shot && !_dead)
         {
@@ -33,12 +33,12 @@ public class SunMagic : PlayerProjectile
 
     protected override void OnTriggerEnter(Collider other)
     {
+        if (!_shot) return;
+        
         if (other.gameObject.layer == 6 || other.gameObject.layer == 7)
         {
             return;
         }
-
-        if (_charging) player.StopCast();
 
         if (other.TryGetComponent(out Entity entity))
         {
@@ -62,7 +62,32 @@ public class SunMagic : PlayerProjectile
         _shot = true;
     }
 
-    protected IEnumerator Death()
+    public void Absorb(float absorbTime)
+    {
+        _chargingParticles.Stop();
+        _charging = false;
+        StartCoroutine(Shrink(absorbTime));
+    }
+
+    IEnumerator Shrink(float duration)
+    {
+        float timer = 0;
+
+        var startingScale = transform.localScale;
+
+        while (timer <= duration)
+        {
+            timer += Time.deltaTime;
+
+            transform.localScale = Vector3.Lerp(startingScale, Vector3.zero, timer / duration);
+
+            yield return null;
+        }
+
+        Die();
+    }
+
+    public IEnumerator Death()
     {
         _dead = true;
         _destroyedParticles.Play();
