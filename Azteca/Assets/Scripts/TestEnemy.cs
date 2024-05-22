@@ -9,20 +9,16 @@ public class TestEnemy : Entity
     [SerializeField] PlayerController _player;
     [SerializeField] Projectile _bullet;
 
-    Rigidbody _rb;
-
     float _timer, _currentCD = 0;
     bool _chasing = false;
 
-    private void Awake()
+    protected override void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        base.Awake();
     }
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
-
         UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp, _maxHp);
 
         _timer = _switchActionTimer * 2;

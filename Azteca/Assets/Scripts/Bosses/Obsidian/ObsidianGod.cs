@@ -7,8 +7,6 @@ public class ObsidianGod : Entity
 {
     [SerializeField] PlayerController _player;
 
-    Rigidbody _rb;
-
     public GameObject placeholderSwingHitboxFeedback;
 
     [SerializeField] GameObject _arena;
@@ -87,17 +85,16 @@ public class ObsidianGod : Entity
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        base.Awake();
+
         _myAS = GetComponent<AudioSource>();
         _meleeBox = new Vector3(_meleeBoxX, _meleeBoxY, _meleeBoxZ);
     }
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
-
         UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp, _maxHp);
 
         _fsm = new FiniteStateMachine();

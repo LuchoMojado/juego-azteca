@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : Entity
 {
-    Rigidbody _rb;
     Movement _movement;
     Inputs _inputs;
 
@@ -53,9 +52,10 @@ public class PlayerController : Entity
         Obsidian
     }
 
-    void Awake()
+    protected override void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        base.Awake();
+
         _myAS = GetComponent<AudioSource>();
         _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _castStepStr, _groundLayer);
         _inputs = new Inputs(_movement, this, _cameraController);
@@ -65,10 +65,8 @@ public class PlayerController : Entity
         _sunHitbox = new Vector3(_sunHitboxX, _sunHitboxY, _sunHitboxZ);
     }
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
-
         UIManager.instance.UpdateBar(UIManager.Bar.PlayerHp, _hp, _maxHp);
 
         _stamina = _maxStamina;
@@ -369,25 +367,23 @@ public class PlayerController : Entity
 
             yield return new WaitForSeconds(_sunAbsorbTime);
 
-            bool hasHit = false;
             _rb.velocity = Vector3.zero;
             _rb.AddForce(transform.forward * _stepStr);
 
-            timer = 0;
+            float timer2 = 0;
 
-            while (_sunMeleeDuration > timer)
+            while (_sunMeleeDuration > timer2)
             {
-                timer += Time.deltaTime;
+                timer2 += Time.deltaTime;
 
-                if (!hasHit)
+                if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
                 {
-                    if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
+                    if (hit.collider.gameObject.layer == 3)
                     {
-                        if (hit.collider.gameObject.layer == 3)
-                        {
-                            currentBoss.TakeDamage(hitDamage);
-                            hasHit = true;
-                        }
+                        currentBoss.TakeDamage(hitDamage);
+                        currentBoss.KnockBack(transform.forward, 100 * timer);
+                        _rb.velocity = Vector3.zero;
+                        break;
                     }
                 }
 
