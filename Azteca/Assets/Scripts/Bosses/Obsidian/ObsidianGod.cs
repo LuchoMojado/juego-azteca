@@ -49,6 +49,9 @@ public class ObsidianGod : Entity
 
     [SerializeField] Animator anim;
 
+    AudioSource _myAS;
+    [SerializeField] AudioClip stomp,dash,dashBox,dashFuerte,lanzaDardos,walk;
+
     public enum ObsidianStates
     {
         Inactive,
@@ -87,7 +90,7 @@ public class ObsidianGod : Entity
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-
+        _myAS = GetComponent<AudioSource>();
         _meleeBox = new Vector3(_meleeBoxX, _meleeBoxY, _meleeBoxZ);
     }
 
@@ -187,7 +190,7 @@ public class ObsidianGod : Entity
         LookAtPlayer = false;
 
         _rb.AddForce(transform.forward * _swingForwardForce);
-
+        ChangeAudio(dashFuerte);
         placeholderSwingHitboxFeedback.SetActive(true);
 
         bool hit = false;
@@ -219,7 +222,7 @@ public class ObsidianGod : Entity
     {
         //preparacion
         yield return new WaitForSeconds(_shardsPreparation);
-
+        ChangeAudio(lanzaDardos);
         LookAtPlayer = false;
 
         for (int i = _shardAmount; i < shardLimit; i++)
@@ -300,9 +303,11 @@ public class ObsidianGod : Entity
     IEnumerator Spiking()
     {
         LookAtPlayer = false;
+        ChangeAudio(dash);
         //preparacion
         yield return new WaitForSeconds(_spikesPreparation);
         //salen spikes del suelo
+        ChangeAudio(stomp);
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
@@ -322,6 +327,7 @@ public class ObsidianGod : Entity
         //preparacion
         yield return new WaitForSeconds(_dashPreparation);
         //comienza dash
+        ChangeAudio(dash);
         _rb.AddForce(transform.forward * _dashStrength);
 
         LookAtPlayer = false;
@@ -367,6 +373,7 @@ public class ObsidianGod : Entity
         else
         {
             Debug.Log("perdi la chance de combo, camino");
+            ChangeAudio(walk);
             _lastAction = ObsidianStates.Walk;
             return _lastAction;
         }
@@ -432,5 +439,10 @@ public class ObsidianGod : Entity
     {
         yield return new WaitForSeconds(1f);
         _arena.SetActive(false);
+    }
+    public void ChangeAudio(AudioClip clip)
+    {
+        _myAS.clip = clip;
+        _myAS.PlayOneShot(_myAS.clip);
     }
 }

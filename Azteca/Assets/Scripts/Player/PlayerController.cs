@@ -44,6 +44,9 @@ public class PlayerController : Entity
 
     [SerializeField] Animator anim;
 
+    AudioSource _myAS;
+    [SerializeField] AudioClip sideStep,jump, damage, chargingSun;
+
     public enum MagicType
     {
         Sun,
@@ -53,7 +56,7 @@ public class PlayerController : Entity
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-
+        _myAS = GetComponent<AudioSource>();
         _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _castStepStr, _groundLayer);
         _inputs = new Inputs(_movement, this, _cameraController);
 
@@ -102,6 +105,7 @@ public class PlayerController : Entity
         {
             anim.SetTrigger("IsJumping");
             _movement.Jump();
+            ChangeAudio(jump);
             //anim.SetBool("IsJumping", false);
         }
     }
@@ -111,6 +115,7 @@ public class PlayerController : Entity
         if (_movement.IsGrounded() && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
             //anim.SetBool("IsStrafeRight", true);
+            ChangeAudio(sideStep);
             _stepCurrentCooldown = _stepCooldown;
             _movement.Step(horizontalInput, verticalInput);
         }
@@ -295,9 +300,9 @@ public class PlayerController : Entity
         _inputs.inputUpdate = _inputs.FixedCast;
 
         anim.SetBool("IsAttacking", true);
-
+        
         yield return new WaitForSeconds(_sunCastDelay);
-
+        ChangeAudio(chargingSun);
         _movement.Cast(true);
         anim.SetBool("IsAttacking", false);
         _inputs.PrimaryAttack = false;
@@ -522,7 +527,7 @@ public class PlayerController : Entity
         //_inputs.PrimaryAttack = false;
 
         if (_damageCurrentCooldown > 0) return;
-
+        ChangeAudio(damage);
         _cameraController.CameraShake(1, 0.5f);
 
         _damageCurrentCooldown = _damageCooldown;
@@ -584,5 +589,10 @@ public class PlayerController : Entity
             _cameraController.Final();
             UIManager.instance.Final();
         }
+    }
+    public void ChangeAudio(AudioClip clip)
+    {
+        _myAS.clip = clip;
+        _myAS.PlayOneShot(_myAS.clip);
     }
 }
