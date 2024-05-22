@@ -95,10 +95,10 @@ public class Inputs
             _Kstep = KeyCode.Joystick1Button2;
             _Kjump = KeyCode.Joystick1Button1;
             _KprimaryAttack = KeyCode.Joystick1Button7;
-            _KsecondaryAttack = KeyCode.Joystick1Button8; //ayuda juli
+            _KsecondaryAttack = KeyCode.Joystick1Button6; //ayuda juli
             _Klock = KeyCode.Joystick1Button11;
             _Ksun = KeyCode.Joystick1Button4;
-            _Kobssidian = KeyCode.Joystick1Button6;
+            _Kobssidian = KeyCode.Joystick1Button4;
             _Kscape = KeyCode.Joystick1Button9;
         }
         else
@@ -108,7 +108,7 @@ public class Inputs
             _Kjump = KeyCode.Space;
             _KprimaryAttack = KeyCode.Mouse0;
             _KsecondaryAttack = KeyCode.Mouse1;
-            _Klock = KeyCode.Q; //no se que tecla estaria bien para esto
+            _Klock = KeyCode.Mouse2; //no se que tecla estaria bien para esto
             _Ksun = KeyCode.Alpha1;
             _Kobssidian = KeyCode.Alpha2;
             _Kscape = KeyCode.Escape;
