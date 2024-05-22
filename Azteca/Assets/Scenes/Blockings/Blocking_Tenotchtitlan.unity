@@ -673,7 +673,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHp: 100
   _maxStamina: 100
-  _staminaRegenRate: 8
+  _staminaRegenRate: 15
   _staminaRegenDelay: 1
   _damageCooldown: 1
   _speed: 5
