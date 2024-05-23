@@ -295,13 +295,13 @@ public class PlayerController : Entity
     IEnumerator NewerSunMagic()
     {
         _usingSun = true;
-        _inputs.inputUpdate = _inputs.FixedCast;
+        _inputs.inputUpdate = _inputs.MovingCast;
 
         anim.SetBool("IsAttacking", true);
         
         yield return new WaitForSeconds(_sunCastDelay);
-        ChangeAudio(chargingSun);
         _movement.Cast(true);
+        ChangeAudio(chargingSun);
         anim.SetBool("IsAttacking", false);
         _inputs.PrimaryAttack = false;
         _inputs.SecondaryAttack = false;

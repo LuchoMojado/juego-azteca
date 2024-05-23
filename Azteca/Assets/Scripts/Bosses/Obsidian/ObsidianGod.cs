@@ -422,9 +422,10 @@ public class ObsidianGod : Entity
         UIManager.instance.ToggleBossBar(false);
         _player.FightEnds();
         //animacion de que las piedras bajan
-        _arena.GetComponent<Animation>().Play("BajanPicos");
-        StartCoroutine(ApagarArena());
+        //_arena.GetComponent<Animation>().Play("BajanPicos");
+        //StartCoroutine(ApagarArena());
         //animacion de muerte
+        _arena.SetActive(false);
         Destroy(gameObject);
     }
 
@@ -435,7 +436,6 @@ public class ObsidianGod : Entity
     IEnumerator ApagarArena()
     {
         yield return new WaitForSeconds(1f);
-        _arena.SetActive(false);
     }
     public void ChangeAudio(AudioClip clip)
     {
