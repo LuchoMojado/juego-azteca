@@ -380,8 +380,8 @@ public class PlayerController : Entity
                 {
                     if (hit.collider.gameObject.layer == 3)
                     {
-                        currentBoss.TakeDamage(hitDamage);
                         currentBoss.KnockBack(transform.forward, 100 * timer);
+                        currentBoss.TakeDamage(hitDamage);
                         _rb.velocity = Vector3.zero;
                         break;
                     }
