@@ -114,6 +114,7 @@ public class Movement
         {
             cameraForward = Camera.main.transform.forward.MakeHorizontal();
             dir = -cameraForward;
+            _playerTransform.forward = cameraForward;
         }
         else
         {
@@ -124,7 +125,6 @@ public class Movement
 
         _rb.velocity = Vector3.zero;
         _rb.AddForce(dir * _currentStepStrength);
-        _playerTransform.forward = cameraForward;
     }
 
     public bool IsGrounded()

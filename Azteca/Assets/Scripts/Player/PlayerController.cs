@@ -99,7 +99,7 @@ public class PlayerController : Entity
 
     public void Jump()
     {
-        if (_movement.IsGrounded() && CheckAndReduceStamina(_jumpCost))
+        if (_movement.IsGrounded() && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
         {
             anim.SetTrigger("IsJumping");
             _movement.Jump();
@@ -154,7 +154,7 @@ public class PlayerController : Entity
         switch (_activeMagic)
         {
             case MagicType.Sun:
-                if (!_usingSun) ActivateSunMagic();
+                if(!_usingSun) ActivateSunMagic();
                 break;
             case MagicType.Obsidian:
                 ActivateObsidianMagic();
@@ -179,12 +179,12 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
         {
-            StartCoroutine(NewerSunMagic());
+            StartCoroutine(NewSunMagic());
         }
         else
         {
             _inputs.PrimaryAttack = false;
-            _inputs.SecondaryAttack = false;
+            //_inputs.SecondaryAttack = false;
         }
     }
 
@@ -227,11 +227,16 @@ public class PlayerController : Entity
 
     IEnumerator NewSunMagic()
     {
-        _inputs.inputUpdate = _inputs.FixedCast;
-        
+        _usingSun = true;
+        _inputs.inputUpdate = _inputs.MovingCast;
+
         anim.SetBool("IsAttacking", true);
 
         yield return new WaitForSeconds(_sunCastDelay);
+
+        _movement.Cast(true);
+        ChangeAudio(chargingSun);
+        anim.SetBool("IsAttacking", false);
 
         var sun = Instantiate(_sunMagic, transform.position + transform.forward * 1f + transform.up * 0.6f, transform.rotation, transform);
         sun.player = this;
@@ -239,57 +244,86 @@ public class PlayerController : Entity
 
         float timer = 0;
 
-        while (_inputs.PrimaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+        if (_inputs.PrimaryAttack)
         {
-            timer += Time.deltaTime;
-
-            var lookAt = Camera.main.transform.forward.MakeHorizontal();
-            transform.forward = lookAt;
-
-            /*if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
+            while (_damageCurrentCooldown <= 0 && _inputs.PrimaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
             {
-                if (hit.collider.TryGetComponent(out Entity entity))
+                timer += Time.deltaTime;
+
+                /*var lookAt = Camera.main.transform.forward.MakeHorizontal();
+                transform.forward = lookAt;
+
+                if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
                 {
-                    entity.TakeDamage(damage * Time.deltaTime);
-                }
-            }*/
+                    if (hit.collider.TryGetComponent(out Entity entity))
+                    {
+                        entity.TakeDamage(damage * Time.deltaTime);
+                    }
+                }*/
 
-            sun.damage += _sunDamageGrowRate * Time.deltaTime;
+                sun.damage += _sunDamageGrowRate * Time.deltaTime;
 
-            yield return null;
-        }
+                yield return null;
+            }
 
-        if (timer >= _sunMaxChargeTime)
-        {
-            sun.ChargeFinished();
-        }
+            if (timer >= _sunMaxChargeTime)
+            {
+                sun.ChargeFinished();
+            }
 
-        while (_inputs.PrimaryAttack)
-        {
-            var lookAt = Camera.main.transform.forward.MakeHorizontal();
-            transform.forward = lookAt;
+            while (_inputs.PrimaryAttack)
+            {
+                CheckAndReduceStamina(0);
+                yield return null;
+            }
 
-            CheckAndReduceStamina(0);
-            yield return null;
-        }
+            if (_damageCurrentCooldown > 0)
+            {
+                sun.Die();
+            }
+            else
+            {
+                _inputs.inputUpdate = _inputs.FixedCast;
 
-        if (_damageCurrentCooldown > 0)
-        {
-            sun.Die();
+                var lookAt = Camera.main.transform.forward.MakeHorizontal();
+                transform.forward = lookAt;
+
+                anim.SetBool("IsAttacking", true);
+
+                yield return new WaitForSeconds(_sunCastDelay);
+
+                _inputs.inputUpdate = _inputs.Unpaused;
+                sun.transform.SetParent(null);
+                sun.speed = _sunSpeed;
+                _rb.AddForce(-transform.forward * 75 * timer);
+                sun.Shoot();
+            }
         }
         else
         {
-            sun.transform.SetParent(null);
-            sun.speed = _sunSpeed;
-            _rb.AddForce(-transform.forward * 75 * timer);
-            sun.Shoot();
+            if (_damageCurrentCooldown > 0)
+            {
+                sun.Die();
+            }
+            else
+            {
+                var lookAt = Camera.main.transform.forward.MakeHorizontal();
+                transform.forward = lookAt;
+
+                _inputs.inputUpdate = _inputs.Unpaused;
+                sun.transform.SetParent(null);
+                sun.speed = _sunSpeed;
+                _rb.AddForce(-transform.forward * 75 * timer);
+                sun.Shoot();
+            }
         }
         
         yield return new WaitForSeconds(_sunRecovery);
 
+        _usingSun = false;
         anim.SetBool("IsAttacking", false);
         _sunCurrentCooldown = _sunCooldown;
-        _inputs.PrimaryAttack = false;
+        _movement.Cast(false);
     }
 
     IEnumerator NewerSunMagic()

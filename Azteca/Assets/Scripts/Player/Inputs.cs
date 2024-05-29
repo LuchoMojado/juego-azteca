@@ -95,7 +95,7 @@ public class Inputs
             _Kstep = KeyCode.Joystick1Button2;
             _Kjump = KeyCode.Joystick1Button1;
             _KprimaryAttack = KeyCode.Joystick1Button7;
-            _KsecondaryAttack = KeyCode.Joystick1Button6; //ayuda juli
+            //_KsecondaryAttack = KeyCode.Joystick1Button6; //ayuda juli
             _Klock = KeyCode.Joystick1Button11;
             _Ksun = KeyCode.Joystick1Button4;
             _Kobssidian = KeyCode.Joystick1Button4;
@@ -107,7 +107,7 @@ public class Inputs
             _Kstep = KeyCode.LeftShift;
             _Kjump = KeyCode.Space;
             _KprimaryAttack = KeyCode.Mouse0;
-            _KsecondaryAttack = KeyCode.Mouse1;
+            //_KsecondaryAttack = KeyCode.Mouse1;
             _Klock = KeyCode.Mouse2; //no se que tecla estaria bien para esto
             _Ksun = KeyCode.Alpha1;
             _Kobssidian = KeyCode.Alpha2;
@@ -124,19 +124,13 @@ public class Inputs
 
         _inputVertical = Input.GetAxis("Vertical");
 
-        if (Input.GetKeyDown(_Kscape))
-        {
-            Time.timeScale = 0;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            //UIManager.instance.SetPauseMenu(true);
-            UIManager.instance.Paused();
-            inputUpdate = Paused;
-        }
+        Pause();
 
         if (Input.GetKeyDown(_Kstep))
         {
             _player.Step(_inputHorizontal, _inputVertical);
+
+            PrimaryAttack = false;
         }
 
         if (Input.GetKeyDown(_Kjump))
@@ -149,27 +143,21 @@ public class Inputs
             PrimaryAttack = true;
         }
 
+        if (Input.GetKeyUp(_KprimaryAttack))
+        {
+            PrimaryAttack = false;
+        }
+
         if (Input.GetKeyDown(_KsecondaryAttack))
         {
             SecondaryAttack = true;
         }
 
-        if (Input.GetKeyDown(_Klock))
-        {
-            ToggleLock();
-        }
+        LockUnlock();
 
-        if (Input.GetKeyDown(_Ksun))
-        {
-            _player.ChangeActiveMagic(PlayerController.MagicType.Sun);
-            _player.renderer.material.color = Color.red;
-        }
+        SelectSun();
 
-        if (Input.GetKeyDown(_Kobssidian))
-        {
-            _player.ChangeActiveMagic(PlayerController.MagicType.Obsidian);
-            _player.renderer.material.color = Color.black;
-        }
+        SelectObsidian();
     }
 
     public void Stepping()
@@ -180,30 +168,13 @@ public class Inputs
 
         cameraInputs();
 
-        if (Input.GetKeyDown(_Kscape))
-        {
-            Time.timeScale = 0;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            //UIManager.instance.SetPauseMenu(true);
-            UIManager.instance.Paused();
-            inputUpdate = Paused;
-        }
+        Pause();
 
-        if (Input.GetKeyDown(_Ksun))
-        {
-            _player.ChangeActiveMagic(PlayerController.MagicType.Sun);
-        }
+        SelectSun();
 
-        if (Input.GetKeyDown(_Kobssidian))
-        {
-            _player.ChangeActiveMagic(PlayerController.MagicType.Obsidian);
-        }
+        SelectObsidian();
 
-        if (Input.GetKeyDown(_Klock))
-        {
-            ToggleLock();
-        }
+        LockUnlock();
     }
 
     public void FixedCast()
@@ -214,23 +185,15 @@ public class Inputs
 
         cameraInputs();
 
-        /*if (Mathf.Abs(Input.GetAxis("Horizontal")) == 1 || Mathf.Abs(Input.GetAxis("Vertical")) == 1)
-        {
-            Attack = false;
-            inputUpdate = Unpaused;
-        }
+        //if (Mathf.Abs(Input.GetAxis("Horizontal")) == 1 || Mathf.Abs(Input.GetAxis("Vertical")) == 1)
+        //{
+        //    Attack = false;
+        //    inputUpdate = Unpaused;
+        //}
 
-        if (Input.GetKeyDown(_Kscape))
-        {
-            Time.timeScale = 0;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            //UIManager.instance.SetPauseMenu(true);
-            UIManager.instance.Paused();
-            inputUpdate = Paused;
-        }
+        //Pause();
 
-        if (Input.GetKeyDown(_Kstep))
+        /*if (Input.GetKeyDown(_Kstep))
         {
             _player.Step(_inputHorizontal, _inputVertical);
             PrimaryAttack = false;
@@ -250,10 +213,7 @@ public class Inputs
             inputUpdate = Unpaused;
         }*/
 
-        if (Input.GetKeyDown(_Klock))
-        {
-            ToggleLock();
-        }
+        LockUnlock();
     }
 
     public void MovingCast()
@@ -264,40 +224,26 @@ public class Inputs
 
         cameraInputs();
 
-        if (Input.GetKeyDown(_Kscape))
-        {
-            Time.timeScale = 0;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            //UIManager.instance.SetPauseMenu(true);
-            UIManager.instance.Paused();
-            inputUpdate = Paused;
-        }
+        Pause();
 
-        /*if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _player.Step(_inputHorizontal, _inputVertical);
-            Attack = false;
-            inputUpdate = Unpaused;
+            PrimaryAttack = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _jump = true;
-            Attack = false;
-            inputUpdate = Unpaused;
-        }*/
+            PrimaryAttack = false;
+        }
 
         if (Input.GetKeyUp(_KprimaryAttack))
         {
             PrimaryAttack = false;
-            inputUpdate = Unpaused;
         }
 
-        if (Input.GetKeyDown(_Klock))
-        {
-            ToggleLock();
-        }
+        LockUnlock();
     }
 
     public void Nothing()
@@ -320,7 +266,7 @@ public class Inputs
 
     public void InputsFixedUpdate()
     {
-        _movement.Move(_inputHorizontal, _inputVertical, !PrimaryAttack);
+        _movement.Move(_inputHorizontal, _inputVertical, true/*!PrimaryAttack*/);
 
         if (_jump)
         {
@@ -344,5 +290,44 @@ public class Inputs
     void LockedOn()
     {
         _cameraController.LockOn(_player.currentBoss.transform);
+    }
+
+    void Pause()
+    {
+        if (Input.GetKeyDown(_Kscape))
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            //UIManager.instance.SetPauseMenu(true);
+            UIManager.instance.Paused();
+            inputUpdate = Paused;
+        }
+    }
+
+    void LockUnlock()
+    {
+        if (Input.GetKeyDown(_Klock))
+        {
+            ToggleLock();
+        }
+    }
+
+    void SelectSun()
+    {
+        if (Input.GetKeyDown(_Ksun))
+        {
+            _player.ChangeActiveMagic(PlayerController.MagicType.Sun);
+            _player.renderer.material.color = Color.red;
+        }
+    }
+
+    void SelectObsidian()
+    {
+        if (Input.GetKeyDown(_Kobssidian))
+        {
+            _player.ChangeActiveMagic(PlayerController.MagicType.Obsidian);
+            _player.renderer.material.color = Color.black;
+        }
     }
 }
