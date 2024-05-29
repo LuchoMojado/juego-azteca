@@ -39,7 +39,15 @@ public class PlayerController : Entity
     public GameObject camaraFinal;
 
     public Renderer renderer;
-    private bool _joystickActive=true, _usingSun = false;
+    private bool _joystickActive=true, _usingSun = false, _stopSun = false;
+
+    public bool StopSun
+    {
+        set
+        {
+            _stopSun = value;
+        }
+    }
 
     [SerializeField] Animator anim;
 
@@ -246,7 +254,7 @@ public class PlayerController : Entity
 
         if (_inputs.PrimaryAttack)
         {
-            while (_damageCurrentCooldown <= 0 && _inputs.PrimaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+            while (!_stopSun && _inputs.PrimaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
             {
                 timer += Time.deltaTime;
 
@@ -277,9 +285,11 @@ public class PlayerController : Entity
                 yield return null;
             }
 
-            if (_damageCurrentCooldown > 0)
+            if (_stopSun)
             {
-                sun.Die();
+                sun.transform.SetParent(null);
+                sun.StartCoroutine(sun.Death());
+                _stopSun = false;
             }
             else
             {
@@ -297,13 +307,17 @@ public class PlayerController : Entity
                 sun.speed = _sunSpeed;
                 _rb.AddForce(-transform.forward * 75 * timer);
                 sun.Shoot();
+
+                yield return new WaitForSeconds(_sunRecovery);
             }
         }
         else
         {
-            if (_damageCurrentCooldown > 0)
+            if (_stopSun)
             {
-                sun.Die();
+                sun.transform.SetParent(null);
+                sun.StartCoroutine(sun.Death());
+                _stopSun = false;
             }
             else
             {
@@ -315,10 +329,10 @@ public class PlayerController : Entity
                 sun.speed = _sunSpeed;
                 _rb.AddForce(-transform.forward * 75 * timer);
                 sun.Shoot();
+
+                yield return new WaitForSeconds(_sunRecovery);
             }
         }
-        
-        yield return new WaitForSeconds(_sunRecovery);
 
         _usingSun = false;
         anim.SetBool("IsAttacking", false);
@@ -555,6 +569,7 @@ public class PlayerController : Entity
     public override void TakeDamage(float amount)
     {
         //_inputs.PrimaryAttack = false;
+        if (_usingSun) _stopSun = true;
 
         if (_damageCurrentCooldown > 0) return;
         ChangeAudio(damage);

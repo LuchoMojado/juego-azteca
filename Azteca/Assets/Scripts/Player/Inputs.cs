@@ -229,12 +229,14 @@ public class Inputs
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _player.Step(_inputHorizontal, _inputVertical);
+            _player.StopSun = true;
             PrimaryAttack = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _jump = true;
+            _player.StopSun = true;
             PrimaryAttack = false;
         }
 
