@@ -279,7 +279,7 @@ public class PlayerController : Entity
                 sun.ChargeFinished();
             }
 
-            while (_inputs.PrimaryAttack)
+            while (!_stopSun && _inputs.PrimaryAttack)
             {
                 CheckAndReduceStamina(0);
                 yield return null;
