@@ -8,6 +8,10 @@ public class SunMagic : PlayerProjectile
 
     [HideInInspector] public PlayerController player;
 
+    [SerializeField] Light _light;
+
+    [SerializeField] float _lightRangeMultiplier;
+
     bool _charging = true, _shot = false, _dead = false;
 
     protected override void Update()
@@ -15,6 +19,7 @@ public class SunMagic : PlayerProjectile
         if (_charging)
         {
             transform.localScale += Vector3.one * Time.deltaTime * 0.2f;
+            _light.range += Time.deltaTime * _lightRangeMultiplier;
         }
         else if (_shot && !_dead)
         {
