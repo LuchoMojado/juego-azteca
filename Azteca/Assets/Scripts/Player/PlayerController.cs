@@ -41,6 +41,8 @@ public class PlayerController : Entity
     public Renderer renderer;
     private bool _joystickActive=true, _usingSun = false, _stopSun = false;
 
+    [SerializeField] Material _VignetteAmountClamps;
+
     public bool StopSun
     {
         set
@@ -63,7 +65,7 @@ public class PlayerController : Entity
     protected override void Awake()
     {
         base.Awake();
-
+        //_VignetteAmountClamps.
         _myAS = GetComponent<AudioSource>();
         _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _castStepStr, _groundLayer);
         _inputs = new Inputs(_movement, this, _cameraController);
