@@ -119,13 +119,15 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _Noise_Scale: 0.62
-    - _Normal_Strength: 1
+    - _Normal_Strength: 0.5
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Rotation: 45
+    - _Roughness_Contrast: 1
+    - _Roughness_Intensity: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _Smoothness_Intensity: 1
