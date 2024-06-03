@@ -38,16 +38,25 @@ public class SunMagic : PlayerProjectile
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (!_shot) return;
+        if (!_shot || _dead) return;
         
         if (other.gameObject.layer == 6 || other.gameObject.layer == 7)
         {
             return;
         }
 
-        if (other.TryGetComponent(out Entity entity))
+        if (other.TryGetComponent(out IDamageable target))
         {
-            entity.TakeDamage(damage);
+            target.TakeDamage(damage);
+        }
+        else
+        {
+            var parent = other.GetComponentInParent<IDamageable>();
+
+            if (parent != null)
+            {
+                parent.TakeDamage(damage);
+            }
         }
 
         StartCoroutine(Death());

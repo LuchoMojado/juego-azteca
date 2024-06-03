@@ -29,9 +29,9 @@ public class PlayerProjectile : MonoBehaviour
             return;
         }
 
-        if (other.TryGetComponent(out Entity entity))
+        if (other.TryGetComponent(out IDamageable target))
         {
-            entity.TakeDamage(damage);
+            target.TakeDamage(damage);
         }
 
         Die();
