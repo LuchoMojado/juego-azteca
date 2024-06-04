@@ -6,7 +6,23 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 {
     [SerializeField] GameObject _completeWall, _brokenWall;
 
+    [SerializeField] float _radius;
+
+    List<Node> _overlappingNodes;
+
     bool _broken = false;
+
+    private void Start()
+    {
+        foreach (var item in ObsidianPathfindManager.instance.allNodes)
+        {
+            if (Vector3.Distance(transform.position, item.transform.position) <= _radius)
+            {
+                _overlappingNodes.Add(item);
+                item.SetBlock(true);
+            }
+        }
+    }
 
     public void Break()
     {
@@ -30,6 +46,11 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     public void Die()
     {
+        foreach (var item in _overlappingNodes)
+        {
+            item.SetBlock(false);
+        }
+
         Destroy(gameObject);
     }
 
