@@ -49,7 +49,6 @@ public class ObsidianGod : Entity
 
     AudioSource _myAS;
     [SerializeField] AudioClip stomp,dash,dashBox,dashFuerte,lanzaDardos,walk;
-
     public enum ObsidianStates
     {
         Inactive,
@@ -426,6 +425,7 @@ public class ObsidianGod : Entity
         //StartCoroutine(ApagarArena());
         //animacion de muerte
         _arena.SetActive(false);
+        CineManager.instance.PlayAnimation(CineManager.cineEnum.obsidianDead);
         Destroy(gameObject);
     }
 
