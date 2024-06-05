@@ -45,7 +45,7 @@ Material:
     - _DistortionPower: 1
     - _DistortionTimeScale: 2
     - _GradientTimeScale: 0.75
-    - _RotationTimeScale: 0.25
+    - _RotationTimeScale: 1
     - _VignetteAmount: 1
     m_Colors: []
   m_BuildTextureStacks: []

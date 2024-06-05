@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool joystick=false;
+    [SerializeField] private Material _vignettePostProcess;
+    [SerializeField] private string _vignetteAmountName = "";
+    public float aaaaa;
     void Awake()
     {
         if (instance == null)
@@ -27,6 +30,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _vignettePostProcess.SetFloat(_vignetteAmountName, aaaaa);
+        }
     }
 }
