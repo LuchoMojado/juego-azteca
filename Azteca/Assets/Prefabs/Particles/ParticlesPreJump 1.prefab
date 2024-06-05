@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2132998149612694735}
-  - {fileID: 3217274011317993321}
+  - {fileID: 7848329215565373744}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3617191875193966713
@@ -120,6 +120,16 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.m_Rotation.x
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5345347041881512020, guid: a5835582664157743bfc739af8e575e3,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 15.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5345347041881512020, guid: a5835582664157743bfc739af8e575e3,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 107.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -215,12 +225,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3839088882984425013, guid: e956fd7fa7d1ff341ba949cd1b8aa41e,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 12.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3839088882984425013, guid: e956fd7fa7d1ff341ba949cd1b8aa41e,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 267.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e956fd7fa7d1ff341ba949cd1b8aa41e, type: 3}
---- !u!4 &3217274011317993321 stripped
+--- !u!4 &7848329215565373744 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2203620804785729296, guid: e956fd7fa7d1ff341ba949cd1b8aa41e,
     type: 3}
