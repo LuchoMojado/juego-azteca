@@ -41,9 +41,7 @@ public class PlayerController : Entity
     public Renderer renderer;
     private bool _joystickActive=true, _usingSun = false, _stopSun = false;
 
-    [SerializeField] Material MvignetteAmount;
-    [Range(0, 10)]
-    public float vignetteInt = 1.0f;
+    [SerializeField] Material _VignetteAmountClamps;
 
     public bool StopSun
     {
@@ -94,10 +92,6 @@ public class PlayerController : Entity
 
         _inputs.inputUpdate = _inputs.Unpaused;
         Joistick();
-        if (MvignetteAmount != null)
-        {
-            MvignetteAmount.SetFloat("_VignetteAmount", vignetteInt);
-        }
     }
 
     void Update()
@@ -253,20 +247,11 @@ public class PlayerController : Entity
     {
         _usingSun = true;
         _inputs.inputUpdate = _inputs.MovingCast;
-        vignetteInt = 0.82f;
-        if (MvignetteAmount != null)
-        {
-            MvignetteAmount.SetFloat("_MyFloat", vignetteInt);
-        }
+
         anim.SetBool("IsAttacking", true);
 
         yield return new WaitForSeconds(_sunCastDelay);
 
-        vignetteInt = 0.82f;
-        if (MvignetteAmount != null)
-        {
-            MvignetteAmount.SetFloat("_MyFloat", vignetteInt);
-        }
         _movement.Cast(true);
         ChangeAudio(chargingSun);
         anim.SetBool("IsAttacking", false);
