@@ -30,4 +30,9 @@ public static class Extensions
     {
         return !Physics.Linecast(startPos, endPos, out hit, obstacleLayer);
     }
+
+    public static Vector3 VectorVariation(this Vector3 vector, float multiplier, float xVariation = 0, float yVariation = 0, float zVariation = 0)
+    {
+        return new Vector3(vector.x + Random.Range(-xVariation, xVariation) * multiplier, vector.y + Random.Range(-yVariation, yVariation) * multiplier, vector.z + Random.Range(-zVariation, zVariation) * multiplier);
+    }
 }

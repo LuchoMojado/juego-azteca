@@ -4,13 +4,31 @@ using UnityEngine;
 
 public class ObsidianWall : MonoBehaviour, IDamageable
 {
+    public Itztlacoliuhqui boss;
+
     [SerializeField] GameObject _completeWall, _brokenWall;
 
     [SerializeField] float _radius;
 
+    public float Radius
+    {
+        get
+        {
+            return _radius;
+        }
+    }
+
     List<Node> _overlappingNodes;
 
     bool _broken = false;
+
+    public bool Broken
+    {
+        get
+        {
+            return _broken;
+        }
+    }
 
     private void Start()
     {
@@ -50,6 +68,8 @@ public class ObsidianWall : MonoBehaviour, IDamageable
         {
             item.SetBlock(false);
         }
+
+        boss.WallDestroyed(this);
 
         Destroy(gameObject);
     }

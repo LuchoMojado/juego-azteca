@@ -292,7 +292,7 @@ Transform:
   m_GameObject: {fileID: 8844907471187623210}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.38, y: 68.03, z: 1163.15}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -314,3 +314,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _completeWall: {fileID: 5258198314591029457}
   _brokenWall: {fileID: 2682066917830086597}
+  _radius: 4

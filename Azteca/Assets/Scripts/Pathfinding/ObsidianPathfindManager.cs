@@ -20,7 +20,7 @@ public class ObsidianPathfindManager : MonoBehaviour
         instance = this;
     }
 
-    public Node FindNodeClosestToPos(Vector3 pos)
+    public Node FindNodeClosestTo(Vector3 pos)
     {
         return allNodes.Where(x => !x.isBlocked).OrderBy(x => Vector3.Distance(pos, x.transform.position)).First();
     }
