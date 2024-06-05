@@ -51,6 +51,14 @@ public class PlayerController : Entity
         }
     }
 
+    public bool UsingSun
+    {
+        get
+        {
+            return _usingSun;
+        }
+    }
+
     [SerializeField] Animator anim;
 
     AudioSource _myAS;

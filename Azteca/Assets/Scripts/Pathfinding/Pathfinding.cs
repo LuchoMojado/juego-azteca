@@ -63,18 +63,12 @@ public class Pathfinding
         int current = 0;
         while (current + 2 < path.Count)
         {
-            if (InLineOfSight(path[current], path[current + 2], wallLayer))
+            if (path[current].InLineOfSightOf(path[current + 2], wallLayer))
                 path.RemoveAt(current + 1);
             else current++;
         }
 
         return path;
-
-    }
-
-    bool InLineOfSight(Vector3 start, Vector3 end, LayerMask wallLayer)
-    {
-        return !Physics.Linecast(start, end, wallLayer);
     }
 
     float Heuristic(Vector3 start, Vector3 end)

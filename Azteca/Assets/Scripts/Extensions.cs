@@ -20,4 +20,14 @@ public static class Extensions
         var euler = quaternion.eulerAngles;
         return Quaternion.Euler(euler.x, euler.y + amount, euler.z);
     }
+
+    public static bool InLineOfSightOf(this Vector3 startPos, Vector3 endPos, LayerMask obstacleLayer)
+    {
+        return !Physics.Linecast(startPos, endPos, obstacleLayer);
+    }
+
+    public static bool InLineOfSightOf(this Vector3 startPos, Vector3 endPos, LayerMask obstacleLayer, out RaycastHit hit)
+    {
+        return !Physics.Linecast(startPos, endPos, out hit, obstacleLayer);
+    }
 }
