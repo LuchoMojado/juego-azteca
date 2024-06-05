@@ -249,9 +249,9 @@ public class PlayerController : Entity
         _inputs.inputUpdate = _inputs.MovingCast;
 
         anim.SetBool("IsAttacking", true);
-
+        ControlFullScreen.instance.ChangeDemond(true);
         yield return new WaitForSeconds(_sunCastDelay);
-
+        
         _movement.Cast(true);
         ChangeAudio(chargingSun);
         anim.SetBool("IsAttacking", false);
@@ -300,6 +300,7 @@ public class PlayerController : Entity
                 sun.transform.SetParent(null);
                 sun.StartCoroutine(sun.Death());
                 _stopSun = false;
+                ControlFullScreen.instance.ChangeDemond(false);
             }
             else
             {
@@ -317,7 +318,7 @@ public class PlayerController : Entity
                 sun.speed = _sunSpeed;
                 _rb.AddForce(-transform.forward * 75 * timer);
                 sun.Shoot();
-
+                ControlFullScreen.instance.ChangeDemond(false);
                 yield return new WaitForSeconds(_sunRecovery);
             }
         }
@@ -327,6 +328,7 @@ public class PlayerController : Entity
             {
                 sun.transform.SetParent(null);
                 sun.StartCoroutine(sun.Death());
+                ControlFullScreen.instance.ChangeDemond(false);
                 _stopSun = false;
             }
             else
@@ -339,7 +341,7 @@ public class PlayerController : Entity
                 sun.speed = _sunSpeed;
                 _rb.AddForce(-transform.forward * 75 * timer);
                 sun.Shoot();
-
+                ControlFullScreen.instance.ChangeDemond(false);
                 yield return new WaitForSeconds(_sunRecovery);
             }
         }
