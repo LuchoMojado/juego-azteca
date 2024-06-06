@@ -82,17 +82,29 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     ObsidianPathfindManager _pfManager { get => ObsidianPathfindManager.instance; }
 
-    bool _takingAction = false;
+    bool _takingAction = false, _lookAtPlayer = false;
 
     float _timer = 0;
 
-    private void Awake()
+    public bool LookAtPlayer
     {
-        StartCoroutine(UsingGatling());
-        return;
+        get
+        {
+            return _lookAtPlayer;
+        }
 
+        set
+        {
+            //_rb.constraints = value ? RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ : RigidbodyConstraints.FreezeRotation;
+            _lookAtPlayer = value;
+        }
+    }
+
+    private void Start()
+    {
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponent<Animator>();
+        _pf = new Pathfinding();
 
         #region FSM State Creation
 
@@ -247,7 +259,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         search.OnEnter += x =>
         {
-            _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(_player.transform.position), _wallLayer);
+            //_path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(_player.transform.position), _wallLayer);
         };
 
         search.OnUpdate += () =>
@@ -260,13 +272,13 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         search.OnFixedUpdate += () =>
         {
-            TravelPath(_searchSpeed);
+            //TravelPath(_searchSpeed);
         };
 
         spikes.OnEnter += x =>
         {
             _takingAction = true;
-            _anim.SetBool("IsStomp", true);
+            //_anim.SetBool("IsStomp", true);
             StartCoroutine(Spiking());
         };
 
@@ -277,7 +289,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         spikes.OnExit += x =>
         {
-            _anim.SetBool("IsStomp", false);
+            //_anim.SetBool("IsStomp", false);
         };
 
         breakWall.OnEnter += x =>
@@ -361,6 +373,8 @@ public class Itztlacoliuhqui : MonoBehaviour
             if (!_takingAction) _treeStart.Execute();
         };
 
+        _fsm = new EventFSM<Actions>(search);
+
         #endregion
 
         #region Decision Tree Setup
@@ -386,6 +400,21 @@ public class Itztlacoliuhqui : MonoBehaviour
         _treeStart = new QuestionNode(playerClose, breakWallInLOS, IsPlayerInLOS);
 
         #endregion
+    }
+
+    private void Update()
+    {
+        _fsm.Update();
+    }
+
+    private void FixedUpdate()
+    {
+        _fsm.FixedUpdate();
+
+        if (LookAtPlayer)
+        {
+            _rb.MoveRotation(Quaternion.LookRotation((_player.transform.position - transform.position).MakeHorizontal()));
+        }
     }
 
     #region Decision Tree Methods
@@ -437,15 +466,15 @@ public class Itztlacoliuhqui : MonoBehaviour
     bool IsPlayerClose() => Vector3.Distance(transform.position, _player.transform.position) <= _playerCloseRange;
     bool IsPlayerInLOS()
     {
-        if (transform.position.InLineOfSightOf(_player.transform.position, _wallLayer, out var hit))
+        if (!transform.position.InLineOfSightOf(_player.transform.position, _wallLayer, out var hit))
         {
-            _wallBlockingLOS = hit.collider.GetComponent<ObsidianWall>();
-            return true;
+            _wallBlockingLOS = hit.collider.GetComponentInParent<ObsidianWall>();
+            return false;
         }
         else
         {
             _wallBlockingLOS = null;
-            return false;
+            return true;
         }
     }
 
@@ -482,10 +511,10 @@ public class Itztlacoliuhqui : MonoBehaviour
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
-        for (int i = 0; i < _preJumpParticles.Length; i++)
-        {
-            _preJumpParticles[i].Stop();
-        }
+        //for (int i = 0; i < _preJumpParticles.Length; i++)
+        //{
+        //    _preJumpParticles[i].Stop();
+        //}
         //recuperacion
         yield return new WaitForSeconds(_spikesRecovery);
 
@@ -495,6 +524,8 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     IEnumerator BreakingWall()
     {
+        _rb.MoveRotation(Quaternion.LookRotation((_wallBlockingLOS.transform.position - transform.position).MakeHorizontal()));
+
         yield return new WaitForSeconds(_breakWallPreparation);
 
         _wallBlockingLOS.Break();
@@ -519,6 +550,8 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     IEnumerator Shielding()
     {
+        LookAtPlayer = true;
+
         yield return new WaitForSeconds(_shieldPreparation);
 
         var wall = Instantiate(_wallPrefab, transform.position + transform.forward * _forwardOffset, Quaternion.identity);
@@ -527,12 +560,17 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         yield return new WaitForSeconds(_shieldRecovery);
 
+        LookAtPlayer = false;
         _takingAction = false;
     }
 
     IEnumerator WallSpiking()
     {
+        LookAtPlayer = true;
+
         yield return new WaitForSeconds(_wallSpikePreparation);
+
+        LookAtPlayer = false;
 
         Vector3 target = _player.transform.position - transform.up * _distFromPivotToFloor;
         Vector3 dir = (target - transform.position).MakeHorizontal().normalized;
@@ -552,7 +590,9 @@ public class Itztlacoliuhqui : MonoBehaviour
         while (Vector3.Distance(nextSpawnPos, target) > _wallPrefab.Radius);
 
         nextSpawnPos = target;
-        _spawnedWalls.Add(Instantiate(_wallPrefab, nextSpawnPos, Quaternion.identity));
+        var wall = Instantiate(_wallPrefab, nextSpawnPos, Quaternion.identity);
+        _spawnedWalls.Add(wall);
+        wall.boss = this;
 
         if (Physics.SphereCast(nextSpawnPos, _wallPrefab.Radius, Vector3.up, out var hit, 5, _playerLayer))
         {
@@ -574,6 +614,8 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     IEnumerator UsingGatling()
     {
+        LookAtPlayer = true;
+
         yield return new WaitForSeconds(_gatlingPreparation);
 
         float timer = 0, cooldown = 0;
@@ -603,18 +645,20 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         yield return new WaitForSeconds(_gatlingRecovery);
 
+        LookAtPlayer = false;
         _takingAction = false;
     }
 
     IEnumerator Dashing()
     {
+        LookAtPlayer = true;
         //preparacion
         yield return new WaitForSeconds(_dashPreparation);
         //comienza dash
         //ChangeAudio(dash);
         _rb.AddForce(transform.forward * _dashStrength);
 
-        //LookAtPlayer = false;
+        LookAtPlayer = false;
 
         float timer = 0;
 
