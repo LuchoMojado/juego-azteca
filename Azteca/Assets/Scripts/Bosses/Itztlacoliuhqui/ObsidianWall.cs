@@ -18,7 +18,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
         }
     }
 
-    List<Node> _overlappingNodes;
+    List<Node> _overlappingNodes = new List<Node>();
 
     bool _broken = false;
 

@@ -48,15 +48,31 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     [Header("Break Wall")]
     [SerializeField] int _shardAmount;
-    [SerializeField] float _breakWallPreparation, _breakWallRecovery, _spawnVariationY, _aimVariationX, _aimVariationY;
+    [SerializeField] float _breakWallPreparation, _breakWallRecovery, _breakSpawnVariationY, _breakAimVariationX, _breakAimVariationY;
 
     [Header("Shield")]
-    [SerializeField] float _shieldPreparation, _shieldRecovery, _forwardOffset;
+    [SerializeField] float _shieldPreparation;
+    [SerializeField] float _shieldRecovery, _forwardOffset;
 
     [Header("Hide")]
-    [SerializeField] float _hideSpeed, _hideDuration;
+    [SerializeField] float _hideSpeed;
+    [SerializeField] float _hideDuration;
+
+    [Header("Wall Spike")]
+    [SerializeField] GameObject _miniWall;
+    [SerializeField] float _distFromPivotToFloor, _firstWallOffset, _miniWallOffset, _miniWallInterval, _wallSpikeKnockback,
+                           _wallSpikeDamage, _wallSpikePreparation, _wallSpikeRecovery, _miniWallDestroyDelay;
+
+    [Header("Gatling")]
+    [SerializeField] Transform _handPos;
+    [SerializeField] float _gatlingDuration, _gatlingShardInterval, _gatlingPreparation, _gatlingRecovery, _gatlingSpawnVariationX, _gatlingSpawnVariationY, _gatlingAimVariationX, _gatlingAimVariationY;
+
+    [Header("Dash (Placeholder)")]
+    [SerializeField] float _dashStrength;
+    [SerializeField] float _dashPreparation, _dashDuration, _dashRecovery;
 
     [SerializeField] PlayerController _player;
+    [SerializeField] LayerMask _playerLayer;
 
     ObsidianWall _wallBlockingLOS;
 
@@ -72,6 +88,9 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     private void Awake()
     {
+        StartCoroutine(UsingGatling());
+        return;
+
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponent<Animator>();
 
@@ -309,6 +328,39 @@ public class Itztlacoliuhqui : MonoBehaviour
             TravelPath(_hideSpeed);
         };
 
+        wallSpike.OnEnter += x =>
+        {
+            _takingAction = true;
+            StartCoroutine(WallSpiking());
+        };
+
+        wallSpike.OnUpdate += () =>
+        {
+            if (!_takingAction) _treeStart.Execute();
+        };
+
+        gatling.OnEnter += x =>
+        {
+            _takingAction = true;
+            StartCoroutine(UsingGatling());
+        };
+
+        gatling.OnUpdate += () =>
+        {
+            if (!_takingAction) _treeStart.Execute();
+        };
+
+        charge.OnEnter += x =>
+        {
+            _takingAction = true;
+            StartCoroutine(Dashing());
+        };
+
+        charge.OnUpdate += () =>
+        {
+            if (!_takingAction) _treeStart.Execute();
+        };
+
         #endregion
 
         #region Decision Tree Setup
@@ -416,7 +468,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     public void WallDestroyed(ObsidianWall wall)
     {
-        _spawnedWalls.Remove(wall);
+        if (_spawnedWalls.Contains(wall)) _spawnedWalls.Remove(wall);
     }
 
     IEnumerator Spiking()
@@ -447,14 +499,14 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         _wallBlockingLOS.Break();
 
-        Vector3 basePos = _wallBlockingLOS.transform.position;
+        Vector3 basePos = new Vector3(_wallBlockingLOS.transform.position.x, transform.position.y + 1.25f, _wallBlockingLOS.transform.position.z);
         float xPosVariation = _wallBlockingLOS.Radius;
-        Vector3 baseDir = _player.transform.position - _wallBlockingLOS.transform.position;
+        Vector3 baseDir = (_player.transform.position - basePos).normalized;
 
         for (int i = 0; i < _shardAmount; i++)
         {
-            var shard = Instantiate(_shardPrefab, basePos.VectorVariation(i, xPosVariation, _spawnVariationY), Quaternion.identity);
-            shard.transform.forward = baseDir.VectorVariation(i, _aimVariationX, _aimVariationY);
+            var shard = Instantiate(_shardPrefab, basePos.VectorVariation(1, xPosVariation, _breakSpawnVariationY), Quaternion.identity);
+            shard.transform.forward = baseDir.VectorVariation(i, _breakAimVariationX, _breakAimVariationY);
             shard.speed = _shardSpeed;
             shard.damage = _shardDamage;
         }
@@ -475,6 +527,109 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         yield return new WaitForSeconds(_shieldRecovery);
 
+        _takingAction = false;
+    }
+
+    IEnumerator WallSpiking()
+    {
+        yield return new WaitForSeconds(_wallSpikePreparation);
+
+        Vector3 target = _player.transform.position - transform.up * _distFromPivotToFloor;
+        Vector3 dir = (target - transform.position).MakeHorizontal().normalized;
+
+        List<GameObject> miniWallList = new List<GameObject>();
+
+        Vector3 nextSpawnPos = transform.position - transform.up * _distFromPivotToFloor + dir * _firstWallOffset;
+        Vector3 movement = dir * _miniWallOffset;
+
+        do
+        {
+            miniWallList.Add(Instantiate(_miniWall, nextSpawnPos, Quaternion.identity));
+            nextSpawnPos += movement;
+
+            yield return new WaitForSeconds(_miniWallInterval);
+        }
+        while (Vector3.Distance(nextSpawnPos, target) > _wallPrefab.Radius);
+
+        nextSpawnPos = target;
+        _spawnedWalls.Add(Instantiate(_wallPrefab, nextSpawnPos, Quaternion.identity));
+
+        if (Physics.SphereCast(nextSpawnPos, _wallPrefab.Radius, Vector3.up, out var hit, 5, _playerLayer))
+        {
+            _player.KnockBack(_player.transform.position - nextSpawnPos, _wallSpikeKnockback);
+            _player.TakeDamage(_wallSpikeDamage);
+        }
+
+        yield return new WaitForSeconds(_wallSpikeRecovery);
+
+        _takingAction = false;
+
+        yield return new WaitForSeconds(_miniWallDestroyDelay);
+
+        foreach (var item in miniWallList)
+        {
+            Destroy(item);
+        }
+    }
+
+    IEnumerator UsingGatling()
+    {
+        yield return new WaitForSeconds(_gatlingPreparation);
+
+        float timer = 0, cooldown = 0;
+
+        while (timer < _gatlingDuration)
+        {
+            if (cooldown >= _gatlingShardInterval)
+            {
+                var pos = _handPos.transform.position;
+                var dir = (_player.transform.position - pos).normalized;
+
+                var shard = Instantiate(_shardPrefab, pos.VectorVariation(1, _gatlingSpawnVariationX, _gatlingSpawnVariationY), Quaternion.identity);
+                shard.transform.forward = dir.VectorVariation(1, _gatlingAimVariationX, _gatlingAimVariationY);
+                shard.speed = _shardSpeed;
+                shard.damage = _shardDamage;
+                cooldown = 0;
+            }
+            else
+            {
+                cooldown += Time.deltaTime;
+            }
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(_gatlingRecovery);
+
+        _takingAction = false;
+    }
+
+    IEnumerator Dashing()
+    {
+        //preparacion
+        yield return new WaitForSeconds(_dashPreparation);
+        //comienza dash
+        //ChangeAudio(dash);
+        _rb.AddForce(transform.forward * _dashStrength);
+
+        //LookAtPlayer = false;
+
+        float timer = 0;
+
+        while (timer < _dashDuration)
+        {
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+        //termina dash
+        _rb.velocity = Vector3.zero;
+        //espero
+        yield return new WaitForSeconds(_dashRecovery);
+
+        //LookAtPlayer = true;
         _takingAction = false;
     }
 }
