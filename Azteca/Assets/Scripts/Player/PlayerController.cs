@@ -43,6 +43,9 @@ public class PlayerController : Entity
 
     [SerializeField] Material _VignetteAmountClamps;
 
+    [SerializeField] ParticleSystem dustPlayer;
+    [SerializeField] GameObject ForceFieldPlayer;
+
     public bool StopSun
     {
         set
@@ -119,6 +122,7 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
         {
+            StartCoroutine(PrendoPlayerDust(true));
             anim.SetTrigger("IsJumping");
             _movement.Jump();
             ChangeAudio(jump);
@@ -130,6 +134,7 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
+            StartCoroutine(PrendoPlayerDust(true));
             //anim.SetBool("IsStrafeRight", true);
             ChangeAudio(sideStep);
             _stepCurrentCooldown = _stepCooldown;
@@ -651,5 +656,15 @@ public class PlayerController : Entity
     {
         _myAS.clip = clip;
         _myAS.PlayOneShot(_myAS.clip);
+    }
+    public IEnumerator PrendoPlayerDust(bool prendo)
+    {
+        ForceFieldPlayer.SetActive(prendo);
+        if(prendo)
+        {
+            dustPlayer.Play();
+        }
+        yield return new WaitForSeconds(1f);
+        ForceFieldPlayer.SetActive(false);
     }
 }
