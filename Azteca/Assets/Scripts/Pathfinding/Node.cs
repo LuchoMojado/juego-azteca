@@ -9,7 +9,7 @@ public class Node : MonoBehaviour
 
     [SerializeField] private List<Node> _neighbors = new List<Node>();
 
-    private int _cost;
+    private int _cost = 1;
     public int Cost { get => _cost; }
 
     private void Start()

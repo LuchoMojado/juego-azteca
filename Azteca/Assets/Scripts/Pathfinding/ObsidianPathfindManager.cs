@@ -7,7 +7,7 @@ public class ObsidianPathfindManager : MonoBehaviour
 {
     public static ObsidianPathfindManager instance;
 
-    public List<Node> allNodes;
+    public List<Node> allNodes = new List<Node>();
 
     public float neighborDistance;
 
