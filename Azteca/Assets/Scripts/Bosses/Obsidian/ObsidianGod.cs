@@ -49,6 +49,8 @@ public class ObsidianGod : Entity
 
     AudioSource _myAS;
     [SerializeField] AudioClip stomp,dash,dashBox,dashFuerte,lanzaDardos,walk;
+
+    [SerializeField] GameObject tornadoPiedras,caidaPiedras;
     public enum ObsidianStates
     {
         Inactive,
@@ -178,13 +180,28 @@ public class ObsidianGod : Entity
         StartCoroutine(Swinging());
     }
 
+    public void prenderTornado(bool prendo)
+    {
+        tornadoPiedras.SetActive(prendo);
+    }
+    public void prenderCaidaPiedras(bool prendo)
+    {
+        caidaPiedras.SetActive(prendo);
+    }
+    public IEnumerator oneShotTiroPiedras()
+    {
+        yield return new WaitForSeconds(0.5f);
+        prenderCaidaPiedras(false);
+    }
+
     IEnumerator Swinging()
     {
         //espero el tiempo de preparacion
+        prenderTornado(true);
         yield return new WaitForSeconds(_swingPreparation);
         //comienza el ataque
         LookAtPlayer = false;
-
+        prenderTornado(false);
         _rb.AddForce(transform.forward * _swingForwardForce);
         ChangeAudio(dashFuerte);
         placeholderSwingHitboxFeedback.SetActive(true);
@@ -217,6 +234,7 @@ public class ObsidianGod : Entity
     IEnumerator ThrowingShards(int shardLimit)
     {
         //preparacion
+        prenderTornado(true);
         yield return new WaitForSeconds(_shardsPreparation);
         ChangeAudio(lanzaDardos);
         LookAtPlayer = false;
@@ -239,6 +257,7 @@ public class ObsidianGod : Entity
 
             yield return new WaitForSeconds(_shardsInterval);
         }
+        prenderTornado(false);
         //recuperacion
         yield return new WaitForSeconds(_shardsRecovery);
 
@@ -282,6 +301,7 @@ public class ObsidianGod : Entity
     IEnumerator ThrowingWave()
     {
         //preparacion
+        prenderTornado(true);
         yield return new WaitForSeconds(_wavePreparation);
         //lanzo ataque
         LookAtPlayer = false;
@@ -290,8 +310,9 @@ public class ObsidianGod : Entity
         wave.speed = _waveSpeed;
         wave.damage = _waveDamage;
         //recuperacion
+        prenderTornado(false);
         yield return new WaitForSeconds(_waveRecovery);
-
+        
         LookAtPlayer = true;
         takingAction = false;
     }
@@ -299,10 +320,12 @@ public class ObsidianGod : Entity
     IEnumerator Spiking()
     {
         LookAtPlayer = false;
+        prenderCaidaPiedras(true);
         ChangeAudio(dash);
         //preparacion
         yield return new WaitForSeconds(_spikesPreparation);
         //salen spikes del suelo
+        prenderCaidaPiedras(false);
         ChangeAudio(stomp);
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
         spikes.duration = _spikesDuration;
@@ -321,6 +344,8 @@ public class ObsidianGod : Entity
     IEnumerator Dashing()
     {
         //preparacion
+        //prenderTornado(true);
+        prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_dashPreparation);
         //comienza dash
         ChangeAudio(dash);
@@ -338,9 +363,10 @@ public class ObsidianGod : Entity
         }
         //termina dash
         _rb.velocity = Vector3.zero;
+        //prenderTornado(false);
+        prenderCaidaPiedras(false);
         //espero
         yield return new WaitForSeconds(_dashRecovery);
-
         LookAtPlayer = true;
         takingAction = false;
     }
@@ -412,12 +438,14 @@ public class ObsidianGod : Entity
 
     public override void TakeDamage(float amount)
     {
+        prenderCaidaPiedras(true);
         base.TakeDamage(amount);
         UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp);
     }
 
     public override void Die()
     {
+        prenderCaidaPiedras(true);
         UIManager.instance.ToggleBossBar(false);
         _player.FightEnds();
         //animacion de que las piedras bajan
