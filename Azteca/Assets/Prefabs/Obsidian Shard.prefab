@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2555397309104866292}
   - component: {fileID: 1969467020812625667}
   - component: {fileID: 1309916077143301227}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Obsidian Shard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5672221260452140265}
   - component: {fileID: 1044178521483352849}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 2301024695677664171}
   - component: {fileID: 6061559239842807070}
   - component: {fileID: 3736043072930216786}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Area Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 7031805035987683808}
   - component: {fileID: 8815160066554680676}
   - component: {fileID: 8864122225268908282}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -457,6 +457,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Proyectil Obsidiana Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632398558995583777, guid: b6fb2c64f8fb5cb46a4a2dd1f08de16f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8973317169856563611, guid: b6fb2c64f8fb5cb46a4a2dd1f08de16f,
         type: 3}
