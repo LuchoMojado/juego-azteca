@@ -28,6 +28,8 @@ public class Itztlacoliuhqui : MonoBehaviour
     Pathfinding _pf;
     List<Vector3> _path = new List<Vector3>();
 
+    [SerializeField] float _aggroRange;
+
     [Header("Walls")]
     [SerializeField] ObsidianWall _wallPrefab;
     [SerializeField] List<ObsidianWall> _spawnedWalls;
@@ -82,7 +84,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     ObsidianPathfindManager _pfManager { get => ObsidianPathfindManager.instance; }
 
-    bool _takingAction = false, _lookAtPlayer = false;
+    bool _takingAction = false, _lookAtPlayer = false, _start = false;
 
     float _timer = 0;
 
@@ -100,7 +102,19 @@ public class Itztlacoliuhqui : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
+    {
+        StartCoroutine(SetupWait());
+    }
+
+    IEnumerator SetupWait()
+    {
+        yield return new WaitForSeconds(1);
+
+        Setup();
+        _start = true;
+    }
+    private void Setup()
     {
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponent<Animator>();
@@ -134,6 +148,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             .Done();
 
         StateConfigurer.Create(search)
+            .SetTransition(Actions.Search, search)
             .SetTransition(Actions.Spikes, spikes)
             .SetTransition(Actions.Swing, swing)
             .SetTransition(Actions.BreakWall, breakWall)
@@ -160,6 +175,7 @@ public class Itztlacoliuhqui : MonoBehaviour
         StateConfigurer.Create(swing)
             .SetTransition(Actions.Search, search)
             .SetTransition(Actions.Spikes, spikes)
+            .SetTransition(Actions.Swing, swing)
             .SetTransition(Actions.BreakWall, breakWall)
             .SetTransition(Actions.Shield, shield)
             .SetTransition(Actions.Hide, hide)
@@ -173,6 +189,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             .SetTransition(Actions.Search, search)
             .SetTransition(Actions.Spikes, spikes)
             .SetTransition(Actions.Swing, swing)
+            .SetTransition(Actions.BreakWall, breakWall)
             .SetTransition(Actions.Shield, shield)
             .SetTransition(Actions.Hide, hide)
             .SetTransition(Actions.WallSpike, wallSpike)
@@ -186,6 +203,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             .SetTransition(Actions.Spikes, spikes)
             .SetTransition(Actions.Swing, swing)
             .SetTransition(Actions.BreakWall, breakWall)
+            .SetTransition(Actions.Shield, shield)
             .SetTransition(Actions.Hide, hide)
             .SetTransition(Actions.WallSpike, wallSpike)
             .SetTransition(Actions.Gatling, gatling)
@@ -199,6 +217,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             .SetTransition(Actions.Swing, swing)
             .SetTransition(Actions.BreakWall, breakWall)
             .SetTransition(Actions.Shield, shield)
+            .SetTransition(Actions.Hide, hide)
             .SetTransition(Actions.WallSpike, wallSpike)
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
@@ -212,6 +231,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             .SetTransition(Actions.BreakWall, breakWall)
             .SetTransition(Actions.Shield, shield)
             .SetTransition(Actions.Hide, hide)
+            .SetTransition(Actions.WallSpike, wallSpike)
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
@@ -225,6 +245,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             .SetTransition(Actions.Shield, shield)
             .SetTransition(Actions.Hide, hide)
             .SetTransition(Actions.WallSpike, wallSpike)
+            .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
             .Done();
@@ -238,6 +259,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             .SetTransition(Actions.Hide, hide)
             .SetTransition(Actions.WallSpike, wallSpike)
             .SetTransition(Actions.Gatling, gatling)
+            .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
             .Done();
 
@@ -251,15 +273,24 @@ public class Itztlacoliuhqui : MonoBehaviour
             .SetTransition(Actions.WallSpike, wallSpike)
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
+            .SetTransition(Actions.ArenaSpikes, arenaSpikes)
             .Done();
 
         #endregion
 
         #region FSM State Setup
 
+        inactive.OnUpdate += () =>
+        {
+            if (Vector3.Distance(transform.position, _player.transform.position) <= _aggroRange)
+            {
+                _treeStart.Execute();
+            }
+        };
+
         search.OnEnter += x =>
         {
-            //_path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(_player.transform.position), _wallLayer);
+            _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(_player.transform.position), _wallLayer);
         };
 
         search.OnUpdate += () =>
@@ -272,7 +303,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         search.OnFixedUpdate += () =>
         {
-            //TravelPath(_searchSpeed);
+            TravelPath(_searchSpeed);
         };
 
         spikes.OnEnter += x =>
@@ -404,11 +435,15 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     private void Update()
     {
+        if (!_start) return;
+
         _fsm.Update();
     }
 
     private void FixedUpdate()
     {
+        if (!_start) return;
+
         _fsm.FixedUpdate();
 
         if (LookAtPlayer)
