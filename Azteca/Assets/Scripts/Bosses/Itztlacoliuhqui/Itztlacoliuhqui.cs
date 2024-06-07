@@ -29,6 +29,7 @@ public class Itztlacoliuhqui : MonoBehaviour
     List<Vector3> _path = new List<Vector3>();
 
     [SerializeField] float _aggroRange;
+    [SerializeField] Transform _eyePos;
 
     [Header("Walls")]
     [SerializeField] ObsidianWall _wallPrefab;
@@ -162,6 +163,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         StateConfigurer.Create(spikes)
             .SetTransition(Actions.Search, search)
+            .SetTransition(Actions.Spikes, spikes)
             .SetTransition(Actions.Swing, swing)
             .SetTransition(Actions.BreakWall, breakWall)
             .SetTransition(Actions.Shield, shield)
@@ -290,6 +292,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         search.OnEnter += x =>
         {
+            Debug.Log("Start search");
             _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(_player.transform.position), _wallLayer);
         };
 
@@ -308,6 +311,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         spikes.OnEnter += x =>
         {
+            Debug.Log("Start spikes");
             _takingAction = true;
             //_anim.SetBool("IsStomp", true);
             StartCoroutine(Spiking());
@@ -325,6 +329,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         breakWall.OnEnter += x =>
         {
+            Debug.Log("Start break wall");
             _takingAction = true;
             StartCoroutine(BreakingWall());
         };
@@ -336,6 +341,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         shield.OnEnter += x =>
         {
+            Debug.Log("Start shield");
             _takingAction = true;
             StartCoroutine(Shielding());
         };
@@ -347,9 +353,10 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         hide.OnEnter += x =>
         {
+            Debug.Log("Start hide");
             _timer = 0;
             var closestWall = _spawnedWalls.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).First();
-            Vector3 hidingSpot = (_player.transform.position - closestWall.transform.position).normalized * -closestWall.Radius;
+            Vector3 hidingSpot = closestWall.transform.position + (_player.transform.position - closestWall.transform.position).normalized * -closestWall.Radius;
             _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(hidingSpot), _wallLayer);
         };
 
@@ -373,6 +380,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         wallSpike.OnEnter += x =>
         {
+            Debug.Log("Start wall spike");
             _takingAction = true;
             StartCoroutine(WallSpiking());
         };
@@ -384,6 +392,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         gatling.OnEnter += x =>
         {
+            Debug.Log("Start gatling");
             _takingAction = true;
             StartCoroutine(UsingGatling());
         };
@@ -395,6 +404,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         charge.OnEnter += x =>
         {
+            Debug.Log("Start dash");
             _takingAction = true;
             StartCoroutine(Dashing());
         };
@@ -404,7 +414,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             if (!_takingAction) _treeStart.Execute();
         };
 
-        _fsm = new EventFSM<Actions>(search);
+        _fsm = new EventFSM<Actions>(hide);
 
         #endregion
 
@@ -495,13 +505,20 @@ public class Itztlacoliuhqui : MonoBehaviour
     {
         _player.transform.position.InLineOfSightOf(_wallBlockingLOS.transform.position, _wallLayer, out var hit);
 
-        return hit.collider.GetComponent<ObsidianWall>() == _wallBlockingLOS;
+        if (hit.collider.GetComponentInParent<ObsidianWall>() == _wallBlockingLOS)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     bool CanBreakWallBlockingLOS() => Vector3.Distance(transform.position, _wallBlockingLOS.transform.position) <= _wallBreakRange && !_wallBlockingLOS.Broken;
     bool IsPlayerClose() => Vector3.Distance(transform.position, _player.transform.position) <= _playerCloseRange;
     bool IsPlayerInLOS()
     {
-        if (!transform.position.InLineOfSightOf(_player.transform.position, _wallLayer, out var hit))
+        if (!_eyePos.position.InLineOfSightOf(_player.transform.position + Vector3.up, _wallLayer, out var hit))
         {
             _wallBlockingLOS = hit.collider.GetComponentInParent<ObsidianWall>();
             return false;
@@ -515,19 +532,24 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     #endregion
 
+    void FixRotation(bool fix)
+    {
+        _rb.constraints = fix ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    }
+
     void TravelPath(float speed)
     {
         Vector3 posTarget = _path[0];
-        posTarget.z = transform.position.z;
+        posTarget.y = transform.position.y;
         Vector3 dir = posTarget - transform.position;
-        if (dir.magnitude < 0.05f)
+        if (dir.magnitude < 0.1f)
         {
             _rb.MovePosition(posTarget);
             _path.RemoveAt(0);
         }
 
-        _rb.MoveRotation(Quaternion.LookRotation((_player.transform.position - transform.position).MakeHorizontal()));
-        _rb.MovePosition(transform.position + transform.forward * speed * Time.fixedDeltaTime);
+        _rb.MoveRotation(Quaternion.LookRotation(dir.MakeHorizontal()));
+        _rb.MovePosition(transform.position + dir.normalized * speed * Time.fixedDeltaTime);
     }
 
     public void WallDestroyed(ObsidianWall wall)
@@ -694,6 +716,7 @@ public class Itztlacoliuhqui : MonoBehaviour
         _rb.AddForce(transform.forward * _dashStrength);
 
         LookAtPlayer = false;
+        FixRotation(true);
 
         float timer = 0;
 
@@ -709,6 +732,7 @@ public class Itztlacoliuhqui : MonoBehaviour
         yield return new WaitForSeconds(_dashRecovery);
 
         //LookAtPlayer = true;
+        FixRotation(false);
         _takingAction = false;
     }
 }
