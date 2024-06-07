@@ -8,7 +8,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     [SerializeField] GameObject _completeWall, _brokenWall;
 
-    [SerializeField] float _radius;
+    [SerializeField] float _radius, _riseTime;
 
     public float Radius
     {
@@ -20,7 +20,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     List<Node> _overlappingNodes = new List<Node>();
 
-    bool _broken = false;
+    bool _broken = false, _rising = true;
 
     public bool Broken
     {
@@ -32,6 +32,8 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     private void Start()
     {
+        StartCoroutine(Rise());
+
         foreach (var item in ObsidianPathfindManager.instance.allNodes)
         {
             if (Vector3.Distance(transform.position, item.transform.position) <= _radius)
@@ -44,6 +46,11 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     public void Break()
     {
+        if (_rising)
+        {
+            Die();
+        }
+
         _completeWall.SetActive(false);
         _brokenWall.SetActive(true);
 
@@ -74,4 +81,26 @@ public class ObsidianWall : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
+    IEnumerator Rise()
+    {
+        var unburiedPos = _completeWall.transform.localPosition;
+        var buriedPos = new Vector3(_completeWall.transform.localPosition.x, -_completeWall.transform.localPosition.y, _completeWall.transform.localPosition.z);
+
+        _completeWall.transform.position = buriedPos;
+
+        float timer = 0;
+
+        while (timer < _riseTime)
+        {
+            _completeWall.transform.localPosition = Vector3.Lerp(buriedPos, unburiedPos, timer / _riseTime);
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        _completeWall.transform.localPosition = unburiedPos;
+
+        _rising = false;
+    }
 }

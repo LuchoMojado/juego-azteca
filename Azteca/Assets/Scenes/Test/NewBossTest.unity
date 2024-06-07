@@ -42555,8 +42555,8 @@ MonoBehaviour:
   _breakWallPreparation: 1
   _breakWallRecovery: 1.5
   _breakSpawnVariationY: 0.25
-  _breakAimVariationX: 0.1
-  _breakAimVariationY: 0.1
+  _breakAimVariationX: 0.05
+  _breakAimVariationY: 0.05
   _shieldPreparation: 0.5
   _shieldRecovery: 1.5
   _forwardOffset: 3.5
@@ -42586,6 +42586,13 @@ MonoBehaviour:
   _dashPreparation: 0.5
   _dashDuration: 0.5
   _dashRecovery: 1.25
+  _chargeBoxSize: {x: 1, y: 2.5, z: 0.25}
+  _chargeSpeed: 15
+  _chargeHitRange: 1.25
+  _chargeDamage: 35
+  _chargeKnockback: 550
+  _chargePreparation: 1
+  _chargeRecovery: 2
   _player: {fileID: 23911759}
   _playerLayer:
     serializedVersion: 2
@@ -65990,7 +65997,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1255618424}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0075864363, y: 0.9913382, z: -0.06658497, w: 0.11294928}
+  m_LocalRotation: {x: 0.007586439, y: 0.9913382, z: -0.06658497, w: 0.11294931}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -108538,7 +108545,7 @@ PrefabInstance:
     - target: {fileID: 3640622803330300723, guid: 56e1b05cc773f7940952e0901becccea,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1141.59
+      value: 1142.17
       objectReference: {fileID: 0}
     - target: {fileID: 3640622803330300723, guid: 56e1b05cc773f7940952e0901becccea,
         type: 3}

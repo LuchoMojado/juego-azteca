@@ -6,7 +6,7 @@ using Cinemachine;
 public class CinemachineCameraController : MonoBehaviour
 {
     [SerializeField] CinemachineFreeLook _freeLookCamera;
-    [SerializeField] CinemachineVirtualCamera _lockOnCamera;
+    [SerializeField] CinemachineVirtualCamera _aimCamera;
 
     CinemachineBasicMultiChannelPerlin _freeNoise, _lockNoise, _currentNoise;
 
@@ -14,20 +14,20 @@ public class CinemachineCameraController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
 
-        _lockNoise = _lockOnCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        _lockNoise = _aimCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         _freeNoise = _freeLookCamera.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     public void Final()
     {
         _freeLookCamera.gameObject.SetActive(false);
-        _lockOnCamera.gameObject.SetActive(false);
+        _aimCamera.gameObject.SetActive(false);
     }
 
     public void FreeLook()
     {
         _freeLookCamera.enabled = true;
-        _lockOnCamera.enabled = false;
+        _aimCamera.enabled = false;
         _currentNoise = _freeNoise;
     }
 
@@ -35,8 +35,8 @@ public class CinemachineCameraController : MonoBehaviour
     {
         _freeLookCamera.enabled = false;
 
-        _lockOnCamera.LookAt = target;
-        _lockOnCamera.enabled = true;
+        _aimCamera.LookAt = target;
+        _aimCamera.enabled = true;
         _currentNoise = _lockNoise;
     }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7277605131247582055}
   - component: {fileID: 5104034872877694939}
   - component: {fileID: 8291896791948742044}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: NewSun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1598997973167283839}
   - component: {fileID: 5707163424339147529}
   - component: {fileID: 1601005808871491987}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Charge particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4923,7 +4923,7 @@ GameObject:
   - component: {fileID: 76740242202721825}
   - component: {fileID: 7978981101926682636}
   - component: {fileID: 3307641028199183126}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Death particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9809,7 +9809,7 @@ GameObject:
   - component: {fileID: 408560939373709972}
   - component: {fileID: 2843669732193946403}
   - component: {fileID: 1097402135425091426}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SunMagic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9889,7 +9889,7 @@ GameObject:
   - component: {fileID: 7819407880816221564}
   - component: {fileID: 982347917356346416}
   - component: {fileID: 3451606782388642217}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Finished charging particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14775,7 +14775,7 @@ GameObject:
   - component: {fileID: 5904014661585800263}
   - component: {fileID: 7661840575400021868}
   - component: {fileID: 1517829089830090834}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

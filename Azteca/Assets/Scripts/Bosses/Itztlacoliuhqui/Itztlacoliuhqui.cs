@@ -74,8 +74,12 @@ public class Itztlacoliuhqui : MonoBehaviour
     [SerializeField] float _dashStrength;
     [SerializeField] float _dashPreparation, _dashDuration, _dashRecovery;
 
+    [Header("Charge")]
+    [SerializeField] Vector3 _chargeBoxSize;
+    [SerializeField] float _chargeSpeed, _chargeHitRange, _chargeDamage, _chargeKnockback, _chargePreparation, _chargeRecovery;
+
     [SerializeField] PlayerController _player;
-    [SerializeField] LayerMask _playerLayer;
+    [SerializeField] LayerMask _playerLayer, _magicLayer;
 
     ObsidianWall _wallBlockingLOS;
 
@@ -85,9 +89,9 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     ObsidianPathfindManager _pfManager { get => ObsidianPathfindManager.instance; }
 
-    bool _takingAction = false, _lookAtPlayer = false, _start = false;
+    bool _takingAction = false, _lookAtPlayer = false, _move = false, _start = false;
 
-    float _timer = 0;
+    float _timer = 0, _currentSpeed = 0;
 
     public bool LookAtPlayer
     {
@@ -293,7 +297,9 @@ public class Itztlacoliuhqui : MonoBehaviour
         search.OnEnter += x =>
         {
             Debug.Log("Start search");
+            _currentSpeed = _searchSpeed;
             _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(_player.transform.position), _wallLayer);
+            _move = true;
         };
 
         search.OnUpdate += () =>
@@ -306,7 +312,13 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         search.OnFixedUpdate += () =>
         {
-            TravelPath(_searchSpeed);
+            TravelPath();
+        };
+
+        search.OnExit += x =>
+        {
+            _currentSpeed = 0;
+            _move = false;
         };
 
         spikes.OnEnter += x =>
@@ -354,10 +366,12 @@ public class Itztlacoliuhqui : MonoBehaviour
         hide.OnEnter += x =>
         {
             Debug.Log("Start hide");
+            _currentSpeed = _hideSpeed;
             _timer = 0;
             var closestWall = _spawnedWalls.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).First();
             Vector3 hidingSpot = closestWall.transform.position + (_player.transform.position - closestWall.transform.position).normalized * -closestWall.Radius;
             _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(hidingSpot), _wallLayer);
+            _move = true;
         };
 
         hide.OnUpdate += () =>
@@ -375,8 +389,13 @@ public class Itztlacoliuhqui : MonoBehaviour
         hide.OnFixedUpdate += () =>
         {
             if (_path.Count == 0 || _path == null) return;
-            TravelPath(_hideSpeed);
+            TravelPath();
         };
+
+        //hide.OnExit += x =>
+        //{
+        //    
+        //};
 
         wallSpike.OnEnter += x =>
         {
@@ -404,9 +423,9 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         charge.OnEnter += x =>
         {
-            Debug.Log("Start dash");
+            Debug.Log("Start charge");
             _takingAction = true;
-            StartCoroutine(Dashing());
+            StartCoroutine(Charging());
         };
 
         charge.OnUpdate += () =>
@@ -456,6 +475,10 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         _fsm.FixedUpdate();
 
+        if (_move)
+        {
+            _rb.MovePosition(transform.position + transform.forward * _currentSpeed * Time.fixedDeltaTime);
+        }
         if (LookAtPlayer)
         {
             _rb.MoveRotation(Quaternion.LookRotation((_player.transform.position - transform.position).MakeHorizontal()));
@@ -537,7 +560,7 @@ public class Itztlacoliuhqui : MonoBehaviour
         _rb.constraints = fix ? RigidbodyConstraints.FreezeRotation : RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
-    void TravelPath(float speed)
+    void TravelPath()
     {
         Vector3 posTarget = _path[0];
         posTarget.y = transform.position.y;
@@ -546,10 +569,16 @@ public class Itztlacoliuhqui : MonoBehaviour
         {
             _rb.MovePosition(posTarget);
             _path.RemoveAt(0);
+
+            if (_path.Count == 0)
+            {
+                _currentSpeed = 0;
+                _move = false;
+            }
         }
 
         _rb.MoveRotation(Quaternion.LookRotation(dir.MakeHorizontal()));
-        _rb.MovePosition(transform.position + dir.normalized * speed * Time.fixedDeltaTime);
+        
     }
 
     public void WallDestroyed(ObsidianWall wall)
@@ -594,7 +623,7 @@ public class Itztlacoliuhqui : MonoBehaviour
         for (int i = 0; i < _shardAmount; i++)
         {
             var shard = Instantiate(_shardPrefab, basePos.VectorVariation(1, xPosVariation, _breakSpawnVariationY), Quaternion.identity);
-            shard.transform.forward = baseDir.VectorVariation(i, _breakAimVariationX, _breakAimVariationY);
+            shard.transform.forward = baseDir.VectorVariation(i * 0.5f, _breakAimVariationX, _breakAimVariationY);
             shard.speed = _shardSpeed;
             shard.damage = _shardDamage;
         }
@@ -611,7 +640,7 @@ public class Itztlacoliuhqui : MonoBehaviour
 
         yield return new WaitForSeconds(_shieldPreparation);
 
-        var wall = Instantiate(_wallPrefab, transform.position + transform.forward * _forwardOffset, Quaternion.identity);
+        var wall = Instantiate(_wallPrefab, transform.position + transform.forward * _forwardOffset - Vector3.up * _distFromPivotToFloor, Quaternion.identity);
         _spawnedWalls.Add(wall);
         wall.boss = this;
 
@@ -730,6 +759,61 @@ public class Itztlacoliuhqui : MonoBehaviour
         _rb.velocity = Vector3.zero;
         //espero
         yield return new WaitForSeconds(_dashRecovery);
+
+        //LookAtPlayer = true;
+        FixRotation(false);
+        _takingAction = false;
+    }
+
+    IEnumerator Charging()
+    {
+        LookAtPlayer = true;
+        //preparacion
+        yield return new WaitForSeconds(_chargePreparation);
+
+        LookAtPlayer = false;
+        FixRotation(true);
+
+        _currentSpeed = _chargeSpeed;
+        _move = true;
+
+        while (_move)
+        {
+            if (Physics.BoxCast(transform.position, _chargeBoxSize, transform.forward, out var hit, transform.rotation, _chargeHitRange))
+            {
+                if (hit.collider.gameObject.layer == Mathf.Log(_wallLayer.value, 2))
+                {
+                    Debug.Log("hit wall");
+                    var wallHit = hit.collider.GetComponentInParent<ObsidianWall>();
+                    var broken = wallHit.Broken;
+
+                    wallHit.Die();
+
+                    if (!broken)
+                    {
+                        _move = false;
+                    }
+                }
+                else if (hit.collider.gameObject.layer == Mathf.Log(_playerLayer.value, 2))
+                {
+                    Debug.Log("hit player");
+                    _player.KnockBack((_player.transform.position - transform.position + transform.up).normalized, _chargeKnockback);
+                    _player.TakeDamage(_chargeDamage);
+                    _move = false;
+                }
+                else if (hit.collider.gameObject.layer != Mathf.Log(_magicLayer.value, 2))
+                {
+                    Debug.Log("hit edge");
+                    _move = false;
+                }
+            }
+
+            yield return null;
+        } 
+
+        
+        //espero
+        yield return new WaitForSeconds(_chargeRecovery);
 
         //LookAtPlayer = true;
         FixRotation(false);
