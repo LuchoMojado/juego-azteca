@@ -48,7 +48,14 @@ public class Movement
         if (horizontalInput == 0 && verticalInput == 0)
         {
             _player.RunningAnimation(false);
-            _rb.constraints = RigidbodyConstraints.FreezeRotation;
+            if (changeForward)
+            {
+                _rb.constraints = RigidbodyConstraints.FreezeRotation;
+            }
+            else
+            {
+                _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            }
             return;
         }
 

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Inputs
 {
-    public System.Action inputUpdate, inputLateUpdate, cameraInputs;
+    public System.Action inputUpdate, cameraInputs;
     float _inputHorizontal, _inputVertical;
     float _inputMouseX, _inputMouseY;
     Movement _movement;
     PlayerController _player;
     CinemachineCameraController _cameraController;
-    bool _jump, _primaryAttack = false, _secondaryAttack = false, _locked = false;
+    bool _jump, _primaryAttack = false, _secondaryAttack = false, _aiming = false;
 
-    KeyCode _Kstep, _Kjump, _KprimaryAttack, _KsecondaryAttack, _Klock, _Ksun, _Kobssidian, _Kscape;
+    KeyCode _Kstep, _Kjump, _KprimaryAttack, _KsecondaryAttack, _Kaim, _Ksun, _Kobssidian, _Kscape;
 
     public bool PrimaryAttack
     {
@@ -69,7 +69,7 @@ public class Inputs
         _movement = movement;
         _player = player;
         _cameraController = camera;
-        inputLateUpdate = FreeLook;
+        FreeLook();
         cameraInputs = CameraInputsMouse;
     }
 
@@ -96,7 +96,7 @@ public class Inputs
             _Kjump = KeyCode.Joystick1Button1;
             _KprimaryAttack = KeyCode.Joystick1Button7;
             //_KsecondaryAttack = KeyCode.Joystick1Button6; //ayuda juli
-            _Klock = KeyCode.Joystick1Button11;
+            _Kaim = KeyCode.Joystick1Button11;
             _Ksun = KeyCode.Joystick1Button4;
             _Kobssidian = KeyCode.Joystick1Button4;
             _Kscape = KeyCode.Joystick1Button9;
@@ -108,7 +108,7 @@ public class Inputs
             _Kjump = KeyCode.Space;
             _KprimaryAttack = KeyCode.Mouse0;
             //_KsecondaryAttack = KeyCode.Mouse1;
-            _Klock = KeyCode.Mouse2; //no se que tecla estaria bien para esto
+            _Kaim = KeyCode.Mouse1; //no se que tecla estaria bien para esto
             _Ksun = KeyCode.Alpha1;
             _Kobssidian = KeyCode.Alpha2;
             _Kscape = KeyCode.Escape;
@@ -153,7 +153,7 @@ public class Inputs
             SecondaryAttack = true;
         }
 
-        LockUnlock();
+        AimUnaim();
 
         SelectSun();
 
@@ -174,7 +174,7 @@ public class Inputs
 
         SelectObsidian();
 
-        LockUnlock();
+        AimUnaim();
     }
 
     public void FixedCast()
@@ -213,7 +213,7 @@ public class Inputs
             inputUpdate = Unpaused;
         }*/
 
-        LockUnlock();
+        AimUnaim();
     }
 
     public void MovingCast()
@@ -245,7 +245,7 @@ public class Inputs
             PrimaryAttack = false;
         }
 
-        LockUnlock();
+        AimUnaim();
     }
 
     public void Nothing()
@@ -268,7 +268,7 @@ public class Inputs
 
     public void InputsFixedUpdate()
     {
-        _movement.Move(_inputHorizontal, _inputVertical, true/*!PrimaryAttack*/);
+        _movement.Move(_inputHorizontal, _inputVertical, !_player.UsingSun);
 
         if (_jump)
         {
@@ -277,11 +277,17 @@ public class Inputs
         }
     }
 
-    void ToggleLock()
+    public void InputsLateUpdate()
     {
-        if (_player.currentBoss == null) return;
-        _locked = !_locked;
-        inputLateUpdate = _locked ? LockedOn : FreeLook;
+        _cameraController.UpdateCameraRotation(_inputMouseX, _inputMouseY);
+    }
+
+    void ToggleAim()
+    {
+        _aiming = !_aiming;
+
+        if (_aiming) Aim();
+        else FreeLook();
     }
 
     public void FreeLook()
@@ -289,9 +295,9 @@ public class Inputs
         _cameraController.FreeLook();
     }
 
-    void LockedOn()
+    void Aim()
     {
-        _cameraController.LockOn(_player.currentBoss.transform);
+        _cameraController.Aim();
     }
 
     void Pause()
@@ -307,11 +313,11 @@ public class Inputs
         }
     }
 
-    void LockUnlock()
+    void AimUnaim()
     {
-        if (Input.GetKeyDown(_Klock))
+        if (Input.GetKeyDown(_Kaim))
         {
-            ToggleLock();
+            ToggleAim();
         }
     }
 

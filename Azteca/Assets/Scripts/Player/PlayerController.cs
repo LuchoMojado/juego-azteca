@@ -115,7 +115,7 @@ public class PlayerController : Entity
 
     private void LateUpdate()
     {
-        _inputs.inputLateUpdate();
+        _inputs.InputsLateUpdate();
     }
 
     public void Jump()
@@ -304,7 +304,6 @@ public class PlayerController : Entity
             {
                 sun.transform.SetParent(null);
                 sun.StartCoroutine(sun.Death());
-                _stopSun = false;
                 ControlFullScreen.instance.ChangeDemond(false);
             }
             else
@@ -334,7 +333,6 @@ public class PlayerController : Entity
                 sun.transform.SetParent(null);
                 sun.StartCoroutine(sun.Death());
                 ControlFullScreen.instance.ChangeDemond(false);
-                _stopSun = false;
             }
             else
             {
@@ -351,6 +349,7 @@ public class PlayerController : Entity
             }
         }
 
+        _stopSun = false;
         _usingSun = false;
         anim.SetBool("IsAttacking", false);
         _sunCurrentCooldown = _sunCooldown;
@@ -626,7 +625,6 @@ public class PlayerController : Entity
         _cameraController.CameraShake(2, 1);
         _movement.Combat(false);
         currentBoss = null;
-        _inputs.inputLateUpdate = _inputs.FreeLook;
     }
 
     public void StopCast()
