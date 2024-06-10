@@ -481,6 +481,7 @@ public class PlayerController : Entity
 
     IEnumerator AimedSunMagic()
     {
+        _inputs.ToggleAim(true);
         _usingSun = true;
         _inputs.inputUpdate = _inputs.Aiming;
 
@@ -569,11 +570,8 @@ public class PlayerController : Entity
             }
         } while (_inputs.SecondaryAttack && CheckAndReduceStamina(_sunBaseCost));
 
-        if (_inputs.SecondaryAttack)
-        {
-            _inputs.ToggleAim(false);
-            _inputs.SecondaryAttack = false;
-        }
+        _inputs.ToggleAim(false);
+        _inputs.SecondaryAttack = false;
 
         _stopSun = false;
         _usingSun = false;

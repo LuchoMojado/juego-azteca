@@ -152,7 +152,6 @@ public class Inputs
 
         if (Input.GetKeyDown(_KsecondaryAttack))
         {
-            ToggleAim(true);
             SecondaryAttack = true;
         }
 
@@ -265,7 +264,6 @@ public class Inputs
         {
             _player.Step(_inputHorizontal, _inputVertical);
             _player.StopSun = true;
-            ToggleAim(false);
             SecondaryAttack = false;
         }
 
@@ -273,7 +271,6 @@ public class Inputs
         {
             _jump = true;
             _player.StopSun = true;
-            ToggleAim(false);
             SecondaryAttack = false;
         }
 
@@ -284,7 +281,6 @@ public class Inputs
 
         if (Input.GetKeyUp(_KsecondaryAttack))
         {
-            ToggleAim(false);
             SecondaryAttack = false;
         }
 
@@ -331,7 +327,7 @@ public class Inputs
 
         if (aim)
         {
-            _player.transform.forward = -_cameraController.FreeLookCamera.transform.forward.MakeHorizontal();
+            _player.transform.forward = Camera.main.transform.forward.MakeHorizontal();
             Aim();
         }
         else FreeLook();

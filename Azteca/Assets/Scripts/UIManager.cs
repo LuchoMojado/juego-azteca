@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider _hpBar, _staminaBar, _bossHpBar;
     [SerializeField] Button _joystick;
     [SerializeField] Image _paused;
+    [SerializeField] GameObject _crosshair;
 
     public GameObject textoFinal;
 
@@ -21,6 +22,8 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null) Destroy(gameObject);
+
         instance = this;
     }
 
@@ -60,6 +63,11 @@ public class UIManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void ToggleCrosshair(bool turnOn)
+    {
+        _crosshair.SetActive(turnOn);
     }
 
     public void ToggleBossBar(bool turnOn)

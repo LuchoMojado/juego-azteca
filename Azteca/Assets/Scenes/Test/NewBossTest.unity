@@ -673,7 +673,7 @@ Transform:
   m_GameObject: {fileID: 23911755}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9933274, z: -0, w: -0.115329005}
-  m_LocalPosition: {x: -2.31, y: 65.694, z: 1161.63}
+  m_LocalPosition: {x: -0.2, y: 65.694, z: 1209}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7649,8 +7649,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190179132}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.016679142, y: 0.004150033, z: 0.000069229514, w: -0.9998523}
-  m_LocalPosition: {x: 0.71108484, y: 0.7350006, z: -1.1040353}
+  m_LocalRotation: {x: 0.016679103, y: 0.0041550025, z: 0.00006931194, w: -0.9998523}
+  m_LocalPosition: {x: 0.7111247, y: 0.7350006, z: -1.1040447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -27759,9 +27759,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.02
+  near clip plane: 0.1
   far clip plane: 5000
-  field of view: 50
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -27787,8 +27787,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 492483261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.010204332, y: 0.989527, z: -0.089561835, w: 0.11274292}
-  m_LocalPosition: {x: -3.32228, y: 66.734, z: 1166.0146}
+  m_LocalRotation: {x: -0.0019924338, y: 0.9927014, z: 0.016559815, w: 0.119439244}
+  m_LocalPosition: {x: -1.1451651, y: 66.429, z: 1209.9117}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42456,7 +42456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &649116229
 Transform:
   m_ObjectHideFlags: 0
@@ -98287,7 +98287,7 @@ Transform:
   m_GameObject: {fileID: 1680406674}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.32228, y: 66.734, z: 1166.0146}
+  m_LocalPosition: {x: -1.21228, y: 66.734, z: 1213.3846}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -100102,6 +100102,7 @@ MonoBehaviour:
   _bossHpBar: {fileID: 891775341}
   _joystick: {fileID: 1520977817}
   _paused: {fileID: 1999687794}
+  _crosshair: {fileID: 0}
   textoFinal: {fileID: 2134608203}
 --- !u!114 &1708667350
 MonoBehaviour:

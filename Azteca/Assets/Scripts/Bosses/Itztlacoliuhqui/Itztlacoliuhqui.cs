@@ -433,7 +433,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             if (!_takingAction) _treeStart.Execute();
         };
 
-        _fsm = new EventFSM<Actions>(hide);
+        _fsm = new EventFSM<Actions>(inactive);
 
         #endregion
 
