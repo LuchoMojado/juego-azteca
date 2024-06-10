@@ -12,7 +12,7 @@ public class Inputs
     CinemachineCameraController _cameraController;
     bool _jump, _primaryAttack = false, _secondaryAttack = false, _aiming = false;
 
-    KeyCode _Kstep, _Kjump, _KprimaryAttack, _KsecondaryAttack, _Kaim, _Ksun, _Kobssidian, _Kscape;
+    KeyCode _Kstep, _Kjump, _KprimaryAttack, _KsecondaryAttack, /*_Kaim, */_Ksun, _Kobssidian, _Kscape;
 
     public bool PrimaryAttack
     {
@@ -54,7 +54,7 @@ public class Inputs
 
                 if (value)
                 {
-                    _player.ActivateMagic();
+                    _player.ActivateSecondaryMagic();
                 }
                 else
                 {
@@ -63,6 +63,8 @@ public class Inputs
             }
         }
     }
+
+    public bool launchAttack = false;
 
     public Inputs(Movement movement, PlayerController player, CinemachineCameraController camera)
     {
@@ -95,8 +97,8 @@ public class Inputs
             _Kstep = KeyCode.Joystick1Button2;
             _Kjump = KeyCode.Joystick1Button1;
             _KprimaryAttack = KeyCode.Joystick1Button7;
-            //_KsecondaryAttack = KeyCode.Joystick1Button6; //ayuda juli
-            _Kaim = KeyCode.Joystick1Button11;
+            _KsecondaryAttack = KeyCode.Joystick1Button6; //ayuda juli
+            //_Kaim = KeyCode.Joystick1Button11;
             _Ksun = KeyCode.Joystick1Button4;
             _Kobssidian = KeyCode.Joystick1Button4;
             _Kscape = KeyCode.Joystick1Button9;
@@ -107,8 +109,8 @@ public class Inputs
             _Kstep = KeyCode.LeftShift;
             _Kjump = KeyCode.Space;
             _KprimaryAttack = KeyCode.Mouse0;
-            //_KsecondaryAttack = KeyCode.Mouse1;
-            _Kaim = KeyCode.Mouse1; //no se que tecla estaria bien para esto
+            _KsecondaryAttack = KeyCode.Mouse1;
+            //_Kaim = KeyCode.Mouse1; //no se que tecla estaria bien para esto
             _Ksun = KeyCode.Alpha1;
             _Kobssidian = KeyCode.Alpha2;
             _Kscape = KeyCode.Escape;
@@ -150,10 +152,11 @@ public class Inputs
 
         if (Input.GetKeyDown(_KsecondaryAttack))
         {
+            ToggleAim(true);
             SecondaryAttack = true;
         }
 
-        AimUnaim();
+        //AimUnaim();
 
         SelectSun();
 
@@ -174,7 +177,7 @@ public class Inputs
 
         SelectObsidian();
 
-        AimUnaim();
+        //AimUnaim();
     }
 
     public void FixedCast()
@@ -211,9 +214,9 @@ public class Inputs
         {
             PrimaryAttack = false;
             inputUpdate = Unpaused;
-        }*/
+        }
 
-        AimUnaim();
+        AimUnaim();*/
     }
 
     public void MovingCast()
@@ -245,7 +248,47 @@ public class Inputs
             PrimaryAttack = false;
         }
 
-        AimUnaim();
+        //AimUnaim();
+    }
+
+    public void Aiming()
+    {
+        _inputHorizontal = Input.GetAxis("Horizontal");
+
+        _inputVertical = Input.GetAxis("Vertical");
+
+        cameraInputs();
+
+        Pause();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _player.Step(_inputHorizontal, _inputVertical);
+            _player.StopSun = true;
+            ToggleAim(false);
+            SecondaryAttack = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _jump = true;
+            _player.StopSun = true;
+            ToggleAim(false);
+            SecondaryAttack = false;
+        }
+
+        if (Input.GetKeyDown(_KprimaryAttack))
+        {
+            launchAttack = true;
+        }
+
+        if (Input.GetKeyUp(_KsecondaryAttack))
+        {
+            ToggleAim(false);
+            SecondaryAttack = false;
+        }
+
+        //AimUnaim();
     }
 
     public void Nothing()
@@ -282,15 +325,19 @@ public class Inputs
         _cameraController.UpdateCameraRotation(_inputMouseX, _inputMouseY);
     }
 
-    void ToggleAim()
+    public void ToggleAim(bool aim)
     {
-        _aiming = !_aiming;
+        //_aiming = aim;
 
-        if (_aiming) Aim();
+        if (aim)
+        {
+            _player.transform.forward = -_cameraController.FreeLookCamera.transform.forward.MakeHorizontal();
+            Aim();
+        }
         else FreeLook();
     }
 
-    public void FreeLook()
+    void FreeLook()
     {
         _cameraController.FreeLook();
     }
@@ -313,13 +360,13 @@ public class Inputs
         }
     }
 
-    void AimUnaim()
-    {
-        if (Input.GetKeyDown(_Kaim))
-        {
-            ToggleAim();
-        }
-    }
+    //void AimUnaim()
+    //{
+    //    if (Input.GetKeyDown(_Kaim))
+    //    {
+    //        ToggleAim();
+    //    }
+    //}
 
     void SelectSun()
     {

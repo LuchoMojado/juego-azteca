@@ -8,6 +8,22 @@ public class CinemachineCameraController : MonoBehaviour
     [SerializeField] CinemachineFreeLook _freeLookCamera;
     [SerializeField] CinemachineVirtualCamera _aimCamera;
 
+    public CinemachineVirtualCamera AimCamera
+    {
+        get
+        {
+            return _aimCamera;
+        }
+    }
+
+    public CinemachineFreeLook FreeLookCamera
+    {
+        get
+        {
+            return _freeLookCamera;
+        }
+    }
+
     [SerializeField] Transform _aimAxis;
 
     [SerializeField] PlayerController _player;
@@ -51,7 +67,7 @@ public class CinemachineCameraController : MonoBehaviour
             _mouseY = Mathf.Clamp(_mouseY, _minAimRotation, _maxAimRotation);
         }
 
-        _aimAxis.eulerAngles = new Vector3(_mouseY, _mouseX);
+        _aimAxis.eulerAngles = new Vector3(-_mouseY, _mouseX);
     }
 
     public void Final()
@@ -70,6 +86,8 @@ public class CinemachineCameraController : MonoBehaviour
 
     public void Aim()
     {
+        _mouseX = _player.transform.eulerAngles.y;
+        _aimAxis.eulerAngles = new Vector3(-_mouseY, _mouseX);
         _turnPlayer = true;
 
         _freeLookCamera.enabled = false;
