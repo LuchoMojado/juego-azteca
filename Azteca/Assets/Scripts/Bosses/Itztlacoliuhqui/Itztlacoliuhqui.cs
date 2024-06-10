@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Itztlacoliuhqui : MonoBehaviour
+public class Itztlacoliuhqui : Entity
 {
     public enum Actions
     {
@@ -109,6 +109,8 @@ public class Itztlacoliuhqui : MonoBehaviour
 
     private void Awake()
     {
+
+
         StartCoroutine(SetupWait());
     }
 
@@ -392,10 +394,11 @@ public class Itztlacoliuhqui : MonoBehaviour
             TravelPath();
         };
 
-        //hide.OnExit += x =>
-        //{
-        //    
-        //};
+        hide.OnExit += x =>
+        {
+            _currentSpeed = 0;
+            _move = false;
+        };
 
         wallSpike.OnEnter += x =>
         {
@@ -433,7 +436,7 @@ public class Itztlacoliuhqui : MonoBehaviour
             if (!_takingAction) _treeStart.Execute();
         };
 
-        _fsm = new EventFSM<Actions>(inactive);
+        _fsm = new EventFSM<Actions>(wallSpike);
 
         #endregion
 
@@ -818,5 +821,10 @@ public class Itztlacoliuhqui : MonoBehaviour
         //LookAtPlayer = true;
         FixRotation(false);
         _takingAction = false;
+    }
+
+    public override void Die()
+    {
+        Destroy(gameObject);
     }
 }
