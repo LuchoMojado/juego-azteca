@@ -8,5 +8,5 @@ public abstract class SpecialMagic
     protected Inputs _inputs;
     public float staminaCost;
 
-    public abstract void Activate();
+    public abstract float Activate();
 }

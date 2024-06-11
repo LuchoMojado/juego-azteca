@@ -63,7 +63,7 @@ public class PlayerController : Entity
         }
     }
 
-    [SerializeField] Animator anim;
+    public Animator anim;
 
     AudioSource _myAS;
     [SerializeField] AudioClip sideStep,jump, damage, chargingSun;
@@ -481,6 +481,7 @@ public class PlayerController : Entity
 
     IEnumerator AimedSunMagic()
     {
+        _rb.angularVelocity = Vector3.zero;
         _inputs.ToggleAim(true);
         _usingSun = true;
         _inputs.inputUpdate = _inputs.Aiming;
