@@ -144,6 +144,7 @@ public class Inputs
 
         if (Input.GetKeyDown(_kPrimaryAttack))
         {
+            Debug.Log(SecondaryAttack);
             PrimaryAttack = true;
         }
 
@@ -220,37 +221,37 @@ public class Inputs
         AimUnaim();*/
     }
 
-    public void MovingCast()
-    {
-        _inputHorizontal = Input.GetAxis("Horizontal");
-
-        _inputVertical = Input.GetAxis("Vertical");
-
-        cameraInputs();
-
-        Pause();
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            _player.Step(_inputHorizontal, _inputVertical);
-            _player.StopSun = true;
-            PrimaryAttack = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _jump = true;
-            _player.StopSun = true;
-            PrimaryAttack = false;
-        }
-
-        if (Input.GetKeyUp(_kPrimaryAttack))
-        {
-            PrimaryAttack = false;
-        }
-
-        //AimUnaim();
-    }
+    //public void MovingCast()
+    //{
+    //    _inputHorizontal = Input.GetAxis("Horizontal");
+    //
+    //    _inputVertical = Input.GetAxis("Vertical");
+    //
+    //    cameraInputs();
+    //
+    //    Pause();
+    //
+    //    if (Input.GetKeyDown(KeyCode.LeftShift))
+    //    {
+    //        _player.Step(_inputHorizontal, _inputVertical);
+    //        _player.StopSun = true;
+    //        PrimaryAttack = false;
+    //    }
+    //
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        _jump = true;
+    //        _player.StopSun = true;
+    //        PrimaryAttack = false;
+    //    }
+    //
+    //    if (Input.GetKeyUp(_kPrimaryAttack))
+    //    {
+    //        PrimaryAttack = false;
+    //    }
+    //
+    //    //AimUnaim();
+    //}
 
     public void Aiming()
     {
@@ -278,6 +279,7 @@ public class Inputs
 
         if (Input.GetKeyDown(_kPrimaryAttack))
         {
+            Debug.Log(SecondaryAttack + "lol");
             launchAttack = true;
         }
 

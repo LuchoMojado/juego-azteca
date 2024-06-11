@@ -213,7 +213,7 @@ public class PlayerController : Entity
 
     void ActivateAimedSunMagic()
     {
-        if (_movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
+        if (!_usingSun && _movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
         {
             StartCoroutine(AimedSunMagic());
         }
@@ -226,7 +226,7 @@ public class PlayerController : Entity
 
     IEnumerator SunMagic()
     {
-        _inputs.inputUpdate = _inputs.MovingCast;
+        //_inputs.inputUpdate = _inputs.MovingCast;
         var damage = _sunBaseDamage;
         _movement.Cast(true);
 
@@ -264,7 +264,7 @@ public class PlayerController : Entity
     IEnumerator NewSunMagic()
     {
         _usingSun = true;
-        _inputs.inputUpdate = _inputs.MovingCast;
+        //_inputs.inputUpdate = _inputs.MovingCast;
 
         anim.SetBool("IsAttacking", true);
         ControlFullScreen.instance.ChangeDemond(true);
@@ -372,7 +372,7 @@ public class PlayerController : Entity
     IEnumerator NewerSunMagic()
     {
         _usingSun = true;
-        _inputs.inputUpdate = _inputs.MovingCast;
+        //_inputs.inputUpdate = _inputs.MovingCast;
 
         anim.SetBool("IsAttacking", true);
         
@@ -530,7 +530,6 @@ public class PlayerController : Entity
             else
             {
                 _inputs.launchAttack = false;
-                //_inputs.inputUpdate = _inputs.FixedCast;
 
                 anim.SetBool("IsAttacking", true);
 
@@ -538,7 +537,6 @@ public class PlayerController : Entity
 
                 anim.SetBool("IsAttacking", false);
 
-                _inputs.inputUpdate = _inputs.Aiming;
                 sun.transform.SetParent(null);
 
                 Vector3 dir;
@@ -569,14 +567,17 @@ public class PlayerController : Entity
                     yield return null;
                 }
             }
+
+            _inputs.launchAttack = false;
         } while (!_stopSun && _inputs.SecondaryAttack && CheckAndReduceStamina(_sunBaseCost));
 
         _movement.Cast(false);
         _inputs.ToggleAim(false);
-        _inputs.SecondaryAttack = false;
+        //_sunCurrentCooldown = _sunCooldown
 
         yield return new WaitForSeconds(0.25f);
 
+        _inputs.SecondaryAttack = false;
         _stopSun = false;
         _usingSun = false;
         //_sunCurrentCooldown = _sunCooldown;
