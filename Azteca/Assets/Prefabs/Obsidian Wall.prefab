@@ -316,4 +316,4 @@ MonoBehaviour:
   _completeWall: {fileID: 5258198314591029457}
   _brokenWall: {fileID: 2682066917830086597}
   _radius: 2.25
-  _riseTime: 1
+  _riseTime: 0.5

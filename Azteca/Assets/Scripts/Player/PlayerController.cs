@@ -550,7 +550,7 @@ public class PlayerController : Entity
                 }
                 else
                 {
-                    dir = _aimTarget.position - sun.transform.position;
+                    dir = Camera.main.transform.forward;
                 }
 
                 sun.transform.forward = dir;
@@ -568,15 +568,17 @@ public class PlayerController : Entity
                     yield return null;
                 }
             }
-        } while (_inputs.SecondaryAttack && CheckAndReduceStamina(_sunBaseCost));
+        } while (!_stopSun && _inputs.SecondaryAttack && CheckAndReduceStamina(_sunBaseCost));
 
+        _movement.Cast(false);
         _inputs.ToggleAim(false);
         _inputs.SecondaryAttack = false;
+
+        yield return new WaitForSeconds(0.25f);
 
         _stopSun = false;
         _usingSun = false;
         //_sunCurrentCooldown = _sunCooldown;
-        _movement.Cast(false);
     }
 
     void ActivateObsidianMagic()

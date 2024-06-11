@@ -12,7 +12,7 @@ public class Inputs
     CinemachineCameraController _cameraController;
     bool _jump, _primaryAttack = false, _secondaryAttack = false, _aiming = false;
 
-    KeyCode _Kstep, _Kjump, _KprimaryAttack, _KsecondaryAttack, /*_Kaim, */_Ksun, _Kobssidian, _Kscape;
+    KeyCode _kStep, _kJump, _kPrimaryAttack, _kSecondaryAttack, _kSpecial1, _kSpecial2, _kSun, _kObsidian, _kPause;
 
     public bool PrimaryAttack
     {
@@ -94,26 +94,28 @@ public class Inputs
         if(joystick)
         {
             cameraInputs = CameraInputsJoystick;
-            _Kstep = KeyCode.Joystick1Button2;
-            _Kjump = KeyCode.Joystick1Button1;
-            _KprimaryAttack = KeyCode.Joystick1Button7;
-            _KsecondaryAttack = KeyCode.Joystick1Button6; //ayuda juli
-            //_Kaim = KeyCode.Joystick1Button11;
-            _Ksun = KeyCode.Joystick1Button4;
-            _Kobssidian = KeyCode.Joystick1Button4;
-            _Kscape = KeyCode.Joystick1Button9;
+            _kStep = KeyCode.Joystick1Button2;
+            _kJump = KeyCode.Joystick1Button1;
+            _kPrimaryAttack = KeyCode.Joystick1Button7;
+            _kSecondaryAttack = KeyCode.Joystick1Button6;
+            _kSpecial1 = KeyCode.Q; // L1
+            _kSpecial2 = KeyCode.E; // R1
+            _kSun = KeyCode.Joystick1Button4;
+            _kObsidian = KeyCode.Joystick1Button4;
+            _kPause = KeyCode.Joystick1Button9;
         }
         else
         {
             cameraInputs = CameraInputsMouse;
-            _Kstep = KeyCode.LeftShift;
-            _Kjump = KeyCode.Space;
-            _KprimaryAttack = KeyCode.Mouse0;
-            _KsecondaryAttack = KeyCode.Mouse1;
-            //_Kaim = KeyCode.Mouse1; //no se que tecla estaria bien para esto
-            _Ksun = KeyCode.Alpha1;
-            _Kobssidian = KeyCode.Alpha2;
-            _Kscape = KeyCode.Escape;
+            _kStep = KeyCode.LeftShift;
+            _kJump = KeyCode.Space;
+            _kPrimaryAttack = KeyCode.Mouse0;
+            _kSecondaryAttack = KeyCode.Mouse1;
+            _kSpecial1 = KeyCode.Q;
+            _kSpecial2 = KeyCode.E;
+            _kSun = KeyCode.Alpha1;
+            _kObsidian = KeyCode.Alpha2;
+            _kPause = KeyCode.Escape;
         }
         
     }
@@ -128,29 +130,29 @@ public class Inputs
 
         Pause();
 
-        if (Input.GetKeyDown(_Kstep))
+        if (Input.GetKeyDown(_kStep))
         {
             _player.Step(_inputHorizontal, _inputVertical);
 
             PrimaryAttack = false;
         }
 
-        if (Input.GetKeyDown(_Kjump))
+        if (Input.GetKeyDown(_kJump))
         {
             _jump = true;
         }
 
-        if (Input.GetKeyDown(_KprimaryAttack))
+        if (Input.GetKeyDown(_kPrimaryAttack))
         {
             PrimaryAttack = true;
         }
 
-        if (Input.GetKeyUp(_KprimaryAttack))
+        if (Input.GetKeyUp(_kPrimaryAttack))
         {
             PrimaryAttack = false;
         }
 
-        if (Input.GetKeyDown(_KsecondaryAttack))
+        if (Input.GetKeyDown(_kSecondaryAttack))
         {
             SecondaryAttack = true;
         }
@@ -242,7 +244,7 @@ public class Inputs
             PrimaryAttack = false;
         }
 
-        if (Input.GetKeyUp(_KprimaryAttack))
+        if (Input.GetKeyUp(_kPrimaryAttack))
         {
             PrimaryAttack = false;
         }
@@ -274,12 +276,12 @@ public class Inputs
             SecondaryAttack = false;
         }
 
-        if (Input.GetKeyDown(_KprimaryAttack))
+        if (Input.GetKeyDown(_kPrimaryAttack))
         {
             launchAttack = true;
         }
 
-        if (Input.GetKeyUp(_KsecondaryAttack))
+        if (Input.GetKeyUp(_kSecondaryAttack))
         {
             SecondaryAttack = false;
         }
@@ -294,7 +296,7 @@ public class Inputs
 
     public void Paused()
     {
-        if (Input.GetKeyDown(_Kscape))
+        if (Input.GetKeyDown(_kPause))
         {
             Time.timeScale = 1;
             UIManager.instance.UnPaused();
@@ -331,6 +333,8 @@ public class Inputs
             Aim();
         }
         else FreeLook();
+
+        UIManager.instance.ToggleCrosshair(aim);
     }
 
     void FreeLook()
@@ -345,7 +349,7 @@ public class Inputs
 
     void Pause()
     {
-        if (Input.GetKeyDown(_Kscape))
+        if (Input.GetKeyDown(_kPause))
         {
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
@@ -366,7 +370,7 @@ public class Inputs
 
     void SelectSun()
     {
-        if (Input.GetKeyDown(_Ksun))
+        if (Input.GetKeyDown(_kSun))
         {
             _player.ChangeActiveMagic(PlayerController.MagicType.Sun);
             _player.renderer.material.color = Color.red;
@@ -375,7 +379,7 @@ public class Inputs
 
     void SelectObsidian()
     {
-        if (Input.GetKeyDown(_Kobssidian))
+        if (Input.GetKeyDown(_kObsidian))
         {
             _player.ChangeActiveMagic(PlayerController.MagicType.Obsidian);
             _player.renderer.material.color = Color.black;

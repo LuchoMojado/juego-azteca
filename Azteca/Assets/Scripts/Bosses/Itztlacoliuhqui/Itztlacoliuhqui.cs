@@ -83,8 +83,6 @@ public class Itztlacoliuhqui : Entity
 
     ObsidianWall _wallBlockingLOS;
 
-    Rigidbody _rb;
-
     Animator _anim;
 
     ObsidianPathfindManager _pfManager { get => ObsidianPathfindManager.instance; }
@@ -107,9 +105,9 @@ public class Itztlacoliuhqui : Entity
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-
+        base.Awake();
 
         StartCoroutine(SetupWait());
     }
@@ -121,6 +119,7 @@ public class Itztlacoliuhqui : Entity
         Setup();
         _start = true;
     }
+
     private void Setup()
     {
         _rb = GetComponent<Rigidbody>();
@@ -436,7 +435,7 @@ public class Itztlacoliuhqui : Entity
             if (!_takingAction) _treeStart.Execute();
         };
 
-        _fsm = new EventFSM<Actions>(wallSpike);
+        _fsm = new EventFSM<Actions>(hide);
 
         #endregion
 
@@ -617,22 +616,25 @@ public class Itztlacoliuhqui : Entity
 
         yield return new WaitForSeconds(_breakWallPreparation);
 
-        _wallBlockingLOS.Break();
-
-        Vector3 basePos = new Vector3(_wallBlockingLOS.transform.position.x, transform.position.y + 1.25f, _wallBlockingLOS.transform.position.z);
-        float xPosVariation = _wallBlockingLOS.Radius;
-        Vector3 baseDir = (_player.transform.position - basePos).normalized;
-
-        for (int i = 0; i < _shardAmount; i++)
+        if (!_wallBlockingLOS.Broken && !IsPlayerInLOS())
         {
-            var shard = Instantiate(_shardPrefab, basePos.VectorVariation(1, xPosVariation, _breakSpawnVariationY), Quaternion.identity);
-            shard.transform.forward = baseDir.VectorVariation(i * 0.5f, _breakAimVariationX, _breakAimVariationY);
-            shard.speed = _shardSpeed;
-            shard.damage = _shardDamage;
+            _wallBlockingLOS.Break();
+
+            Vector3 basePos = new Vector3(_wallBlockingLOS.transform.position.x, transform.position.y + 1.25f, _wallBlockingLOS.transform.position.z);
+            float xPosVariation = _wallBlockingLOS.Radius;
+            Vector3 baseDir = (_player.transform.position - basePos).normalized;
+
+            for (int i = 0; i < _shardAmount; i++)
+            {
+                var shard = Instantiate(_shardPrefab, basePos.VectorVariation(1, xPosVariation, _breakSpawnVariationY), Quaternion.identity);
+                shard.transform.forward = baseDir.VectorVariation(i * 0.5f, _breakAimVariationX, _breakAimVariationY);
+                shard.speed = _shardSpeed;
+                shard.damage = _shardDamage;
+            }
+
+            yield return new WaitForSeconds(_breakWallRecovery);
         }
-
-        yield return new WaitForSeconds(_breakWallRecovery);
-
+       
         //LookAtPlayer = true;
         _takingAction = false;
     }
@@ -683,7 +685,7 @@ public class Itztlacoliuhqui : Entity
         _spawnedWalls.Add(wall);
         wall.boss = this;
 
-        if (Physics.SphereCast(nextSpawnPos, _wallPrefab.Radius, Vector3.up, out var hit, 5, _playerLayer))
+        if (Physics.CheckCapsule(nextSpawnPos, nextSpawnPos + Vector3.up * 5, wall.Radius, _playerLayer))
         {
             _player.KnockBack(_player.transform.position - nextSpawnPos, _wallSpikeKnockback);
             _player.TakeDamage(_wallSpikeDamage);
