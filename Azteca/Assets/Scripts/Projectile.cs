@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IDamageable
 {
     [HideInInspector] public float damage, speed;
 
@@ -34,6 +34,16 @@ public class Projectile : MonoBehaviour
             player.TakeDamage(damage);
         }
 
+        Die();
+    }
+
+    public void TakeDamage(float amount)
+    {
+        Die();
+    }
+
+    public void Die()
+    {
         Destroy(gameObject);
     }
 }

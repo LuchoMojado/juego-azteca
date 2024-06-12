@@ -43,6 +43,7 @@ public class SpecialSunstrike : SpecialMagic
         yield return new WaitForSeconds(_preparation);
 
         _player.anim.SetBool("IsAttacking", false);
+        _inputs.inputUpdate = _inputs.Unpaused;
 
         if (!boss) yield break;
 
