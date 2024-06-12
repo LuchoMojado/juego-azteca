@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class ObsidianGod : Entity
+public class ObsidianGod : Boss
 {
     [SerializeField] PlayerController _player;
 

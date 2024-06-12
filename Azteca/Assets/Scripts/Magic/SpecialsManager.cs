@@ -33,7 +33,7 @@ public class SpecialsManager : MonoBehaviour
         _inputs = _player.Inputs;
 
         _allSpecials.Add(new SpecialSunstrike(_player, _inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown));
-        _allSpecials.Add(new SpecialSupernova(_player, _inputs, _supernova, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaRecovery, _supernovaCooldown));
+        _allSpecials.Add(new SpecialSupernova(_player, _inputs, _supernova, _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaRecovery, _supernovaCooldown));
 
         EquipSpecial(Specials.Sunstrike, 1);
         EquipSpecial(Specials.Supernova, 2);
@@ -53,18 +53,17 @@ public class SpecialsManager : MonoBehaviour
 
     public float GetCost(int slot)
     {
-        if (slot <= 0 || slot > _equippedSpecials.Length) return default;
-
         return _equippedSpecials[slot - 1].staminaCost;
+    }
+
+    public bool IsOffCooldown(int slot)
+    {
+        return _slotsCooldowns[slot - 1] <= 0;
     }
 
     public void ActivateSpecial(int slot)
     {
-        if (slot <= 0 || slot > _equippedSpecials.Length) return;
-
-        if (_slotsCooldowns[slot] > 0) return;
-
-        _slotsCooldowns[slot] = _equippedSpecials[slot - 1].Activate();
+        _slotsCooldowns[slot - 1] = _equippedSpecials[slot - 1].Activate();
     }
 
     public void EquipSpecial(Specials special, int slot)

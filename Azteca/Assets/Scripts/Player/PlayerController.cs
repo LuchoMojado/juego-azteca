@@ -39,7 +39,7 @@ public class PlayerController : Entity
 
     float _stamina, _currentStaminaDelay = 0;
 
-    public Entity currentBoss;
+    public Boss currentBoss;
 
     MagicType _activeMagic;
 
@@ -54,6 +54,8 @@ public class PlayerController : Entity
 
     [SerializeField] ParticleSystem dustPlayer;
     [SerializeField] GameObject ForceFieldPlayer;
+
+    SpecialsManager _specials;
 
     public bool StopSun
     {
@@ -88,6 +90,7 @@ public class PlayerController : Entity
         _myAS = GetComponent<AudioSource>();
         _movement = new Movement(transform, _rb, _speed, _explorationSpeed, _speedOnCast, _turnRate, _jumpStr, _stepStr, _castStepStr, _groundLayer);
         _inputs = new Inputs(_movement, this, _cameraController);
+        _specials = GetComponent<SpecialsManager>();
 
         _activeMagic = MagicType.Sun;
         renderer.material.color = Color.red;
@@ -174,6 +177,14 @@ public class PlayerController : Entity
 
         _inputs.inputUpdate = _inputs.Unpaused;
     }*/
+
+    public void UseSpecial(int slot)
+    {
+        if (_movement.IsGrounded() && _specials.IsOffCooldown(slot) && CheckAndReduceStamina(_specials.GetCost(slot)))
+        {
+            _specials.ActivateSpecial(slot);
+        }
+    }
 
     public void ChangeActiveMagic(MagicType type)
     {
@@ -738,7 +749,7 @@ public class PlayerController : Entity
         _inputs.PrimaryAttack = false;
     }
 
-    public void FightStarts(Entity boss)
+    public void FightStarts(Boss boss)
     {
         _cameraController.CameraShake(2, 1);
         _movement.Combat(true);

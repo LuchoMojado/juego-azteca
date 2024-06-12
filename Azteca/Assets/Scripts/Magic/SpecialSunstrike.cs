@@ -37,7 +37,7 @@ public class SpecialSunstrike : SpecialMagic
         var boss = _player.currentBoss;
 
         _inputs.inputUpdate = _inputs.FixedCast;
-        _player.transform.forward = _player.transform.position - boss.transform.position;
+        _player.transform.forward = boss.transform.position - _player.transform.position;
         _player.anim.SetBool("IsAttacking", true);
 
         yield return new WaitForSeconds(_preparation);
@@ -47,7 +47,7 @@ public class SpecialSunstrike : SpecialMagic
 
         if (!boss) yield break;
 
-        Vector3 strikePos = boss.transform.position;
+        Vector3 strikePos = boss.transform.position - Vector3.up * boss.DistFromPivotToFloor;
         var ray1 = Object.Instantiate(_firstRay, strikePos, Quaternion.identity);
 
         yield return new WaitForSeconds(_delay);
@@ -63,6 +63,6 @@ public class SpecialSunstrike : SpecialMagic
 
         yield return new WaitForSeconds(_linger);
 
-        //destruir segundo rayo
+        Object.Destroy(ray2);
     }
 }

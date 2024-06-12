@@ -7,11 +7,12 @@ public class SpecialSupernova : SpecialMagic
     GameObject _supernova;
     float _radius, _damage, _preparation, _recovery, _cooldown;
 
-    public SpecialSupernova(PlayerController player, Inputs inputs, GameObject supernova, float radius, float damage, float preparation, float recovery, float cooldown)
+    public SpecialSupernova(PlayerController player, Inputs inputs, GameObject supernova, float cost, float radius, float damage, float preparation, float recovery, float cooldown)
     {
         _player = player;
         _inputs = inputs;
         _supernova = supernova;
+        staminaCost = cost;
         _radius = radius;
         _damage = damage;
         _preparation = preparation;
@@ -42,7 +43,13 @@ public class SpecialSupernova : SpecialMagic
         {
             if (item.TryGetComponent(out IDamageable damageable))
             {
-                damageable.TakeDamage(_damage);
+                if (!item.TryGetComponent(out PlayerController player)) damageable.TakeDamage(_damage);
+            }
+            else
+            {
+                damageable = item.GetComponentInParent<IDamageable>();
+
+                if (damageable != null) damageable.TakeDamage(_damage);
             }
         }
 

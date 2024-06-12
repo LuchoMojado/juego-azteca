@@ -55,7 +55,7 @@ Material:
     m_Colors:
     - _Color: {r: 9.539009, g: 5.8121405, b: 1.3310245, a: 1}
     - _MainSpeed: {r: -0.5, g: 0, b: 0, a: 0}
-    - _NoiseSpeed: {r: -1, g: 0, b: 0, a: 0}
+    - _NoiseSpeed: {r: -2.27, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2393748786085846696
 MonoBehaviour:

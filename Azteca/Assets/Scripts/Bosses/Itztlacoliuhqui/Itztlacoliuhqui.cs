@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Itztlacoliuhqui : Entity
+public class Itztlacoliuhqui : Boss
 {
     public enum Actions
     {
@@ -28,6 +28,7 @@ public class Itztlacoliuhqui : Entity
     Pathfinding _pf;
     List<Vector3> _path = new List<Vector3>();
 
+    [SerializeField] Animator _anim;
     [SerializeField] float _aggroRange;
     [SerializeField] Transform _eyePos;
 
@@ -63,7 +64,7 @@ public class Itztlacoliuhqui : Entity
 
     [Header("Wall Spike")]
     [SerializeField] GameObject _miniWall;
-    [SerializeField] float _distFromPivotToFloor, _firstWallOffset, _miniWallOffset, _miniWallInterval, _wallSpikeKnockback,
+    [SerializeField] float _firstWallOffset, _miniWallOffset, _miniWallInterval, _wallSpikeKnockback,
                            _wallSpikeDamage, _wallSpikePreparation, _wallSpikeRecovery, _miniWallDestroyDelay;
 
     [Header("Gatling")]
@@ -82,8 +83,6 @@ public class Itztlacoliuhqui : Entity
     [SerializeField] LayerMask _playerLayer, _magicLayer;
 
     ObsidianWall _wallBlockingLOS;
-
-    Animator _anim;
 
     ObsidianPathfindManager _pfManager { get => ObsidianPathfindManager.instance; }
 
@@ -123,7 +122,6 @@ public class Itztlacoliuhqui : Entity
     private void Setup()
     {
         _rb = GetComponent<Rigidbody>();
-        _anim = GetComponent<Animator>();
         _pf = new Pathfinding();
 
         #region FSM State Creation
@@ -326,7 +324,7 @@ public class Itztlacoliuhqui : Entity
         {
             Debug.Log("Start spikes");
             _takingAction = true;
-            //_anim.SetBool("IsStomp", true);
+            _anim.SetBool("IsStomp", true);
             StartCoroutine(Spiking());
         };
 
@@ -337,7 +335,7 @@ public class Itztlacoliuhqui : Entity
 
         spikes.OnExit += x =>
         {
-            //_anim.SetBool("IsStomp", false);
+            _anim.SetBool("IsStomp", false);
         };
 
         breakWall.OnEnter += x =>
@@ -435,9 +433,9 @@ public class Itztlacoliuhqui : Entity
             if (!_takingAction) _treeStart.Execute();
         };
 
-        _fsm = new EventFSM<Actions>(hide);
-
         #endregion
+
+        _fsm = new EventFSM<Actions>(spikes);
 
         #region Decision Tree Setup
 

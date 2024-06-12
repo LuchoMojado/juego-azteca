@@ -158,6 +158,16 @@ public class Inputs
             SecondaryAttack = true;
         }
 
+        if (Input.GetKeyDown(_kSpecial1))
+        {
+            _player.UseSpecial(1);
+        }
+
+        if (Input.GetKeyDown(_kSpecial2))
+        {
+            _player.UseSpecial(2);
+        }
+
         //AimUnaim();
 
         SelectSun();
