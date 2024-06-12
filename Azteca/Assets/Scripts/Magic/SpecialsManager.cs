@@ -7,7 +7,7 @@ public class SpecialsManager : MonoBehaviour
     public enum Specials
     {
         Sunstrike,
-
+        Supernova
     }
 
     List<SpecialMagic> _allSpecials = new List<SpecialMagic>();
@@ -18,17 +18,25 @@ public class SpecialsManager : MonoBehaviour
     [SerializeField] GameObject _sunstrikeSecondRay;
     [SerializeField] float _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown;
 
-    [SerializeField] PlayerController _player;
+    [Header("Supernova")]
+    [SerializeField] GameObject _supernova;
+    [SerializeField] float _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaRecovery, _supernovaCooldown;
 
-    [HideInInspector] public Inputs inputs;
+    PlayerController _player;
+    Inputs _inputs;
 
     float[] _slotsCooldowns = new float[2];
 
     private void Start()
     {
-        _allSpecials.Add(new SpecialSunstrike(_player, inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown));
+        _player = GetComponent<PlayerController>();
+        _inputs = _player.Inputs;
+
+        _allSpecials.Add(new SpecialSunstrike(_player, _inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown));
+        _allSpecials.Add(new SpecialSupernova(_player, _inputs, _supernova, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaRecovery, _supernovaCooldown));
 
         EquipSpecial(Specials.Sunstrike, 1);
+        EquipSpecial(Specials.Supernova, 2);
     }
 
     private void Update()
@@ -63,6 +71,6 @@ public class SpecialsManager : MonoBehaviour
     {
         if (slot <= 0 || slot > _equippedSpecials.Length) return;
 
-        _equippedSpecials[slot] = _allSpecials[(int)special];
+        _equippedSpecials[slot - 1] = _allSpecials[(int)special];
     }
 }
