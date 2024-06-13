@@ -26,28 +26,42 @@ public class ObsidianPathfindManager : MonoBehaviour
 
         instance = this;
 
+        Debug.Log(Mathf.FloorToInt(-0.5f));
+
         GenerateNodeGrid();
+
+        foreach (var item in allNodes)
+        {
+            item.Initialize();
+        }
     }
 
     public void GenerateNodeGrid()
     {
-        for (int k = 0; k < _longestRowLength; k++)
+        int lengthReduction = 0;
+
+        for (int j = 0; j < _longestRowLength; j++)
         {
-            for (int j = 0; j < _shortestRowLength; j++)
+            var zMult = j;
+
+            if (zMult % 2 != 0)
             {
-                for (int i = 0; i < _longestRowLength; i++)
-                {
-                    var xMult = i;
-                    var zMult = j;
+                zMult *= -1;
 
-                    if (xMult % 2 != 0) xMult *= -1;
-                    if (zMult % 2 != 0) zMult *= -1;
+                if (j >= _shortestRowLength) lengthReduction += 2;
+            }
 
-                    xMult = Mathf.FloorToInt(xMult * 0.5f);
-                    zMult = Mathf.FloorToInt(zMult * 0.5f);
+            zMult = Mathf.FloorToInt(zMult * 0.5f);
 
-                    allNodes.Add(Instantiate(_node, _centerNodePos + new Vector3(_nodeDistance * xMult, 0, _nodeDistance * zMult), Quaternion.identity));
-                }
+            for (int i = 0; i < _longestRowLength - lengthReduction; i++)
+            {
+                var xMult = i;
+
+                if (xMult % 2 != 0) xMult *= -1;
+
+                xMult = Mathf.FloorToInt(xMult * 0.5f);
+
+                allNodes.Add(Instantiate(_node, _centerNodePos + new Vector3(_nodeDistance * xMult, 0, _nodeDistance * zMult), Quaternion.identity));
             }
         }
     }

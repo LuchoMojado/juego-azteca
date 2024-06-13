@@ -8,7 +8,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     [SerializeField] GameObject _completeWall, _brokenWall;
 
-    [SerializeField] float _radius, _riseTime;
+    [SerializeField] float _radius, _nodeBlockRadius, _riseTime;
 
     public float Radius
     {
@@ -92,7 +92,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
         foreach (var item in ObsidianPathfindManager.instance.allNodes)
         {
-            if (Vector3.Distance(transform.position, item.transform.position) <= _radius)
+            if (Vector3.Distance(transform.position, item.transform.position) <= _nodeBlockRadius)
             {
                 _overlappingNodes.Add(item);
                 item.SetBlock(true);

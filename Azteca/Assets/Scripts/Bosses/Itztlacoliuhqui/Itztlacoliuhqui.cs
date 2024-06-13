@@ -52,7 +52,7 @@ public class Itztlacoliuhqui : Boss
 
     [Header("Break Wall")]
     [SerializeField] int _shardAmount;
-    [SerializeField] float _breakWallPreparation, _breakWallRecovery, _breakSpawnVariationY, _breakAimVariationX, _breakAimVariationY;
+    [SerializeField] float _breakWallPreparation, _breakWallRecovery, _breakBaseSpawnOffsetY, _breakSpawnVariationY, _breakAimVariationX, _breakAimVariationY;
 
     [Header("Shield")]
     [SerializeField] float _shieldPreparation;
@@ -289,6 +289,7 @@ public class Itztlacoliuhqui : Boss
         {
             if (Vector3.Distance(transform.position, _player.transform.position) <= _aggroRange)
             {
+                _player.FightStarts(this);
                 _treeStart.Execute();
             }
         };
@@ -367,7 +368,7 @@ public class Itztlacoliuhqui : Boss
             Debug.Log("Start hide");
             _currentSpeed = _hideSpeed;
             _timer = 0;
-            var closestWall = _spawnedWalls.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).First();
+            var closestWall = _spawnedWalls.Where(x => !x.Broken).OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).First();
             Vector3 hidingSpot = closestWall.transform.position + (_player.transform.position - closestWall.transform.position).normalized * -closestWall.Radius;
             _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(hidingSpot), _wallLayer);
             _move = true;
@@ -618,7 +619,7 @@ public class Itztlacoliuhqui : Boss
         {
             _wallBlockingLOS.Break();
 
-            Vector3 basePos = new Vector3(_wallBlockingLOS.transform.position.x, transform.position.y + 1.25f, _wallBlockingLOS.transform.position.z);
+            Vector3 basePos = new Vector3(_wallBlockingLOS.transform.position.x, transform.position.y + _breakBaseSpawnOffsetY, _wallBlockingLOS.transform.position.z);
             float xPosVariation = _wallBlockingLOS.Radius;
             Vector3 baseDir = (_player.transform.position - basePos).normalized;
 
@@ -661,13 +662,14 @@ public class Itztlacoliuhqui : Boss
 
         LookAtPlayer = false;
 
-        Vector3 target = _player.transform.position - transform.up * _distFromPivotToFloor;
+        Vector3 target = _player.transform.position;
         Vector3 dir = (target - transform.position).MakeHorizontal().normalized;
 
         List<GameObject> miniWallList = new List<GameObject>();
 
         Vector3 nextSpawnPos = transform.position - transform.up * _distFromPivotToFloor + dir * _firstWallOffset;
         Vector3 movement = dir * _miniWallOffset;
+        target = new Vector3(target.x, nextSpawnPos.y, target.z);
 
         do
         {
