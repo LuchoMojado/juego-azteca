@@ -31,6 +31,7 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] Animator _anim;
     [SerializeField] float _aggroRange;
     [SerializeField] Transform _eyePos;
+    [SerializeField] GameObject _edgeBlock;
 
     [Header("Walls")]
     [SerializeField] ObsidianWall _wallPrefab;
@@ -107,6 +108,8 @@ public class Itztlacoliuhqui : Boss
     protected override void Awake()
     {
         base.Awake();
+
+        UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp, _maxHp);
 
         StartCoroutine(SetupWait());
     }
@@ -290,6 +293,8 @@ public class Itztlacoliuhqui : Boss
             if (Vector3.Distance(transform.position, _player.transform.position) <= _aggroRange)
             {
                 _player.FightStarts(this);
+                _edgeBlock.SetActive(true);
+                UIManager.instance.ToggleBossBar(true);
                 _treeStart.Execute();
             }
         };
@@ -825,8 +830,16 @@ public class Itztlacoliuhqui : Boss
         _takingAction = false;
     }
 
+    public override void TakeDamage(float amount)
+    {
+        base.TakeDamage(amount);
+        Debug.Log(_hp);
+        UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp);
+    }
+
     public override void Die()
     {
+        UIManager.instance.ToggleBossBar(false);
         Destroy(gameObject);
     }
 }
