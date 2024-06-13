@@ -12,7 +12,7 @@ public class Node : MonoBehaviour
     private int _cost = 1;
     public int Cost { get => _cost; }
 
-    private void Start()
+    public void Initialize()
     {
         foreach (var item in AllNodes)
         {

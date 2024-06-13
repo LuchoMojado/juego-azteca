@@ -435,7 +435,7 @@ public class Itztlacoliuhqui : Boss
 
         #endregion
 
-        _fsm = new EventFSM<Actions>(spikes);
+        _fsm = new EventFSM<Actions>(inactive);
 
         #region Decision Tree Setup
 

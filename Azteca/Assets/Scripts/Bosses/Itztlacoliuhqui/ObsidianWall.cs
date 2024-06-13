@@ -33,15 +33,6 @@ public class ObsidianWall : MonoBehaviour, IDamageable
     private void Start()
     {
         StartCoroutine(Rise());
-
-        foreach (var item in ObsidianPathfindManager.instance.allNodes)
-        {
-            if (Vector3.Distance(transform.position, item.transform.position) <= _radius)
-            {
-                _overlappingNodes.Add(item);
-                item.SetBlock(true);
-            }
-        }
     }
 
     public void Break()
@@ -97,6 +88,15 @@ public class ObsidianWall : MonoBehaviour, IDamageable
             timer += Time.deltaTime;
 
             yield return null;
+        }
+
+        foreach (var item in ObsidianPathfindManager.instance.allNodes)
+        {
+            if (Vector3.Distance(transform.position, item.transform.position) <= _radius)
+            {
+                _overlappingNodes.Add(item);
+                item.SetBlock(true);
+            }
         }
 
         _completeWall.transform.localPosition = unburiedPos;
