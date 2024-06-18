@@ -73,6 +73,14 @@ public class PlayerController : Entity
         }
     }
 
+    public bool Grounded
+    {
+        get
+        {
+            return _movement.IsGrounded();
+        }
+    }
+
     public Animator anim;
 
     AudioSource _myAS;
@@ -131,7 +139,7 @@ public class PlayerController : Entity
 
     public void Jump()
     {
-        if (_movement.IsGrounded() && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
+        if (Grounded && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
         {
             StartCoroutine(PrendoPlayerDust(true));
             anim.SetTrigger("IsJumping");
@@ -143,7 +151,7 @@ public class PlayerController : Entity
 
     public void Step(float horizontalInput, float verticalInput)
     {
-        if (_movement.IsGrounded() && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
+        if (Grounded && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
             StartCoroutine(PrendoPlayerDust(true));
             //anim.SetBool("IsStrafeRight", true);
@@ -180,7 +188,7 @@ public class PlayerController : Entity
 
     public void UseSpecial(int slot)
     {
-        if (_movement.IsGrounded() && _specials.IsOffCooldown(slot) && CheckAndReduceStamina(_specials.GetCost(slot)))
+        if (Grounded && _specials.IsOffCooldown(slot) && CheckAndReduceStamina(_specials.GetCost(slot)))
         {
             _specials.ActivateSpecial(slot);
         }
@@ -604,7 +612,7 @@ public class PlayerController : Entity
 
     void ActivateObsidianMagic()
     {
-        if (_movement.IsGrounded() && _obsidianCurrentCooldown <= 0 && CheckAndReduceStamina(_obsidianCost))
+        if (Grounded && _obsidianCurrentCooldown <= 0 && CheckAndReduceStamina(_obsidianCost))
         {
             StartCoroutine(ObsidianMagic());
         }

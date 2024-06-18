@@ -18,7 +18,8 @@ public class Itztlacoliuhqui : Boss
         WallSpike,
         Gatling,
         Charge,
-        ArenaSpikes
+        ArenaSpikes,
+        Leap
     }
 
     EventFSM<Actions> _fsm;
@@ -83,6 +84,10 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] PlayerController _player;
     [SerializeField] LayerMask _playerLayer, _magicLayer;
 
+    [Header("Leap")]
+    [SerializeField] float _leapHeight;
+    [SerializeField] float _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
+
     ObsidianWall _wallBlockingLOS;
 
     ObsidianPathfindManager _pfManager { get => ObsidianPathfindManager.instance; }
@@ -140,6 +145,7 @@ public class Itztlacoliuhqui : Boss
         var gatling = new State<Actions>("Gatling");
         var charge = new State<Actions>("Charge");
         var arenaSpikes = new State<Actions>("ArenaSpikes");
+        var leap = new State<Actions>("Leap");
 
         StateConfigurer.Create(inactive)
             .SetTransition(Actions.Search, search)
@@ -152,6 +158,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(search)
@@ -165,6 +172,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(spikes)
@@ -178,6 +186,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(swing)
@@ -191,6 +200,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(breakWall)
@@ -204,6 +214,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(shield)
@@ -217,6 +228,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(hide)
@@ -230,6 +242,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(wallSpike)
@@ -243,6 +256,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(gatling)
@@ -256,6 +270,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(charge)
@@ -269,6 +284,7 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         StateConfigurer.Create(arenaSpikes)
@@ -282,6 +298,21 @@ public class Itztlacoliuhqui : Boss
             .SetTransition(Actions.Gatling, gatling)
             .SetTransition(Actions.Charge, charge)
             .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
+            .Done();
+
+        StateConfigurer.Create(leap)
+            .SetTransition(Actions.Search, search)
+            .SetTransition(Actions.Spikes, spikes)
+            .SetTransition(Actions.Swing, swing)
+            .SetTransition(Actions.BreakWall, breakWall)
+            .SetTransition(Actions.Shield, shield)
+            .SetTransition(Actions.Hide, hide)
+            .SetTransition(Actions.WallSpike, wallSpike)
+            .SetTransition(Actions.Gatling, gatling)
+            .SetTransition(Actions.Charge, charge)
+            .SetTransition(Actions.ArenaSpikes, arenaSpikes)
+            .SetTransition(Actions.Leap, leap)
             .Done();
 
         #endregion
@@ -439,9 +470,20 @@ public class Itztlacoliuhqui : Boss
             if (!_takingAction) _treeStart.Execute();
         };
 
+        leap.OnEnter += x =>
+        {
+            _takingAction = true;
+            StartCoroutine(Leaping());
+        };
+
+        leap.OnUpdate += () =>
+        {
+            if (!_takingAction) _treeStart.Execute();
+        };
+
         #endregion
 
-        _fsm = new EventFSM<Actions>(inactive);
+        _fsm = new EventFSM<Actions>(leap);
 
         #region Decision Tree Setup
 
@@ -827,6 +869,82 @@ public class Itztlacoliuhqui : Boss
 
         //LookAtPlayer = true;
         FixRotation(false);
+        _takingAction = false;
+    }
+
+    IEnumerator Leaping()
+    {
+        LookAtPlayer = true;
+        //preparacion
+        yield return new WaitForSeconds(_chargePreparation);
+
+        LookAtPlayer = false;
+        FixRotation(true);
+        _rb.isKinematic = true;
+
+        ObsidianWall wallToDestroy = null;
+        Vector3 startPos = transform.position, slamPos, horPos;
+        float timer = 0, timer2 = 0, yPos, highestPoint = startPos.y + _leapHeight;
+        
+        if (_player.Grounded && Mathf.Abs(_player.transform.position.y - startPos.y) > 1f)
+        {
+            wallToDestroy = _spawnedWalls.Where(x => x.Broken).OrderBy(x => Vector3.Distance(_player.transform.position, x.transform.position)).First();
+            slamPos = wallToDestroy.transform.position;
+        }
+        else
+        {
+            slamPos = new Vector3(_player.transform.position.x, transform.position.y, _player.transform.position.z);
+        }
+
+        while (timer < _leapDuration * 0.5f)
+        {
+            horPos = Vector3.Lerp(startPos, slamPos, timer / _leapDuration);
+
+            yPos = Mathf.Lerp(startPos.y, highestPoint, timer / (_leapDuration * 0.5f));
+
+            _rb.MovePosition(new Vector3(horPos.x, yPos, horPos.z));
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        bool hit = false;
+
+        while (timer < _leapDuration)
+        {
+            horPos = Vector3.Lerp(startPos, slamPos, timer / _leapDuration);
+
+            yPos = Mathf.Lerp(highestPoint, startPos.y, timer2 / (_leapDuration * 0.5f));
+
+            _rb.MovePosition(new Vector3(horPos.x, yPos, horPos.z));
+
+            timer += Time.deltaTime;
+            timer2 += Time.deltaTime;
+
+            if (!hit)
+            {
+                if (Physics.CheckCapsule(transform.position, transform.position + new Vector3(0, 4.35f), 1, _playerLayer))
+                {
+                    _player.KnockBack((_player.transform.position - transform.position).MakeHorizontal(), _leapKnockback);
+                    _player.TakeDamage(_leapDamage);
+
+                    hit = true;
+                }
+            }
+
+            yield return null;
+        }
+
+        if (wallToDestroy != null)
+        {
+            // destruir pared y spawnear shards
+        }
+
+        _rb.isKinematic = false;
+
+        yield return new WaitForSeconds(_leapRecovery);
+
         _takingAction = false;
     }
 
