@@ -51,11 +51,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 0.21
+    - _Depth_Fade_Distance: 142.54
+    - _Edge: 0.15
+    - _Edge_2: 1.18
+    - _Fresnel_Power: 0.42
     - _MaxDistance: 7
     - _MinDistance: 2
     - _Opacity_Height: 2.02
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0.95283014, g: 0.9425193, b: 0.7775454, a: 0.007843138}
+    - _Color: {r: 1, g: 0.9904833, b: 0.8915094, a: 0.007843138}
   m_BuildTextureStacks: []
