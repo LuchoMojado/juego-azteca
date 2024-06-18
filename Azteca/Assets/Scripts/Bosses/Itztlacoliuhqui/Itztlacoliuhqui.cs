@@ -483,7 +483,7 @@ public class Itztlacoliuhqui : Boss
 
         #endregion
 
-        _fsm = new EventFSM<Actions>(leap);
+        _fsm = new EventFSM<Actions>(inactive);
 
         #region Decision Tree Setup
 
