@@ -340,6 +340,7 @@ public class Itztlacoliuhqui : Boss
         search.OnEnter += x =>
         {
             Debug.Log("Start search");
+            _anim.SetBool("IsWalking", true);
             _currentSpeed = _searchSpeed;
             _path = _pf.ThetaStar(_pfManager.FindNodeClosestTo(transform.position), _pfManager.FindNodeClosestTo(_player.transform.position), _wallLayer);
             _move = true;
@@ -360,6 +361,7 @@ public class Itztlacoliuhqui : Boss
 
         search.OnExit += x =>
         {
+            _anim.SetBool("IsWalking", false);
             _currentSpeed = 0;
             _move = false;
         };
@@ -385,18 +387,21 @@ public class Itztlacoliuhqui : Boss
         breakWall.OnEnter += x =>
         {
             Debug.Log("Start break wall");
+            _anim.SetBool("IsShooting", true);
             _takingAction = true;
             StartCoroutine(BreakingWall());
         };
 
         breakWall.OnUpdate += () =>
         {
+            _anim.SetBool("IsShooting", false);
             if (!_takingAction) _treeStart.Execute();
         };
 
         shield.OnEnter += x =>
         {
             Debug.Log("Start shield");
+            _anim.SetBool("IsBoxAttack", true);
             _takingAction = true;
             StartCoroutine(Shielding());
         };
@@ -404,6 +409,11 @@ public class Itztlacoliuhqui : Boss
         shield.OnUpdate += () =>
         {
             if (!_takingAction) _treeStart.Execute();
+        };
+
+        shield.OnExit += x =>
+        {
+            _anim.SetBool("IsBoxAttack", false);
         };
 
         hide.OnEnter += x =>
@@ -443,6 +453,7 @@ public class Itztlacoliuhqui : Boss
 
         wallSpike.OnEnter += x =>
         {
+            _anim.SetBool("IsBoxAttack", true);
             Debug.Log("Start wall spike");
             _takingAction = true;
             StartCoroutine(WallSpiking());
@@ -453,9 +464,15 @@ public class Itztlacoliuhqui : Boss
             if (!_takingAction) _treeStart.Execute();
         };
 
+        wallSpike.OnExit += x =>
+        {
+            _anim.SetBool("IsBoxAttack", false);
+        };
+
         gatling.OnEnter += x =>
         {
             Debug.Log("Start gatling");
+            _anim.SetBool("IsBoxAttack", true);
             _takingAction = true;
             StartCoroutine(UsingGatling());
         };
@@ -465,9 +482,15 @@ public class Itztlacoliuhqui : Boss
             if (!_takingAction) _treeStart.Execute();
         };
 
+        gatling.OnExit += x =>
+        {
+            _anim.SetBool("IsBoxAttack", false);
+        };
+
         charge.OnEnter += x =>
         {
             Debug.Log("Start charge");
+            _anim.SetBool("IsDashing", true);
             _takingAction = true;
             StartCoroutine(Charging());
         };
@@ -477,8 +500,14 @@ public class Itztlacoliuhqui : Boss
             if (!_takingAction) _treeStart.Execute();
         };
 
+        charge.OnExit += x =>
+        {
+            _anim.SetBool("IsDashing", false);
+        };
+
         leap.OnEnter += x =>
         {
+            _anim.SetBool("IsStomp", true);
             _takingAction = true;
             StartCoroutine(Leaping());
         };
@@ -486,6 +515,11 @@ public class Itztlacoliuhqui : Boss
         leap.OnUpdate += () =>
         {
             if (!_takingAction) _treeStart.Execute();
+        };
+
+        leap.OnExit += x =>
+        {
+            _anim.SetBool("IsStomp", false);
         };
 
         #endregion

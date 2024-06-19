@@ -42,10 +42,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DistortionPower: 1
+    - _DistortionPower: 0
     - _DistortionTimeScale: 2
     - _GradientTimeScale: 0.75
-    - _RotationTimeScale: 1
+    - _RotationTimeScale: 0
     - _VignetteAmount: 1
     m_Colors: []
   m_BuildTextureStacks: []
