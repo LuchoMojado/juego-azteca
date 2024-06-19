@@ -85,8 +85,8 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] LayerMask _playerLayer, _magicLayer;
 
     [Header("Leap")]
-    [SerializeField] float _leapHeight;
-    [SerializeField] float _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
+    [SerializeField] Transform _leapAngle;
+    [SerializeField] float _leapHeight, _leapMaxDistance, _leapMinAngle, _leapStrength, _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
 
     ObsidianWall _wallBlockingLOS;
 
@@ -507,7 +507,7 @@ public class Itztlacoliuhqui : Boss
 
         leap.OnEnter += x =>
         {
-            _anim.SetBool("IsStomp", true);
+            //_anim.SetBool("IsStomp", true);
             _takingAction = true;
             StartCoroutine(Leaping());
         };
@@ -524,7 +524,7 @@ public class Itztlacoliuhqui : Boss
 
         #endregion
 
-        _fsm = new EventFSM<Actions>(inactive);
+        _fsm = new EventFSM<Actions>(leap);
 
         #region Decision Tree Setup
 
@@ -926,7 +926,7 @@ public class Itztlacoliuhqui : Boss
         //preparacion
         prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_chargePreparation);
-
+        _anim.SetBool("IsStomp", true);
         LookAtPlayer = false;
         FixRotation(true);
         _rb.isKinematic = true;
@@ -945,31 +945,17 @@ public class Itztlacoliuhqui : Boss
             slamPos = new Vector3(_player.transform.position.x, transform.position.y, _player.transform.position.z);
         }
 
-        while (timer < _leapDuration * 0.5f)
-        {
-            horPos = Vector3.Lerp(startPos, slamPos, timer / _leapDuration);
-
-            yPos = Mathf.Lerp(startPos.y, highestPoint, timer / (_leapDuration * 0.5f));
-
-            _rb.MovePosition(new Vector3(horPos.x, yPos, horPos.z));
-
-            timer += Time.deltaTime;
-
-            yield return null;
-        }
-
         bool hit = false;
 
         while (timer < _leapDuration)
         {
             horPos = Vector3.Lerp(startPos, slamPos, timer / _leapDuration);
 
-            yPos = Mathf.Lerp(highestPoint, startPos.y, timer2 / (_leapDuration * 0.5f));
+            yPos = Mathf.Lerp(startPos.y, highestPoint, -(timer - _leapDuration) * timer);
 
             _rb.MovePosition(new Vector3(horPos.x, yPos, horPos.z));
 
             timer += Time.deltaTime;
-            timer2 += Time.deltaTime;
 
             if (!hit)
             {
@@ -984,7 +970,7 @@ public class Itztlacoliuhqui : Boss
 
             yield return null;
         }
-
+        
         if (wallToDestroy != null)
         {
             // destruir pared y spawnear shards
@@ -992,6 +978,7 @@ public class Itztlacoliuhqui : Boss
 
         _rb.isKinematic = false;
         prenderCaidaPiedras(true);
+        _anim.SetBool("IsStomp", false);
         yield return new WaitForSeconds(_leapRecovery);
 
         _takingAction = false;
