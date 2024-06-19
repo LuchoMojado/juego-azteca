@@ -102,6 +102,5 @@ public class ObsidianWall : MonoBehaviour, IDamageable
         _completeWall.transform.localPosition = unburiedPos;
 
         _rising = false;
-        Break();
     }
 }
