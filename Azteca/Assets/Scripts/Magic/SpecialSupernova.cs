@@ -5,9 +5,9 @@ using UnityEngine;
 public class SpecialSupernova : SpecialMagic
 {
     GameObject _supernova;
-    float _radius, _damage, _preparation, _recovery, _cooldown;
+    float _radius, _damage, _preparation, _duration, _recovery, _cooldown;
 
-    public SpecialSupernova(PlayerController player, Inputs inputs, GameObject supernova, float cost, float radius, float damage, float preparation, float recovery, float cooldown)
+    public SpecialSupernova(PlayerController player, Inputs inputs, GameObject supernova, float cost, float radius, float damage, float preparation, float duration, float recovery, float cooldown)
     {
         _player = player;
         _inputs = inputs;
@@ -16,6 +16,7 @@ public class SpecialSupernova : SpecialMagic
         _radius = radius;
         _damage = damage;
         _preparation = preparation;
+        _duration = duration;
         _recovery = recovery;
         _cooldown = cooldown;
     }
@@ -37,25 +38,48 @@ public class SpecialSupernova : SpecialMagic
         var nova = Object.Instantiate(_supernova, _player.transform.position, Quaternion.identity);
         nova.transform.localScale *= _radius;
 
-        var cols = Physics.OverlapSphere(_player.transform.position, _radius);
+        float timer = 0;
+        List<Collider> ignore = new List<Collider>();
+        ignore.Add(_player.GetComponent<Collider>());
+        bool skip = false;
 
-        foreach (var item in cols)
+        while (timer < _duration)
         {
-            if (item.TryGetComponent(out IDamageable damageable))
-            {
-                if (!item.TryGetComponent(out PlayerController player)) damageable.TakeDamage(_damage);
-            }
-            else
-            {
-                damageable = item.GetComponentInParent<IDamageable>();
+            var cols = Physics.OverlapSphere(_player.transform.position, _radius);
 
-                if (damageable != null) damageable.TakeDamage(_damage);
+            foreach (var item in cols)
+            {
+                foreach (var item2 in ignore)
+                {
+                    if (item == item2) skip = true;
+                }
+
+                if (skip)
+                {
+                    skip = false;
+                    continue;
+                }
+
+                if (item.TryGetComponent(out IDamageable damageable))
+                {
+                    damageable.TakeDamage(_damage);
+                }
+                else
+                {
+                    damageable = item.GetComponentInParent<IDamageable>();
+
+                    if (damageable != null) damageable.TakeDamage(_damage);
+                }
             }
+
+            timer += Time.deltaTime;
+
+            yield return null;
         }
 
-        yield return new WaitForSeconds(_recovery);
-
         Object.Destroy(nova);
+
+        yield return new WaitForSeconds(_recovery);
 
         _player.anim.SetBool("IsAttacking", false);
         _inputs.inputUpdate = _inputs.Unpaused;

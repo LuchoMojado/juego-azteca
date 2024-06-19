@@ -20,7 +20,7 @@ public class SpecialsManager : MonoBehaviour
 
     [Header("Supernova")]
     [SerializeField] GameObject _supernova;
-    [SerializeField] float _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaRecovery, _supernovaCooldown;
+    [SerializeField] float _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaDuration, _supernovaRecovery, _supernovaCooldown;
 
     PlayerController _player;
     Inputs _inputs;
@@ -33,7 +33,7 @@ public class SpecialsManager : MonoBehaviour
         _inputs = _player.Inputs;
 
         _allSpecials.Add(new SpecialSunstrike(_player, _inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown));
-        _allSpecials.Add(new SpecialSupernova(_player, _inputs, _supernova, _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaRecovery, _supernovaCooldown));
+        _allSpecials.Add(new SpecialSupernova(_player, _inputs, _supernova, _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaDuration, _supernovaRecovery, _supernovaCooldown));
 
         EquipSpecial(Specials.Sunstrike, 1);
         EquipSpecial(Specials.Supernova, 2);

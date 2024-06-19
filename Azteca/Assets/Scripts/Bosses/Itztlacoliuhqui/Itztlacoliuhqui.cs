@@ -33,6 +33,7 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] float _aggroRange;
     [SerializeField] Transform _eyePos;
     [SerializeField] GameObject _edgeBlock;
+    [SerializeField] Actions _creationAttacks, _attacks;
 
     [Header("Walls")]
     [SerializeField] ObsidianWall _wallPrefab;
@@ -137,6 +138,7 @@ public class Itztlacoliuhqui : Boss
     private void Setup()
     {
         _rb = GetComponent<Rigidbody>();
+        _myAS = GetComponent<AudioSource>();
         _pf = new Pathfinding();
 
         #region FSM State Creation
@@ -539,9 +541,9 @@ public class Itztlacoliuhqui : Boss
         var chargeNode = new ActionNode(Charge);
         var arenaSpikesNode = new ActionNode(ArenaSpikes);
 
-        var wallClose = new QuestionNode(hideNode, shieldNode, IsWallClose);
+        var unbrokenWallClose = new QuestionNode(hideNode, shieldNode, IsUnbrokenWallClose);
         var wallCloseToPlayer = new QuestionNode(gatlingNode, wallSpikeNode, IsWallCloseToPlayer);
-        var defend = new QuestionNode(wallClose, wallCloseToPlayer, ShouldDefend);
+        var defend = new QuestionNode(unbrokenWallClose, wallCloseToPlayer, ShouldDefend);
         var playerSunning = new QuestionNode(defend, chargeNode, IsPlayerUsingSun);
         var playerInWallLOS = new QuestionNode(breakWallNode, searchNode, BreakableWallInPlayerLOS);
         var playerClose = new QuestionNode(spikesNode, playerSunning, IsPlayerClose);
@@ -576,6 +578,8 @@ public class Itztlacoliuhqui : Boss
 
     #region Decision Tree Methods
 
+
+
     void Search() => _fsm.SendInput(Actions.Search);
     void Spikes() => _fsm.SendInput(Actions.Spikes);
     void Swing() => _fsm.SendInput(Actions.Swing);
@@ -588,9 +592,21 @@ public class Itztlacoliuhqui : Boss
     void ArenaSpikes() => _fsm.SendInput(Actions.ArenaSpikes);
     void Leap() => _fsm.SendInput(Actions.Leap);
 
-    bool IsWallClose()
+    bool IsAnyWallClose()
     {
         foreach (var item in _spawnedWalls)
+        {
+            if (Vector3.Distance(transform.position, item.transform.position) <= _wallCloseRange)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    bool IsUnbrokenWallClose()
+    {
+        foreach (var item in _spawnedWalls.Where(x => !x.Broken))
         {
             if (Vector3.Distance(transform.position, item.transform.position) <= _wallCloseRange)
             {
@@ -930,6 +946,11 @@ public class Itztlacoliuhqui : Boss
         prenderCaidaPiedras(true);
         ChangeAudio(dash);
         yield return new WaitForSeconds(_leapPreparation);
+
+        var wall = Instantiate(_wallPrefab, transform.position, Quaternion.identity);
+        _spawnedWalls.Add(wall);
+        wall.boss = this;
+
         _anim.SetBool("IsStomp", true);
         LookAtPlayer = false;
         FixRotation(true);
