@@ -686,7 +686,9 @@ public class Itztlacoliuhqui : Boss
             _preJumpParticles[i].Play();
         }
         prenderCaidaPiedras(true);
+        ChangeAudio(dash);
         yield return new WaitForSeconds(_spikesPreparation);
+        ChangeAudio(stomp);
         //salen spikes del suelo
         //ChangeAudio(stomp);
         prenderCaidaPiedras(false);
@@ -709,7 +711,7 @@ public class Itztlacoliuhqui : Boss
         _rb.MoveRotation(Quaternion.LookRotation((_wallBlockingLOS.transform.position - transform.position).MakeHorizontal()));
         prenderTornado(true);
         yield return new WaitForSeconds(_breakWallPreparation);
-
+        ChangeAudio(dashBox);
         if (!_wallBlockingLOS.Broken && !IsPlayerInLOS())
         {
             _wallBlockingLOS.Break();
@@ -738,7 +740,7 @@ public class Itztlacoliuhqui : Boss
         LookAtPlayer = true;
         prenderTornado(true);
         yield return new WaitForSeconds(_shieldPreparation);
-
+        ChangeAudio(dashBox);
         var wall = Instantiate(_wallPrefab, transform.position + transform.forward * _forwardOffset - Vector3.up * _distFromPivotToFloor, Quaternion.identity);
         _spawnedWalls.Add(wall);
         wall.boss = this;
@@ -754,7 +756,7 @@ public class Itztlacoliuhqui : Boss
         LookAtPlayer = true;
         prenderTornado(true);
         yield return new WaitForSeconds(_wallSpikePreparation);
-
+        ChangeAudio(lanzaDardos);
         LookAtPlayer = false;
 
         Vector3 target = _player.transform.position;
@@ -803,7 +805,7 @@ public class Itztlacoliuhqui : Boss
         LookAtPlayer = true;
         prenderTornado(true);
         yield return new WaitForSeconds(_gatlingPreparation);
-
+        ChangeAudio(lanzaDardos);
         float timer = 0, cooldown = 0;
 
         while (timer < _gatlingDuration)
@@ -871,7 +873,7 @@ public class Itztlacoliuhqui : Boss
         //preparacion
         prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_chargePreparation);
-
+        ChangeAudio(dash);
         LookAtPlayer = false;
         FixRotation(true);
 
@@ -926,6 +928,7 @@ public class Itztlacoliuhqui : Boss
         LookAtPlayer = true;
         //preparacion
         prenderCaidaPiedras(true);
+        ChangeAudio(dash);
         yield return new WaitForSeconds(_leapPreparation);
         _anim.SetBool("IsStomp", true);
         LookAtPlayer = false;
@@ -999,6 +1002,7 @@ public class Itztlacoliuhqui : Boss
         }
 
         _rb.isKinematic = false;
+        ChangeAudio(stomp);
         prenderCaidaPiedras(true);
         _anim.SetBool("IsStomp", false);
         yield return new WaitForSeconds(_leapRecovery);
@@ -1017,6 +1021,8 @@ public class Itztlacoliuhqui : Boss
     public override void Die()
     {
         UIManager.instance.ToggleBossBar(false);
+        prenderCaidaPiedras(true);
+        CineManager.instance.PlayAnimation(CineManager.cineEnum.obsidianDead);
         Destroy(gameObject);
     }
     public void ChangeAudio(AudioClip clip)
