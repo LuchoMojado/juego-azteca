@@ -672,7 +672,7 @@ public class Itztlacoliuhqui : Boss
     IEnumerator BreakingWall()
     {
         _rb.MoveRotation(Quaternion.LookRotation((_wallBlockingLOS.transform.position - transform.position).MakeHorizontal()));
-
+        prenderTornado(true);
         yield return new WaitForSeconds(_breakWallPreparation);
 
         if (!_wallBlockingLOS.Broken && !IsPlayerInLOS())
@@ -690,7 +690,7 @@ public class Itztlacoliuhqui : Boss
                 shard.speed = _shardSpeed;
                 shard.damage = _shardDamage;
             }
-
+            prenderTornado(false);
             yield return new WaitForSeconds(_breakWallRecovery);
         }
        
@@ -701,13 +701,13 @@ public class Itztlacoliuhqui : Boss
     IEnumerator Shielding()
     {
         LookAtPlayer = true;
-
+        prenderTornado(true);
         yield return new WaitForSeconds(_shieldPreparation);
 
         var wall = Instantiate(_wallPrefab, transform.position + transform.forward * _forwardOffset - Vector3.up * _distFromPivotToFloor, Quaternion.identity);
         _spawnedWalls.Add(wall);
         wall.boss = this;
-
+        prenderTornado(false);
         yield return new WaitForSeconds(_shieldRecovery);
 
         LookAtPlayer = false;
@@ -717,7 +717,7 @@ public class Itztlacoliuhqui : Boss
     IEnumerator WallSpiking()
     {
         LookAtPlayer = true;
-
+        prenderTornado(true);
         yield return new WaitForSeconds(_wallSpikePreparation);
 
         LookAtPlayer = false;
@@ -750,7 +750,7 @@ public class Itztlacoliuhqui : Boss
             _player.KnockBack(_player.transform.position - nextSpawnPos, _wallSpikeKnockback);
             _player.TakeDamage(_wallSpikeDamage);
         }
-
+        prenderTornado(false);
         yield return new WaitForSeconds(_wallSpikeRecovery);
 
         _takingAction = false;
@@ -766,7 +766,7 @@ public class Itztlacoliuhqui : Boss
     IEnumerator UsingGatling()
     {
         LookAtPlayer = true;
-
+        prenderTornado(true);
         yield return new WaitForSeconds(_gatlingPreparation);
 
         float timer = 0, cooldown = 0;
@@ -793,7 +793,7 @@ public class Itztlacoliuhqui : Boss
 
             yield return null;
         }
-
+        prenderTornado(false);
         yield return new WaitForSeconds(_gatlingRecovery);
 
         LookAtPlayer = false;
@@ -834,6 +834,7 @@ public class Itztlacoliuhqui : Boss
     {
         LookAtPlayer = true;
         //preparacion
+        prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_chargePreparation);
 
         LookAtPlayer = false;
@@ -874,9 +875,9 @@ public class Itztlacoliuhqui : Boss
             }
 
             yield return null;
-        } 
+        }
 
-        
+        prenderCaidaPiedras(false);
         //espero
         yield return new WaitForSeconds(_chargeRecovery);
 
@@ -889,6 +890,7 @@ public class Itztlacoliuhqui : Boss
     {
         LookAtPlayer = true;
         //preparacion
+        prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_chargePreparation);
 
         LookAtPlayer = false;
@@ -955,7 +957,7 @@ public class Itztlacoliuhqui : Boss
         }
 
         _rb.isKinematic = false;
-
+        prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_leapRecovery);
 
         _takingAction = false;
@@ -963,6 +965,7 @@ public class Itztlacoliuhqui : Boss
 
     public override void TakeDamage(float amount)
     {
+        StartCoroutine(oneShotTiroPiedras());
         base.TakeDamage(amount);
         Debug.Log(_hp);
         UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp);
