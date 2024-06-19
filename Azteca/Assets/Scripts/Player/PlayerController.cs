@@ -801,12 +801,12 @@ public class PlayerController : Entity
     }
     public IEnumerator PrendoPlayerDust(bool prendo)
     {
-        ForceFieldPlayer.SetActive(prendo);
+        //ForceFieldPlayer.SetActive(prendo);
         if(prendo)
         {
-            dustPlayer.Play();
+            //dustPlayer.Play();
         }
         yield return new WaitForSeconds(1f);
-        ForceFieldPlayer.SetActive(false);
+        //ForceFieldPlayer.SetActive(false);
     }
 }
