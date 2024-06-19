@@ -85,8 +85,8 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] LayerMask _playerLayer, _magicLayer;
 
     [Header("Leap")]
-    [SerializeField] Transform _leapAngle;
-    [SerializeField] float _leapHeight, _leapMaxDistance, _leapMinAngle, _leapStrength, _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
+    [SerializeField] float _leapHeight;
+    [SerializeField] float _leapShardAmount, _leapStrength, _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
 
     ObsidianWall _wallBlockingLOS;
 
@@ -586,6 +586,7 @@ public class Itztlacoliuhqui : Boss
     void Gatling() => _fsm.SendInput(Actions.Gatling);
     void Charge() => _fsm.SendInput(Actions.Charge);
     void ArenaSpikes() => _fsm.SendInput(Actions.ArenaSpikes);
+    void Leap() => _fsm.SendInput(Actions.Leap);
 
     bool IsWallClose()
     {
@@ -689,7 +690,7 @@ public class Itztlacoliuhqui : Boss
         //salen spikes del suelo
         //ChangeAudio(stomp);
         prenderCaidaPiedras(false);
-        var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
+        var spikes = Instantiate(_spikes, transform.position, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
         for (int i = 0; i < _preJumpParticles.Length; i++)
@@ -925,7 +926,7 @@ public class Itztlacoliuhqui : Boss
         LookAtPlayer = true;
         //preparacion
         prenderCaidaPiedras(true);
-        yield return new WaitForSeconds(_chargePreparation);
+        yield return new WaitForSeconds(_leapPreparation);
         _anim.SetBool("IsStomp", true);
         LookAtPlayer = false;
         FixRotation(true);
@@ -933,7 +934,7 @@ public class Itztlacoliuhqui : Boss
 
         ObsidianWall wallToDestroy = null;
         Vector3 startPos = transform.position, slamPos, horPos;
-        float timer = 0, timer2 = 0, yPos, highestPoint = startPos.y + _leapHeight;
+        float timer = 0, yPos, highestPoint = startPos.y + _leapHeight;
         
         if (_player.Grounded && Mathf.Abs(_player.transform.position.y - startPos.y) > 1f)
         {
@@ -970,10 +971,31 @@ public class Itztlacoliuhqui : Boss
 
             yield return null;
         }
-        
+
+        if (!hit)
+        {
+            if (Physics.CheckCapsule(transform.position, transform.position + new Vector3(0, 4.35f), 1.5f, _playerLayer))
+            {
+                _player.KnockBack((_player.transform.position - transform.position).MakeHorizontal(), _leapKnockback);
+                _player.TakeDamage(_leapDamage);
+            }
+        }
+
         if (wallToDestroy != null)
         {
-            // destruir pared y spawnear shards
+            var wallRadius = wallToDestroy.Radius * 0.9f;
+            var baseAngle = 360 / _leapShardAmount;
+            var basePos = wallToDestroy.transform.position;
+
+            wallToDestroy.Die();
+
+            for (int i = 0; i < _leapShardAmount; i++)
+            {
+                var shard = Instantiate(_shardPrefab, basePos, Quaternion.Euler(new Vector3(0, baseAngle * i + Mathf.Lerp(0, baseAngle, Random.value))));
+                shard.transform.position += shard.transform.forward * wallRadius;
+                shard.speed = _shardSpeed;
+                shard.damage = _shardDamage;
+            }
         }
 
         _rb.isKinematic = false;
