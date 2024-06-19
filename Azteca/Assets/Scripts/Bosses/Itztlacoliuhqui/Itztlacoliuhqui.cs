@@ -96,7 +96,7 @@ public class Itztlacoliuhqui : Boss
 
     float _timer = 0, _currentSpeed = 0;
 
-    [SerializeField] Animator anim;
+    //[SerializeField] Animator anim;
 
     AudioSource _myAS;
     [SerializeField] AudioClip stomp, dash, dashBox, dashFuerte, lanzaDardos, walk;
@@ -646,16 +646,22 @@ public class Itztlacoliuhqui : Boss
         //LookAtPlayer = false;
         //ChangeAudio(dash);
         //preparacion
+        for (int i = 0; i < _preJumpParticles.Length; i++)
+        {
+            _preJumpParticles[i].Play();
+        }
+        prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_spikesPreparation);
         //salen spikes del suelo
         //ChangeAudio(stomp);
+        prenderCaidaPiedras(false);
         var spikes = Instantiate(_spikes, transform.position - Vector3.up * 1.65f, transform.rotation);
         spikes.duration = _spikesDuration;
         spikes.damage = _spikesDamage;
-        //for (int i = 0; i < _preJumpParticles.Length; i++)
-        //{
-        //    _preJumpParticles[i].Stop();
-        //}
+        for (int i = 0; i < _preJumpParticles.Length; i++)
+        {
+            _preJumpParticles[i].Stop();
+        }
         //recuperacion
         yield return new WaitForSeconds(_spikesRecovery);
 
@@ -971,5 +977,18 @@ public class Itztlacoliuhqui : Boss
     {
         _myAS.clip = clip;
         _myAS.PlayOneShot(_myAS.clip);
+    }
+    public void prenderTornado(bool prendo)
+    {
+        tornadoPiedras.SetActive(prendo);
+    }
+    public void prenderCaidaPiedras(bool prendo)
+    {
+        caidaPiedras.SetActive(prendo);
+    }
+    public IEnumerator oneShotTiroPiedras()
+    {
+        yield return new WaitForSeconds(0.5f);
+        prenderCaidaPiedras(false);
     }
 }
