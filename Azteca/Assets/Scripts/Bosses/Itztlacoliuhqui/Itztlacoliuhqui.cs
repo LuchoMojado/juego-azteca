@@ -96,6 +96,13 @@ public class Itztlacoliuhqui : Boss
 
     float _timer = 0, _currentSpeed = 0;
 
+    [SerializeField] Animator anim;
+
+    AudioSource _myAS;
+    [SerializeField] AudioClip stomp, dash, dashBox, dashFuerte, lanzaDardos, walk;
+
+    [SerializeField] GameObject tornadoPiedras, caidaPiedras;
+
     public bool LookAtPlayer
     {
         get
@@ -959,5 +966,10 @@ public class Itztlacoliuhqui : Boss
     {
         UIManager.instance.ToggleBossBar(false);
         Destroy(gameObject);
+    }
+    public void ChangeAudio(AudioClip clip)
+    {
+        _myAS.clip = clip;
+        _myAS.PlayOneShot(_myAS.clip);
     }
 }
