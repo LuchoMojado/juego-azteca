@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Test/TestObsidianBoss.unity
     guid: dd5578f6b69792f40bd884366e535995
   - enabled: 1
+    path: Assets/Scenes/Blockings/EscenaDe cambio.unity
+    guid: 75d559b5cfbaa1143b76d87e378c85c6
+  - enabled: 1
     path: Assets/Scenes/Test/Modelos.unity
     guid: db46332b7e8e3d1418bdfbff922403d5
   - enabled: 0
