@@ -85,6 +85,7 @@ public class PlayerController : Entity
 
     AudioSource _myAS;
     [SerializeField] AudioClip sideStep,jump, damage, chargingSun;
+    [SerializeField] GameObject _stepParticles, _jumpParticles;
 
     public enum MagicType
     {
@@ -141,7 +142,7 @@ public class PlayerController : Entity
     {
         if (Grounded && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
         {
-            StartCoroutine(PrendoPlayerDust(true));
+            StartCoroutine(ToggleGameObject(_jumpParticles));
             //anim.SetTrigger("IsJumping");
             _movement.Jump();
             ChangeAudio(jump);
@@ -154,7 +155,7 @@ public class PlayerController : Entity
         if (Grounded && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
             anim.SetTrigger("step");
-            StartCoroutine(PrendoPlayerDust(true));
+            StartCoroutine(ToggleGameObject(_stepParticles));
             //anim.SetBool("IsStrafeRight", true);
             ChangeAudio(sideStep);
             _stepCurrentCooldown = _stepCooldown;
@@ -809,5 +810,13 @@ public class PlayerController : Entity
         }
         yield return new WaitForSeconds(1f);
         //ForceFieldPlayer.SetActive(false);
+    }
+    public IEnumerator ToggleGameObject(GameObject go, float duration = 1)
+    {
+        go.SetActive(true);
+
+        yield return new WaitForSeconds(duration);
+
+        go.SetActive(false);
     }
 }
