@@ -56,7 +56,7 @@ public class SpecialSunstrike : SpecialMagic
         var ray2 = Object.Instantiate(_secondRay, strikePos, Quaternion.identity);
         ray2.transform.localScale = new Vector3(_radius, ray2.transform.localScale.y, _radius);
 
-        if (Physics.CheckCapsule(strikePos, strikePos + Vector3.up * 5, _radius, boss.gameObject.layer))
+        if (Vector3.Distance(boss.transform.position, strikePos) <= _radius)
         {
             boss.TakeDamage(_damage);
         }
