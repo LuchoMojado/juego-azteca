@@ -142,7 +142,7 @@ public class PlayerController : Entity
         if (Grounded && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
         {
             StartCoroutine(PrendoPlayerDust(true));
-            anim.SetTrigger("IsJumping");
+            //anim.SetTrigger("IsJumping");
             _movement.Jump();
             ChangeAudio(jump);
             //anim.SetBool("IsJumping", false);
@@ -153,6 +153,7 @@ public class PlayerController : Entity
     {
         if (Grounded && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
+            anim.SetTrigger("step");
             StartCoroutine(PrendoPlayerDust(true));
             //anim.SetBool("IsStrafeRight", true);
             ChangeAudio(sideStep);
@@ -293,13 +294,13 @@ public class PlayerController : Entity
         _usingSun = true;
         //_inputs.inputUpdate = _inputs.MovingCast;
 
-        anim.SetBool("IsAttacking", true);
+        //anim.SetBool("IsAttacking", true);
         ControlFullScreen.instance.ChangeDemond(true);
         yield return new WaitForSeconds(_sunCastDelay);
         
         _movement.Cast(true);
         ChangeAudio(chargingSun);
-        anim.SetBool("IsAttacking", false);
+        anim.SetTrigger("chargeSun");
 
         var sun = Instantiate(_sunMagic, transform.position + transform.forward * 1f + transform.up * 0.6f, transform.rotation, transform);
         sun.player = this;
@@ -353,7 +354,7 @@ public class PlayerController : Entity
                 var lookAt = Camera.main.transform.forward.MakeHorizontal();
                 transform.forward = lookAt;
 
-                anim.SetBool("IsAttacking", true);
+                //anim.SetBool("IsAttacking", true);
 
                 yield return new WaitForSeconds(_sunCastDelay);
 
@@ -391,7 +392,7 @@ public class PlayerController : Entity
 
         _stopSun = false;
         _usingSun = false;
-        anim.SetBool("IsAttacking", false);
+        //anim.SetBool("IsAttacking", false);
         _sunCurrentCooldown = _sunCooldown;
         _movement.Cast(false);
     } // en desuso
@@ -401,12 +402,12 @@ public class PlayerController : Entity
         _usingSun = true;
         //_inputs.inputUpdate = _inputs.MovingCast;
 
-        anim.SetBool("IsAttacking", true);
+        //anim.SetBool("IsAttacking", true);
         
         yield return new WaitForSeconds(_sunCastDelay);
         _movement.Cast(true);
         ChangeAudio(chargingSun);
-        anim.SetBool("IsAttacking", false);
+        //anim.SetBool("IsAttacking", false);
         _inputs.PrimaryAttack = false;
         _inputs.SecondaryAttack = false;
 
@@ -452,7 +453,7 @@ public class PlayerController : Entity
 
         if (_inputs.PrimaryAttack)
         {
-            anim.SetBool("IsAttacking", true);
+            //anim.SetBool("IsAttacking", true);
 
             yield return new WaitForSeconds(_sunCastDelay);
 
@@ -467,7 +468,7 @@ public class PlayerController : Entity
             sun.Absorb(_sunAbsorbTime);
 
             //podria ir una animacion de absorber y cuando termine pasar a la piña
-            anim.SetBool("IsAttacking", true); //aca iria animacion de piña
+            //anim.SetBool("IsAttacking", true); //aca iria animacion de piña
 
             yield return new WaitForSeconds(_sunAbsorbTime);
 
@@ -499,7 +500,7 @@ public class PlayerController : Entity
 
         yield return new WaitForSeconds(_sunRecovery);
 
-        anim.SetBool("IsAttacking", false);
+        //anim.SetBool("IsAttacking", false);
         _usingSun = false;
         _inputs.PrimaryAttack = false;
         _inputs.SecondaryAttack = false;
@@ -558,11 +559,11 @@ public class PlayerController : Entity
             {
                 _inputs.launchAttack = false;
 
-                anim.SetBool("IsAttacking", true);
+                //anim.SetBool("IsAttacking", true);
 
                 yield return new WaitForSeconds(_sunCastDelay);
 
-                anim.SetBool("IsAttacking", false);
+                //anim.SetBool("IsAttacking", false);
 
                 sun.transform.SetParent(null);
 
@@ -627,7 +628,7 @@ public class PlayerController : Entity
         _inputs.inputUpdate = _inputs.FixedCast;
         var lookAt = Camera.main.transform.forward.MakeHorizontal();
         transform.forward = lookAt;
-        anim.SetBool("IsAttacking", true);
+        //anim.SetBool("IsAttacking", true);
 
         yield return new WaitForSeconds(_obsidianCastDelay);
 
@@ -658,7 +659,7 @@ public class PlayerController : Entity
                 if (!_inputs.PrimaryAttack)
                 {
                     _obsidianCurrentCooldown = _obsidianCooldown;
-                    anim.SetBool("IsAttacking", false);
+                    //anim.SetBool("IsAttacking", false);
                     yield break;
                 }
 
@@ -671,7 +672,7 @@ public class PlayerController : Entity
                 break;
             }
         }
-        anim.SetBool("IsAttacking", false);
+        //anim.SetBool("IsAttacking", false);
         _obsidianCurrentCooldown = _obsidianCooldown;
     }
 
@@ -737,8 +738,8 @@ public class PlayerController : Entity
 
         _damageCurrentCooldown = _damageCooldown;
 
-        anim.SetBool("IsHit", true);
-        anim.SetBool("IsHit", false);
+        //anim.SetBool("IsHit", true);
+        //anim.SetBool("IsHit", false);
 
         base.TakeDamage(amount);
         
@@ -773,13 +774,13 @@ public class PlayerController : Entity
 
     public void StopCast()
     {
-        anim.SetBool("IsAttacking",false);
+        //anim.SetBool("IsAttacking",false);
         _inputs.PrimaryAttack = false;
     }
 
     public void RunningAnimation(bool play)
     {
-        anim.SetBool("IsRunning", play);
+        //anim.SetBool("IsRunning", play);
     }
 
     private void OnTriggerEnter(Collider other)
