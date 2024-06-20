@@ -415,7 +415,7 @@ public class Itztlacoliuhqui : Boss
 
         shield.OnExit += x =>
         {
-            //_anim.SetBool("IsBoxAttack", false);
+            _anim.SetBool("IsBoxAttack", false);
         };
 
         hide.OnEnter += x =>
