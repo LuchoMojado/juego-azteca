@@ -63,12 +63,16 @@ public class SpecialSupernova : SpecialMagic
                 if (item.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeDamage(_damage);
+
+                    if (item != null) ignore.Add(item);
                 }
                 else
                 {
                     damageable = item.GetComponentInParent<IDamageable>();
 
                     if (damageable != null) damageable.TakeDamage(_damage);
+
+                    if (item != null) ignore.Add(item);
                 }
             }
 

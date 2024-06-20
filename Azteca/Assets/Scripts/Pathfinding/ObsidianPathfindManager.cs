@@ -26,8 +26,6 @@ public class ObsidianPathfindManager : MonoBehaviour
 
         instance = this;
 
-        Debug.Log(Mathf.FloorToInt(-0.5f));
-
         GenerateNodeGrid();
 
         foreach (var item in allNodes)

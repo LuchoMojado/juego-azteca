@@ -33,7 +33,7 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] float _aggroRange;
     [SerializeField] Transform _eyePos;
     [SerializeField] GameObject _edgeBlock;
-    [SerializeField] Actions _creationAttacks, _attacks;
+    [SerializeField] Actions[] _creationAttacks, _attacks;
 
     [Header("Walls")]
     [SerializeField] ObsidianWall _wallPrefab;
@@ -87,7 +87,7 @@ public class Itztlacoliuhqui : Boss
 
     [Header("Leap")]
     [SerializeField] float _leapHeight;
-    [SerializeField] float _leapShardAmount, _leapStrength, _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
+    [SerializeField] float _leapShardAmount, _leapLandingDamageRadius, _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
 
     ObsidianWall _wallBlockingLOS;
 
@@ -396,7 +396,7 @@ public class Itztlacoliuhqui : Boss
 
         breakWall.OnUpdate += () =>
         {
-            _anim.SetBool("IsShooting", false);
+            //_anim.SetBool("IsShooting", false);
             if (!_takingAction) _treeStart.Execute();
         };
 
@@ -415,7 +415,7 @@ public class Itztlacoliuhqui : Boss
 
         shield.OnExit += x =>
         {
-            _anim.SetBool("IsBoxAttack", false);
+            //_anim.SetBool("IsBoxAttack", false);
         };
 
         hide.OnEnter += x =>
@@ -492,7 +492,7 @@ public class Itztlacoliuhqui : Boss
         charge.OnEnter += x =>
         {
             Debug.Log("Start charge");
-            _anim.SetBool("IsDashing", true);
+            //_anim.SetBool("IsDashing", true);
             _takingAction = true;
             StartCoroutine(Charging());
         };
@@ -504,7 +504,7 @@ public class Itztlacoliuhqui : Boss
 
         charge.OnExit += x =>
         {
-            _anim.SetBool("IsDashing", false);
+            //_anim.SetBool("IsDashing", false);
         };
 
         leap.OnEnter += x =>
@@ -532,19 +532,23 @@ public class Itztlacoliuhqui : Boss
 
         var searchNode = new ActionNode(Search);
         var spikesNode = new ActionNode(Spikes);
-        var swingNode = new ActionNode(Swing);
+        //var swingNode = new ActionNode(Swing);
         var breakWallNode = new ActionNode(BreakWall);
         var shieldNode = new ActionNode(Shield);
         var hideNode = new ActionNode(Hide);
-        var wallSpikeNode = new ActionNode(WallSpike);
-        var gatlingNode = new ActionNode(Gatling);
-        var chargeNode = new ActionNode(Charge);
+        //var wallSpikeNode = new ActionNode(WallSpike);
+        //var gatlingNode = new ActionNode(Gatling);
+        //var chargeNode = new ActionNode(Charge);
+        var creationAttacks = new ActionNode(WallCreationAttacks);
+        var attacks = new ActionNode(Attacks);
         var arenaSpikesNode = new ActionNode(ArenaSpikes);
 
-        var unbrokenWallClose = new QuestionNode(hideNode, shieldNode, IsUnbrokenWallClose);
-        var wallCloseToPlayer = new QuestionNode(gatlingNode, wallSpikeNode, IsWallCloseToPlayer);
-        var defend = new QuestionNode(unbrokenWallClose, wallCloseToPlayer, ShouldDefend);
-        var playerSunning = new QuestionNode(defend, chargeNode, IsPlayerUsingSun);
+        //var wallCloseToPlayer = new QuestionNode(gatlingNode, wallSpikeNode, IsWallCloseToPlayer);
+        var spawnWall = new QuestionNode(creationAttacks, attacks, ShouldSpawnWalls);
+        var anyWallClose = new QuestionNode(spawnWall, shieldNode, IsAnyWallClose);
+        var unbrokenWallClose = new QuestionNode(hideNode, anyWallClose, IsUnbrokenWallClose);
+        var defend = new QuestionNode(unbrokenWallClose, spawnWall, ShouldDefend);
+        var playerSunning = new QuestionNode(defend, spawnWall, IsPlayerUsingSun);
         var playerInWallLOS = new QuestionNode(breakWallNode, searchNode, BreakableWallInPlayerLOS);
         var playerClose = new QuestionNode(spikesNode, playerSunning, IsPlayerClose);
         var breakWallInLOS = new QuestionNode(playerInWallLOS, searchNode, CanBreakWallBlockingLOS);
@@ -578,7 +582,8 @@ public class Itztlacoliuhqui : Boss
 
     #region Decision Tree Methods
 
-
+    void WallCreationAttacks() => _fsm.SendInput(_creationAttacks[Random.Range(0, _creationAttacks.Length)]);
+    void Attacks() => _fsm.SendInput(_attacks[Random.Range(0, _creationAttacks.Length)]);
 
     void Search() => _fsm.SendInput(Actions.Search);
     void Spikes() => _fsm.SendInput(Actions.Spikes);
@@ -657,6 +662,10 @@ public class Itztlacoliuhqui : Boss
             _wallBlockingLOS = null;
             return true;
         }
+    }
+    bool ShouldSpawnWalls()
+    {
+        return Random.Range(0, 100) > _spawnedWalls.Count * _spawnedWalls.Count;
     }
 
     #endregion
@@ -761,6 +770,7 @@ public class Itztlacoliuhqui : Boss
         _spawnedWalls.Add(wall);
         wall.boss = this;
         prenderTornado(false);
+        _anim.SetBool("IsBoxAttack", false);
         yield return new WaitForSeconds(_shieldRecovery);
 
         LookAtPlayer = false;
@@ -892,6 +902,7 @@ public class Itztlacoliuhqui : Boss
         ChangeAudio(dash);
         LookAtPlayer = false;
         FixRotation(true);
+        _anim.SetBool("IsDashing", true);
 
         _currentSpeed = _chargeSpeed;
         _move = true;
@@ -929,7 +940,7 @@ public class Itztlacoliuhqui : Boss
 
             yield return null;
         }
-
+        _anim.SetBool("IsDashing", false);
         prenderCaidaPiedras(false);
         //espero
         yield return new WaitForSeconds(_chargeRecovery);
