@@ -115,6 +115,8 @@ MonoBehaviour:
   jump: {fileID: 8300000, guid: 99c65f497eb45424cb8358229530576a, type: 3}
   damage: {fileID: 8300000, guid: 50989b7f5f9a38d40993abcd2a6a6656, type: 3}
   chargingSun: {fileID: 8300000, guid: 08ddd45cc91b2b042b5fbaa55d1539a3, type: 3}
+  _stepParticles: {fileID: 0}
+  _jumpParticles: {fileID: 0}
 --- !u!114 &629325897749523065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,8 +320,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2754890316402762798}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.016614413, y: 0.011745511, z: 0.00019518504, w: -0.99979293}
-  m_LocalPosition: {x: 0.7719851, y: 0.7350006, z: -1.1183661}
+  m_LocalRotation: {x: 0.01661347, y: 0.011852637, z: 0.00019695424, w: -0.99979174}
+  m_LocalPosition: {x: 0.77284783, y: 0.7350006, z: -1.1185691}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
