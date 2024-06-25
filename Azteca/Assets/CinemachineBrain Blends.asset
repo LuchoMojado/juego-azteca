@@ -38,7 +38,7 @@ MonoBehaviour:
   - m_From: Virtual Camera (3)
     m_To: FreeLook Camera
     m_Blend:
-      m_Style: 4
+      m_Style: 6
       m_Time: 1
       m_CustomCurve:
         serializedVersion: 2
