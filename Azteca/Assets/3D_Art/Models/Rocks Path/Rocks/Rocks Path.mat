@@ -67,7 +67,7 @@ Material:
     - _Depth_Fade: 0
     - _Edge_1: 0.99999
     - _Edge_2: 1
-    - _Normal_Map_Strength: 0.5
+    - _Normal_Map_Strength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:

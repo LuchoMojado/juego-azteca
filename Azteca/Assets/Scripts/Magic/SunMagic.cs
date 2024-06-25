@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class SunMagic : PlayerProjectile
 {
-    [SerializeField] ParticleSystem _chargingParticles, _readyParticles, _destroyedParticles;
+    [SerializeField] ParticleSystem _chargingParticles, _readyParticles, _destroyedParticles, _baseParticle, _fireParticle, _trailParticle, _destroyedSparksParticles;
 
     [HideInInspector] public PlayerController player;
 
     [SerializeField] Light _light;
 
-    [SerializeField] float _lightRangeMultiplier;
+    [SerializeField] float _lightRangeMultiplier, _growRate;
 
     bool _charging = true, _shot = false, _dead = false;
 
@@ -18,8 +18,10 @@ public class SunMagic : PlayerProjectile
     {
         if (_charging)
         {
-            transform.localScale += Vector3.one * Time.deltaTime * 0.2f;
+            _baseParticle.gameObject.transform.localScale += Vector3.one * Time.deltaTime * _growRate;
+            _fireParticle.gameObject.transform.localScale += Vector3.one * Time.deltaTime * _growRate;
             _light.range += Time.deltaTime * _lightRangeMultiplier;
+            
         }
         else if (_shot && !_dead)
         {
@@ -72,6 +74,8 @@ public class SunMagic : PlayerProjectile
     public void Shoot()
     {
         _chargingParticles.Stop();
+        _fireParticle.Stop();
+        _trailParticle.Play();
         _charging = false;
         _shot = true;
     }
@@ -105,6 +109,7 @@ public class SunMagic : PlayerProjectile
     {
         _dead = true;
         _destroyedParticles.Play();
+        _destroyedSparksParticles.Play();
         GetComponentInChildren<Renderer>().enabled = false;
 
         yield return new WaitForSeconds(1);

@@ -27,6 +27,7 @@ public class PlayerController : Entity
 
     [Header("Sun Magic")]
     [SerializeField] SunMagic _sunMagic;
+    [SerializeField] Transform _sunSpawnPoint;
     [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunMaxChargeTime, _sunCastDelay, _sunRecovery, _sunCooldown, _sunAbsorbTime, _sunMeleeDuration,_sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
@@ -303,7 +304,7 @@ public class PlayerController : Entity
         ChangeAudio(chargingSun);
         anim.SetTrigger("chargeSun");
 
-        var sun = Instantiate(_sunMagic, transform.position + transform.forward * 1f + transform.up * 0.6f, transform.rotation, transform);
+        var sun = Instantiate(_sunMagic, _sunSpawnPoint);
         sun.player = this;
         sun.damage = _sunBaseDamage;
 
@@ -517,14 +518,14 @@ public class PlayerController : Entity
 
         yield return new WaitForSeconds(_sunCastDelay);
 
-        ControlFullScreen.instance.ChangeDemond(true);
+        //ControlFullScreen.instance.ChangeDemond(true);
 
         _movement.Cast(true);
         ChangeAudio(chargingSun);
 
         do
         {
-            var sun = Instantiate(_sunMagic, transform.position + transform.forward * 1f + transform.up * 0.6f, transform.rotation, transform);
+            var sun = Instantiate(_sunMagic, _sunSpawnPoint.position, Quaternion.identity, _sunSpawnPoint);
             sun.player = this;
             sun.damage = _sunBaseDamage;
 
@@ -554,7 +555,7 @@ public class PlayerController : Entity
             {
                 sun.transform.SetParent(null);
                 sun.StartCoroutine(sun.Death());
-                ControlFullScreen.instance.ChangeDemond(false);
+                //ControlFullScreen.instance.ChangeDemond(false);
             }
             else
             {
@@ -585,7 +586,7 @@ public class PlayerController : Entity
                 sun.speed = _sunSpeed;
                 sun.Shoot();
 
-                ControlFullScreen.instance.ChangeDemond(false);
+                //ControlFullScreen.instance.ChangeDemond(false);
 
                 timer = 0;
 
