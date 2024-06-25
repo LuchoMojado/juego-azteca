@@ -952,7 +952,7 @@ public class Itztlacoliuhqui : Boss
 
     IEnumerator ArenaSpiking()
     {
-
+        yield return null;
     }
 
     IEnumerator Leaping()
