@@ -950,6 +950,11 @@ public class Itztlacoliuhqui : Boss
         _takingAction = false;
     }
 
+    IEnumerator ArenaSpiking()
+    {
+
+    }
+
     IEnumerator Leaping()
     {
         LookAtPlayer = true;
