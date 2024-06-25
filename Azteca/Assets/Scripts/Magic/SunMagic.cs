@@ -116,4 +116,15 @@ public class SunMagic : PlayerProjectile
 
         Die();
     }
+
+    public IEnumerator Cancel()
+    {
+        _dead = true;
+        //play particles
+        GetComponentInChildren<Renderer>().enabled = false;
+
+        yield return new WaitForSeconds(1);
+
+        Die();
+    }
 }
