@@ -82,13 +82,17 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] Vector3 _chargeBoxSize;
     [SerializeField] float _chargeSpeed, _chargeHitRange, _chargeDamage, _chargeKnockback, _chargePreparation, _chargeRecovery;
 
-    [SerializeField] PlayerController _player;
-    [SerializeField] LayerMask _playerLayer, _magicLayer;
+    [Header("Arena Spikes")]
+    [SerializeField] GameObject _arenaSpikePrefab;
+    [SerializeField] float _arenaSpikeInterval, _arenaSpikeDamage, _arenaSpikesPreparation, _arenaSpikesRecovery;
 
     [Header("Leap")]
     [SerializeField] float _leapHeight;
     [SerializeField] float _leapShardAmount, _leapLandingDamageRadius, _leapKnockback, _leapDamage, _leapPreparation, _leapDuration, _leapRecovery;
 
+    [SerializeField] PlayerController _player;
+    [SerializeField] LayerMask _playerLayer, _magicLayer;
+    
     ObsidianWall _wallBlockingLOS;
 
     ObsidianPathfindManager _pfManager { get => ObsidianPathfindManager.instance; }
@@ -507,6 +511,17 @@ public class Itztlacoliuhqui : Boss
             //_anim.SetBool("IsDashing", false);
         };
 
+        arenaSpikes.OnEnter += x =>
+        {
+            _takingAction = true;
+            StartCoroutine(ArenaSpiking());
+        };
+
+        arenaSpikes.OnUpdate += () =>
+        {
+            if (!_takingAction) _treeStart.Execute();
+        };
+
         leap.OnEnter += x =>
         {
             //_anim.SetBool("IsStomp", true);
@@ -526,7 +541,7 @@ public class Itztlacoliuhqui : Boss
 
         #endregion
 
-        _fsm = new EventFSM<Actions>(inactive);
+        _fsm = new EventFSM<Actions>(arenaSpikes);
 
         #region Decision Tree Setup
 
@@ -952,7 +967,30 @@ public class Itztlacoliuhqui : Boss
 
     IEnumerator ArenaSpiking()
     {
-        yield return null;
+        //animacion de golpear el piso
+
+        yield return new WaitForSeconds(_arenaSpikesPreparation);
+
+        var nodeList = _pfManager.allNodes.Where(x => !x.isBlocked).OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).SkipWhile(x => Vector3.Distance(x.transform.position, transform.position) < 3);
+
+        //int counter = 0;
+        //
+        //while (nodeList.Any())
+        //{
+        //
+        //}
+
+        foreach (var node in nodeList)
+        {
+            var spike = Instantiate(_arenaSpikePrefab, node.transform.position, Quaternion.Euler(new Vector3(-90, Random.Range(0f, 360f))));
+            spike.transform.localScale *= 5;
+
+            yield return new WaitForSeconds(_arenaSpikeInterval);
+        }
+
+        yield return new WaitForSeconds(_arenaSpikesRecovery);
+
+        _takingAction = false;
     }
 
     IEnumerator Leaping()

@@ -554,7 +554,7 @@ public class PlayerController : Entity
             if (_stopSun || !_inputs.SecondaryAttack)
             {
                 sun.transform.SetParent(null);
-                sun.StartCoroutine(sun.Death());
+                sun.StartCoroutine(sun.Cancel());
                 //ControlFullScreen.instance.ChangeDemond(false);
             }
             else
