@@ -84,7 +84,7 @@ public class Itztlacoliuhqui : Boss
 
     [Header("Arena Spikes")]
     [SerializeField] GameObject _arenaSpikePrefab;
-    [SerializeField] float _arenaSpikeInterval, _arenaSpikeDamage, _arenaSpikesPreparation, _arenaSpikesRecovery;
+    [SerializeField] float _arenaSpikeInterval, _arenaSpikeDamage, _arenaSpikesPreparation, _arenaSpikeLinger, _arenaSpikesRecovery;
 
     [Header("Leap")]
     [SerializeField] float _leapHeight;
@@ -971,21 +971,48 @@ public class Itztlacoliuhqui : Boss
 
         yield return new WaitForSeconds(_arenaSpikesPreparation);
 
-        var nodeList = _pfManager.allNodes.Where(x => !x.isBlocked).OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).SkipWhile(x => Vector3.Distance(x.transform.position, transform.position) < 3);
+        var nodeList = _pfManager.allNodes.Where(x => !x.isBlocked).OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).SkipWhile(x => Vector3.Distance(x.transform.position, transform.position) < 3).ToList();
 
-        //int counter = 0;
-        //
-        //while (nodeList.Any())
-        //{
-        //
-        //}
+        int distMultiplier = 0;
+        bool hit = false;
 
-        foreach (var node in nodeList)
+        List<GameObject> spawnedSpikes = new();
+        
+        while (nodeList.Any())
         {
-            var spike = Instantiate(_arenaSpikePrefab, node.transform.position, Quaternion.Euler(new Vector3(-90, Random.Range(0f, 360f))));
-            spike.transform.localScale *= 5;
+            distMultiplier++;
 
-            yield return new WaitForSeconds(_arenaSpikeInterval);
+            var spawnAt = nodeList.TakeWhile(x => Vector3.Distance(x.transform.position, transform.position) < distMultiplier * _pfManager.neighborDistance + _pfManager.neighborDistance * 0.4f);
+
+            if (spawnAt.Any())
+            {
+                foreach (var item in spawnAt)
+                {
+                    Vector3 pos = item.transform.position + new Vector3(Random.Range(-0.1f, 0.1f), 0, Random.Range(-0.1f, 0.1f));
+
+                    var spike = Instantiate(_arenaSpikePrefab, pos, Quaternion.Euler(new Vector3(-90, Random.Range(0f, 360f))));
+                    spike.transform.localScale *= 5;
+                    spawnedSpikes.Add(spike);
+
+                    if (!hit && Physics.CheckCapsule(pos, pos + Vector3.up * 5, _pfManager.neighborDistance * 0.45f, _playerLayer))
+                    {
+                        _player.KnockBack(_player.transform.position - pos, _wallSpikeKnockback);
+                        _player.TakeDamage(_arenaSpikeDamage);
+                        hit = true;
+                    }
+                }
+
+                nodeList.RemoveRange(0, spawnAt.Count());
+
+                yield return new WaitForSeconds(_arenaSpikeInterval);
+            }
+        }
+
+        yield return new WaitForSeconds(_arenaSpikeLinger);
+
+        foreach (var item in spawnedSpikes)
+        {
+            Destroy(item);
         }
 
         yield return new WaitForSeconds(_arenaSpikesRecovery);
