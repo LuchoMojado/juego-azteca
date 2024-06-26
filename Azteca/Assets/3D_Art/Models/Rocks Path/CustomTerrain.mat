@@ -84,11 +84,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _Contrast: -0.55
-    - _Dirt_Brightness: 2.18
-    - _Edge_1: 1
-    - _Edge_2: -0.32
-    - _Grass_Brightness: 2.11
-    - _Noise_Tiling: 0.43
+    - _Dirt_Brightness: 2
+    - _Dirt_Hue: 10
+    - _Edge_1: 0.64
+    - _Edge_2: -1.05
+    - _Grass_Brightness: 2.2
+    - _Grass_Hue: 0
+    - _Noise_Tiling: 2892
+    - _Noise_Tiling_2: 1330.91
     - _Normal_Noise_Scale: 15
     - _Normal_Noise_Strength: 0.2
     - _Normal_Strength: 1

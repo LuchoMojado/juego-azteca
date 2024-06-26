@@ -83,10 +83,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AO: 0.2
+    - _AO: 0
     - _Alpha_Clip_Threshold: 0.5
     - _Brightness: 1
-    - _Hue: 0
+    - _Hue: 5
     - _Normal_Strength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -96,7 +96,7 @@ Material:
     - _Top_Movement: 23.7
     - _Top_Movements: 5
     - _Var_Brightness: 0.04
-    - _Variation_Scale: 0.3
+    - _Variation_Scale: 0.5
     - _Wind_Intensity: 358.89
     - _Wind_Scale_1: 15
     - _Wind_Scale_2: 2
