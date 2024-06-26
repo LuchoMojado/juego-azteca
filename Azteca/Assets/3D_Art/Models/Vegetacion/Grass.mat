@@ -93,6 +93,7 @@ Material:
     - _SSS: 0
     - _Saturation: 1
     - _Smoothness_1: 0.5
+    - _Smoothness_Value: 0.5
     - _Top_Movement: 23.7
     - _Top_Movements: 5
     - _Var_Brightness: 0.04
