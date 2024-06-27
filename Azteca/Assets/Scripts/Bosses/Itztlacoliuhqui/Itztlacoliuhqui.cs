@@ -84,6 +84,7 @@ public class Itztlacoliuhqui : Boss
 
     [Header("Arena Spikes")]
     [SerializeField] GameObject _arenaSpikePrefab;
+    [SerializeField] int _attacksToProcArenaSpikes;
     [SerializeField] float _arenaSpikeInterval, _arenaSpikeDamage, _arenaSpikesPreparation, _arenaSpikeLinger, _arenaSpikesRecovery;
 
     [Header("Leap")]
@@ -100,6 +101,7 @@ public class Itztlacoliuhqui : Boss
     bool _takingAction = false, _lookAtPlayer = false, _move = false, _start = false;
 
     float _timer = 0, _currentSpeed = 0;
+    int _attackCounter;
 
     //[SerializeField] Animator anim;
 
@@ -374,6 +376,7 @@ public class Itztlacoliuhqui : Boss
 
         spikes.OnEnter += x =>
         {
+            _attackCounter++;
             Debug.Log("Start spikes");
             _takingAction = true;
             _anim.SetBool("IsStomp", true);
@@ -392,6 +395,7 @@ public class Itztlacoliuhqui : Boss
 
         breakWall.OnEnter += x =>
         {
+            _attackCounter++;
             Debug.Log("Start break wall");
             _anim.SetBool("IsShooting", true);
             _takingAction = true;
@@ -459,6 +463,7 @@ public class Itztlacoliuhqui : Boss
 
         wallSpike.OnEnter += x =>
         {
+            _attackCounter++;
             _anim.SetBool("IsBoxAttack", true);
             Debug.Log("Start wall spike");
             _takingAction = true;
@@ -477,6 +482,7 @@ public class Itztlacoliuhqui : Boss
 
         gatling.OnEnter += x =>
         {
+            _attackCounter++;
             Debug.Log("Start gatling");
             _anim.SetBool("IsBoxAttack", true);
             _takingAction = true;
@@ -495,6 +501,7 @@ public class Itztlacoliuhqui : Boss
 
         charge.OnEnter += x =>
         {
+            _attackCounter++;
             Debug.Log("Start charge");
             //_anim.SetBool("IsDashing", true);
             _takingAction = true;
@@ -513,6 +520,7 @@ public class Itztlacoliuhqui : Boss
 
         arenaSpikes.OnEnter += x =>
         {
+            _attackCounter = 0;
             _takingAction = true;
             StartCoroutine(ArenaSpiking());
         };
@@ -524,6 +532,7 @@ public class Itztlacoliuhqui : Boss
 
         leap.OnEnter += x =>
         {
+            _attackCounter++;
             //_anim.SetBool("IsStomp", true);
             _takingAction = true;
             StartCoroutine(Leaping());
@@ -541,7 +550,7 @@ public class Itztlacoliuhqui : Boss
 
         #endregion
 
-        _fsm = new EventFSM<Actions>(arenaSpikes);
+        _fsm = new EventFSM<Actions>(inactive);
 
         #region Decision Tree Setup
 
@@ -567,7 +576,8 @@ public class Itztlacoliuhqui : Boss
         var playerInWallLOS = new QuestionNode(breakWallNode, searchNode, BreakableWallInPlayerLOS);
         var playerClose = new QuestionNode(spikesNode, playerSunning, IsPlayerClose);
         var breakWallInLOS = new QuestionNode(playerInWallLOS, searchNode, CanBreakWallBlockingLOS);
-        _treeStart = new QuestionNode(playerClose, breakWallInLOS, IsPlayerInLOS);
+        var playerInLOS = new QuestionNode(playerClose, breakWallInLOS, IsPlayerInLOS);
+        _treeStart = new QuestionNode(arenaSpikesNode, playerInLOS, ShouldUseUltimate);
 
         #endregion
     }
@@ -612,6 +622,10 @@ public class Itztlacoliuhqui : Boss
     void ArenaSpikes() => _fsm.SendInput(Actions.ArenaSpikes);
     void Leap() => _fsm.SendInput(Actions.Leap);
 
+    bool ShouldUseUltimate()
+    {
+        return _attackCounter >= _attacksToProcArenaSpikes;
+    }
     bool IsAnyWallClose()
     {
         foreach (var item in _spawnedWalls)
@@ -811,7 +825,7 @@ public class Itztlacoliuhqui : Boss
 
         do
         {
-            miniWallList.Add(Instantiate(_miniWall, nextSpawnPos, Quaternion.identity));
+            miniWallList.Add(Instantiate(_miniWall, nextSpawnPos, Quaternion.Euler(-90, 0, 0)));
             nextSpawnPos += movement;
 
             yield return new WaitForSeconds(_miniWallInterval);
