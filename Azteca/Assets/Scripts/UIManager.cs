@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider _hpBar, _staminaBar, _bossHpBar;
     [SerializeField] Button _joystick;
     [SerializeField] Image _paused;
+    [SerializeField] Image[] _specials = new Image[2];
+    [SerializeField] Image[] _specialsCooldowns = new Image[2];
     [SerializeField] GameObject _crosshair;
 
     public GameObject textoFinal;
@@ -63,6 +65,17 @@ public class UIManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void UpdateSpecialIcon(int number, Sprite icon)
+    {
+        _specials[number].sprite = icon;
+        _specialsCooldowns[number].sprite = icon;
+    }
+
+    public void UpdateSpecialCooldown(int number, float value)
+    {
+        _specialsCooldowns[number].fillAmount = value;
     }
 
     public void ToggleCrosshair(bool turnOn)

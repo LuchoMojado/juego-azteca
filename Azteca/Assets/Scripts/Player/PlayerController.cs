@@ -184,6 +184,19 @@ public class PlayerController : Entity
     public void ChangeActiveMagic(MagicType type)
     {
         _activeMagic = type;
+        switch (type)
+        {
+            case MagicType.Sun:
+                _specials.EquipSpecial(SpecialsManager.Specials.Sunstrike, 0);
+                _specials.EquipSpecial(SpecialsManager.Specials.Supernova, 1);
+                break;
+            case MagicType.Obsidian:
+                _specials.EquipSpecial(SpecialsManager.Specials.ObsidianTrap, 0);
+                _specials.EquipSpecial(SpecialsManager.Specials.RockToss, 1);
+                break;
+            default:
+                break;
+        }
     }
 
     public void ActivateMagic()

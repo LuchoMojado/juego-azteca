@@ -11,24 +11,27 @@ public class SpecialsManager : MonoBehaviour
         ObsidianTrap,
         RockToss
     }
-
-    Dictionary<Specials, SpecialMagic> _allSpecials = new();
+    Dictionary<Specials, (SpecialMagic, Sprite)> _allSpecials = new();
     SpecialMagic[] _equippedSpecials = new SpecialMagic[2];
 
     [Header("Sunstrike")]
+    [SerializeField] Sprite _sunstrikeIcon;
     [SerializeField] GameObject _sunstrikeFirstRay;
     [SerializeField] GameObject _sunstrikeSecondRay;
     [SerializeField] float _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown;
 
     [Header("Supernova")]
+    [SerializeField] Sprite _supernovaIcon;
     [SerializeField] GameObject _supernova;
     [SerializeField] float _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaDuration, _supernovaRecovery, _supernovaCooldown;
 
     [Header("Obsidian Trap")]
+    [SerializeField] Sprite _obsidianTrapIcon;
     [SerializeField] ObsidianTrap _obsidianTrap;
     [SerializeField] float _obsidianTrapCost, _obsidianTrapShardDamage, _obsidianTrapShardSpeed, _obsidianTrapPreparation, _obsidianTrapRecovery, _obsidianTrapCooldown;
 
     [Header("Rock Toss")]
+    [SerializeField] Sprite _rockTossIcon;
     [SerializeField] Rock _rock;
     [SerializeField] Transform _rockTossPos;
     [SerializeField] float _rockTossCost, _rockTossDamage, _rockTossStrength, _rockTossAngle, _rockTossPreparation, _rockTossRecovery, _rockTossCooldown;
@@ -37,52 +40,64 @@ public class SpecialsManager : MonoBehaviour
     Inputs _inputs;
 
     float[] _slotsCooldowns = new float[2];
+    float[] _slotsCurrentCooldowns = new float[2];
 
     private void Start()
     {
         _player = GetComponent<PlayerController>();
         _inputs = _player.Inputs;
 
-        _allSpecials.Add(Specials.Sunstrike, new SpecialSunstrike(_player, _inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown));
-        _allSpecials.Add(Specials.Supernova, new SpecialSupernova(_player, _inputs, _supernova, _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaDuration, _supernovaRecovery, _supernovaCooldown));
-        _allSpecials.Add(Specials.ObsidianTrap, new SpecialObsidianTrap(_player, _inputs, _obsidianTrap, _obsidianTrapCost, _obsidianTrapShardDamage, _obsidianTrapShardSpeed, _obsidianTrapPreparation, _obsidianTrapRecovery, _obsidianTrapCooldown));
-        _allSpecials.Add(Specials.RockToss, new SpecialRockToss(_player, _inputs, _rock, _rockTossPos, _rockTossCost, _rockTossDamage, _rockTossStrength, _rockTossAngle, _rockTossPreparation, _rockTossRecovery, _rockTossCooldown));
+        var sunstrike = new SpecialSunstrike(_player, _inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown);
+        var supernova = new SpecialSupernova(_player, _inputs, _supernova, _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaDuration, _supernovaRecovery, _supernovaCooldown);
+        var obsTrap = new SpecialObsidianTrap(_player, _inputs, _obsidianTrap, _obsidianTrapCost, _obsidianTrapShardDamage, _obsidianTrapShardSpeed, _obsidianTrapPreparation, _obsidianTrapRecovery, _obsidianTrapCooldown);
+        var rockToss = new SpecialRockToss(_player, _inputs, _rock, _rockTossPos, _rockTossCost, _rockTossDamage, _rockTossStrength, _rockTossAngle, _rockTossPreparation, _rockTossRecovery, _rockTossCooldown);
 
-        EquipSpecial(Specials.ObsidianTrap, 1);
-        EquipSpecial(Specials.RockToss, 2);
+        _allSpecials.Add(Specials.Sunstrike, (sunstrike, _sunstrikeIcon));
+        _allSpecials.Add(Specials.Supernova, (supernova, _supernovaIcon));
+        _allSpecials.Add(Specials.ObsidianTrap, (obsTrap, _obsidianTrapIcon));
+        _allSpecials.Add(Specials.RockToss, (rockToss, _rockTossIcon));
+
+        EquipSpecial(Specials.Sunstrike, 0);
+        EquipSpecial(Specials.Supernova, 1);
     }
 
     private void Update()
     {
-        if (_slotsCooldowns[0] > 0)
+        if (_slotsCurrentCooldowns[0] > 0)
         {
-            _slotsCooldowns[0] -= Time.deltaTime;
+            Debug.Log("slot 0 cd updating");
+            _slotsCurrentCooldowns[0] -= Time.deltaTime;
+            UIManager.instance.UpdateSpecialCooldown(0, Mathf.InverseLerp(0, _slotsCooldowns[0], _slotsCurrentCooldowns[0]));
         }
-        if (_slotsCooldowns[1] > 0)
+        if (_slotsCurrentCooldowns[1] > 0)
         {
-            _slotsCooldowns[1] -= Time.deltaTime;
+            Debug.Log("slot 1 cd updating");
+            _slotsCurrentCooldowns[1] -= Time.deltaTime;
+            UIManager.instance.UpdateSpecialCooldown(1, Mathf.InverseLerp(0, _slotsCooldowns[1], _slotsCurrentCooldowns[1]));
         }
     }
 
     public float GetCost(int slot)
     {
-        return _equippedSpecials[slot - 1].staminaCost;
+        return _equippedSpecials[slot].staminaCost;
     }
 
     public bool IsOffCooldown(int slot)
     {
-        return _slotsCooldowns[slot - 1] <= 0;
+        return _slotsCurrentCooldowns[slot] <= 0;
     }
 
     public void ActivateSpecial(int slot)
     {
-        _slotsCooldowns[slot - 1] = _equippedSpecials[slot - 1].Activate();
+        _slotsCooldowns[slot] = _equippedSpecials[slot].Activate();
+        _slotsCurrentCooldowns[slot] = _slotsCooldowns[slot];
     }
 
     public void EquipSpecial(Specials special, int slot)
     {
-        if (slot <= 0 || slot > _equippedSpecials.Length) return;
+        if (slot < 0 || slot >= _equippedSpecials.Length) return;
 
-        _equippedSpecials[slot - 1] = _allSpecials[special];
+        _equippedSpecials[slot] = _allSpecials[special].Item1;
+        UIManager.instance.UpdateSpecialIcon(slot, _allSpecials[special].Item2);
     }
 }

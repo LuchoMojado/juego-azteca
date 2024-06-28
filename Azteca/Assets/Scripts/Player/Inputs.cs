@@ -159,12 +159,12 @@ public class Inputs
 
         if (Input.GetKeyDown(_kSpecial1))
         {
-            _player.UseSpecial(1);
+            _player.UseSpecial(0);
         }
 
         if (Input.GetKeyDown(_kSpecial2))
         {
-            _player.UseSpecial(2);
+            _player.UseSpecial(1);
         }
 
         //AimUnaim();
