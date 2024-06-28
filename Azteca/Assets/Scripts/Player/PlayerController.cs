@@ -33,8 +33,9 @@ public class PlayerController : Entity
 
     [Header("Obsidian Magic")]
     [SerializeField] PlayerProjectile _obsidianShard;
-    [SerializeField] float _obsidianDamage, _obsidianCastDelay, _obsidianComboInterval, _obsidianCooldown, _shardAngleOffset, _shardSpeed;
-    [SerializeField] int _shardsPerWave, _maxWaves;
+    [SerializeField] Transform _obsidianSpawnPoint;
+    [SerializeField] float _obsidianDamage, _obsidianAimDelay, _obsidianShotDelay, _obsidianComboInterval, _obsidianCooldown, _shardMaxAngleVariation, _shardSpeed, _shardDuration;
+    [SerializeField] int _obsidianShardAmount, _maxWaves;
 
     float _stepCurrentCooldown = 0, _obsidianCurrentCooldown = 0, _sunCurrentCooldown = 0, _damageCurrentCooldown = 0;
 
@@ -49,7 +50,7 @@ public class PlayerController : Entity
     public GameObject camaraFinal;
 
     public Renderer renderer;
-    private bool _joystickActive=true, _usingSun = false, _stopSun = false;
+    private bool _joystickActive=true, _aiming = false, _stopChannels = false;
 
     [SerializeField] Material _VignetteAmountClamps;
 
@@ -58,19 +59,19 @@ public class PlayerController : Entity
 
     SpecialsManager _specials;
 
-    public bool StopSun
+    public bool StopChannels
     {
         set
         {
-            _stopSun = value;
+            _stopChannels = value;
         }
     }
 
-    public bool UsingSun
+    public bool Aiming
     {
         get
         {
-            return _usingSun;
+            return _aiming;
         }
     }
 
@@ -79,6 +80,14 @@ public class PlayerController : Entity
         get
         {
             return _movement.IsGrounded();
+        }
+    }
+
+    public float DistToFloor
+    {
+        get
+        {
+            return _movement.DistanceToFloor();
         }
     }
 
@@ -164,31 +173,6 @@ public class PlayerController : Entity
         }
     }
 
-    /* Step viejo (desactiva inputs por su duracion)
-    public void Step(float horizontalInput, float verticalInput)
-    {
-        if (_movement.IsGrounded() && CheckAndReduceStamina(_stepCost))
-        {
-            StartCoroutine(Stepping(horizontalInput, verticalInput));
-        }
-    }
-
-    public IEnumerator Stepping(float horizontalInput, float verticalInput)
-    {
-        _inputs.inputUpdate = _inputs.Stepping;
-
-        _movement.Step(horizontalInput, verticalInput);
-
-        yield return new WaitForSeconds(0.02f);
-
-        while (_rb.velocity.magnitude > _stepStopVelocity)
-        {
-            yield return null;
-        }
-
-        _inputs.inputUpdate = _inputs.Unpaused;
-    }*/
-
     public void UseSpecial(int slot)
     {
         if (Grounded && _specials.IsOffCooldown(slot) && CheckAndReduceStamina(_specials.GetCost(slot)))
@@ -223,7 +207,7 @@ public class PlayerController : Entity
                 ActivateAimedSunMagic();
                 break;
             case MagicType.Obsidian:
-                ActivateObsidianMagic();
+                ActivateAimedObsidianMagic();
                 break;
         }
     }
@@ -232,7 +216,7 @@ public class PlayerController : Entity
     {
         if (_movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
         {
-            StartCoroutine(NewSunMagic());
+            //StartCoroutine(NewSunMagic());
         }
         else
         {
@@ -243,7 +227,7 @@ public class PlayerController : Entity
 
     void ActivateAimedSunMagic()
     {
-        if (!_usingSun && _movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
+        if (!_aiming && _movement.IsGrounded() && _sunCurrentCooldown <= 0 && CheckAndReduceStamina(_sunBaseCost))
         {
             StartCoroutine(AimedSunMagic());
         }
@@ -254,266 +238,11 @@ public class PlayerController : Entity
         }
     }
 
-    IEnumerator SunMagic()
-    {
-        //_inputs.inputUpdate = _inputs.MovingCast;
-        var damage = _sunBaseDamage;
-        _movement.Cast(true);
-
-        yield return new WaitForSeconds(_sunCastDelay);
-
-        _sunMagic.gameObject.SetActive(true);
-
-        while (_inputs.PrimaryAttack && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
-        {
-            var lookAt = Camera.main.transform.forward.MakeHorizontal();
-            transform.forward = lookAt;
-
-            if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
-            {
-                if (hit.collider.TryGetComponent(out Entity entity))
-                {
-                    entity.TakeDamage(damage * Time.deltaTime);
-                }
-            }
-
-            damage += _sunDamageGrowRate * Time.deltaTime;
-
-            yield return null;
-        }
-
-        _sunMagic.gameObject.SetActive(false);
-
-        yield return new WaitForSeconds(_sunRecovery);
-
-        _sunCurrentCooldown = _sunCooldown;
-        _inputs.PrimaryAttack = false;
-        _movement.Cast(false);
-    } // en desuso
-
-    IEnumerator NewSunMagic()
-    {
-        _usingSun = true;
-        //_inputs.inputUpdate = _inputs.MovingCast;
-
-        //anim.SetBool("IsAttacking", true);
-        ControlFullScreen.instance.ChangeDemond(true);
-        yield return new WaitForSeconds(_sunCastDelay);
-        
-        _movement.Cast(true);
-        ChangeAudio(chargingSun);
-        anim.SetTrigger("chargeSun");
-
-        var sun = Instantiate(_sunMagic, _sunSpawnPoint);
-        sun.player = this;
-        sun.damage = _sunBaseDamage;
-
-        float timer = 0;
-
-        if (_inputs.PrimaryAttack)
-        {
-            while (!_stopSun && _inputs.PrimaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
-            {
-                timer += Time.deltaTime;
-
-                /*var lookAt = Camera.main.transform.forward.MakeHorizontal();
-                transform.forward = lookAt;
-
-                if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
-                {
-                    if (hit.collider.TryGetComponent(out Entity entity))
-                    {
-                        entity.TakeDamage(damage * Time.deltaTime);
-                    }
-                }*/
-
-                sun.damage += _sunDamageGrowRate * Time.deltaTime;
-
-                yield return null;
-            }
-
-            if (timer >= _sunMaxChargeTime)
-            {
-                sun.ChargeFinished();
-            }
-
-            while (!_stopSun && _inputs.PrimaryAttack)
-            {
-                CheckAndReduceStamina(0);
-                yield return null;
-            }
-
-            if (_stopSun)
-            {
-                sun.transform.SetParent(null);
-                sun.StartCoroutine(sun.Death());
-                ControlFullScreen.instance.ChangeDemond(false);
-            }
-            else
-            {
-                _inputs.inputUpdate = _inputs.FixedCast;
-
-                var lookAt = Camera.main.transform.forward.MakeHorizontal();
-                transform.forward = lookAt;
-
-                //anim.SetBool("IsAttacking", true);
-
-                yield return new WaitForSeconds(_sunCastDelay);
-
-                _inputs.inputUpdate = _inputs.Unpaused;
-                sun.transform.SetParent(null);
-                sun.speed = _sunSpeed;
-                _rb.AddForce(-transform.forward * 75 * timer);
-                sun.Shoot();
-                ControlFullScreen.instance.ChangeDemond(false);
-                yield return new WaitForSeconds(_sunRecovery);
-            }
-        }
-        else
-        {
-            if (_stopSun)
-            {
-                sun.transform.SetParent(null);
-                sun.StartCoroutine(sun.Death());
-                ControlFullScreen.instance.ChangeDemond(false);
-            }
-            else
-            {
-                var lookAt = Camera.main.transform.forward.MakeHorizontal();
-                transform.forward = lookAt;
-
-                _inputs.inputUpdate = _inputs.Unpaused;
-                sun.transform.SetParent(null);
-                sun.speed = _sunSpeed;
-                _rb.AddForce(-transform.forward * 75 * timer);
-                sun.Shoot();
-                ControlFullScreen.instance.ChangeDemond(false);
-                yield return new WaitForSeconds(_sunRecovery);
-            }
-        }
-
-        _stopSun = false;
-        _usingSun = false;
-        //anim.SetBool("IsAttacking", false);
-        _sunCurrentCooldown = _sunCooldown;
-        _movement.Cast(false);
-    } // en desuso
-
-    IEnumerator NewerSunMagic()
-    {
-        _usingSun = true;
-        //_inputs.inputUpdate = _inputs.MovingCast;
-
-        //anim.SetBool("IsAttacking", true);
-        
-        yield return new WaitForSeconds(_sunCastDelay);
-        _movement.Cast(true);
-        ChangeAudio(chargingSun);
-        //anim.SetBool("IsAttacking", false);
-        _inputs.PrimaryAttack = false;
-        _inputs.SecondaryAttack = false;
-
-        var sun = Instantiate(_sunMagic, transform.position + transform.forward * 0.75f + transform.up * 0.6f, transform.rotation, transform);
-        sun.player = this;
-        sun.damage = _sunBaseDamage;
-
-        float timer = 0;
-
-        while (_damageCurrentCooldown <= 0 && !_inputs.PrimaryAttack && !_inputs.SecondaryAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
-        {
-            timer += Time.deltaTime;
-
-            sun.damage += _sunDamageGrowRate * Time.deltaTime;
-
-            yield return null;
-        }
-
-        if (timer >= _sunMaxChargeTime || !CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
-        {
-            sun.ChargeFinished();
-        }
-
-        while (!_inputs.PrimaryAttack && !_inputs.SecondaryAttack)
-        {
-            if (_damageCurrentCooldown > 0)
-            {
-                sun.StartCoroutine(sun.Death());
-                _usingSun = false;
-                _sunCurrentCooldown = _sunCooldown;
-                _movement.Cast(false);
-                yield break;
-            }
-
-            CheckAndReduceStamina(0);
-            yield return null;
-        }
-
-        var lookAt = Camera.main.transform.forward.MakeHorizontal();
-        transform.forward = lookAt;
-
-        _inputs.inputUpdate = _inputs.FixedCast;
-
-        if (_inputs.PrimaryAttack)
-        {
-            //anim.SetBool("IsAttacking", true);
-
-            yield return new WaitForSeconds(_sunCastDelay);
-
-            sun.transform.SetParent(null);
-            sun.speed = _sunSpeed;
-            _rb.AddForce(-transform.forward * 75 * timer);
-            sun.Shoot();
-        }
-        else if (_inputs.SecondaryAttack)
-        {
-            var hitDamage = sun.damage * 1.5f;
-            sun.Absorb(_sunAbsorbTime);
-
-            //podria ir una animacion de absorber y cuando termine pasar a la piña
-            //anim.SetBool("IsAttacking", true); //aca iria animacion de piña
-
-            yield return new WaitForSeconds(_sunAbsorbTime);
-
-            _rb.velocity = Vector3.zero;
-            _rb.AddForce(transform.forward * _stepStr);
-
-            float timer2 = 0;
-
-            while (_sunMeleeDuration > timer2)
-            {
-                timer2 += Time.deltaTime;
-
-                if (Physics.BoxCast(transform.position, _sunHitbox, transform.forward, out var hit, transform.rotation, _sunRange))
-                {
-                    if (hit.collider.gameObject.layer == 3)
-                    {
-                        currentBoss.KnockBack(transform.forward, 100 * timer);
-                        currentBoss.TakeDamage(hitDamage);
-                        _rb.velocity = Vector3.zero;
-                        break;
-                    }
-                }
-
-                yield return null;
-            }
-        }
-
-        _sunCurrentCooldown = _sunCooldown;
-
-        yield return new WaitForSeconds(_sunRecovery);
-
-        //anim.SetBool("IsAttacking", false);
-        _usingSun = false;
-        _inputs.PrimaryAttack = false;
-        _inputs.SecondaryAttack = false;
-        _movement.Cast(false);
-    } // en desuso
-
     IEnumerator AimedSunMagic()
     {
         _rb.angularVelocity = Vector3.zero;
         _inputs.ToggleAim(true);
-        _usingSun = true;
+        _aiming = true;
         _inputs.inputUpdate = _inputs.Aiming;
 
         yield return new WaitForSeconds(_sunCastDelay);
@@ -527,15 +256,15 @@ public class PlayerController : Entity
         {
             var sun = Instantiate(_sunMagic, _sunSpawnPoint.position, Quaternion.identity, _sunSpawnPoint);
             sun.player = this;
-            sun.damage = _sunBaseDamage;
+            sun.SetupStats(_sunBaseDamage);
 
             float timer = 0;
 
-            while (!_stopSun && _inputs.SecondaryAttack && !_inputs.launchAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
+            while (!_stopChannels && _inputs.SecondaryAttack && !_inputs.launchAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
             {
                 timer += Time.deltaTime;
 
-                sun.damage += _sunDamageGrowRate * Time.deltaTime;
+                sun.UpdateDamage(_sunDamageGrowRate * Time.deltaTime);
 
                 yield return null;
             }
@@ -545,13 +274,13 @@ public class PlayerController : Entity
                 sun.ChargeFinished();
             }
 
-            while (!_stopSun && _inputs.SecondaryAttack && !_inputs.launchAttack)
+            while (!_stopChannels && _inputs.SecondaryAttack && !_inputs.launchAttack)
             {
                 CheckAndReduceStamina(0);
                 yield return null;
             }
 
-            if (_stopSun || !_inputs.SecondaryAttack)
+            if (_stopChannels || !_inputs.SecondaryAttack)
             {
                 sun.transform.SetParent(null);
                 sun.StartCoroutine(sun.Cancel());
@@ -583,8 +312,7 @@ public class PlayerController : Entity
                 }
 
                 sun.transform.forward = dir;
-                sun.speed = _sunSpeed;
-                sun.Shoot();
+                sun.Shoot(_sunSpeed);
 
                 //ControlFullScreen.instance.ChangeDemond(false);
 
@@ -599,7 +327,7 @@ public class PlayerController : Entity
             }
 
             _inputs.launchAttack = false;
-        } while (!_stopSun && _inputs.SecondaryAttack && CheckAndReduceStamina(_sunBaseCost));
+        } while (!_stopChannels && _inputs.SecondaryAttack && CheckAndReduceStamina(_sunBaseCost));
 
         _movement.Cast(false);
         _inputs.ToggleAim(false);
@@ -608,8 +336,8 @@ public class PlayerController : Entity
         yield return new WaitForSeconds(0.25f);
 
         _inputs.SecondaryAttack = false;
-        _stopSun = false;
-        _usingSun = false;
+        _stopChannels = false;
+        _aiming = false;
         //_sunCurrentCooldown = _sunCooldown;
     }
 
@@ -617,7 +345,7 @@ public class PlayerController : Entity
     {
         if (Grounded && _obsidianCurrentCooldown <= 0 && CheckAndReduceStamina(_obsidianCost))
         {
-            StartCoroutine(ObsidianMagic());
+            StartCoroutine(UnaimedObsidianMagic());
         }
         else
         {
@@ -625,57 +353,106 @@ public class PlayerController : Entity
         }
     }
 
-    IEnumerator ObsidianMagic()
+    void ActivateAimedObsidianMagic()
     {
-        _inputs.inputUpdate = _inputs.FixedCast;
-        var lookAt = Camera.main.transform.forward.MakeHorizontal();
-        transform.forward = lookAt;
-        //anim.SetBool("IsAttacking", true);
-
-        yield return new WaitForSeconds(_obsidianCastDelay);
-
-        for (int i = _shardsPerWave; i < _shardsPerWave + _maxWaves; i++)
+        if (!_aiming && Grounded && _obsidianCurrentCooldown <= 0)
         {
-            var baseRotationChange = i % 2 == 0 ? _shardAngleOffset * 0.5f : 0;
+            StartCoroutine(AimedObsidianMagic());
+        }
+        else
+        {
+            _inputs.SecondaryAttack = false;
+        }
+    }
 
-            for (int j = 0; j < i; j++)
+    IEnumerator UnaimedObsidianMagic()
+    {
+        _rb.angularVelocity = Vector3.zero;
+        _aiming = true;
+
+        yield return new WaitForSeconds(_obsidianShotDelay);
+
+        for (int i = 0; i < _obsidianShardAmount; i++)
+        {
+            Vector3 dir = transform.forward;
+
+            var shard = Instantiate(_obsidianShard, _obsidianSpawnPoint.position, Quaternion.identity);
+            shard.transform.forward = dir;
+            shard.SetupStats(_obsidianDamage, _shardSpeed, _shardDuration);
+
+            var xRotation = shard.transform.rotation.eulerAngles.x + Mathf.Lerp(-_shardMaxAngleVariation, _shardMaxAngleVariation, Random.value);
+            var yRotation = shard.transform.rotation.eulerAngles.y + Mathf.Lerp(-_shardMaxAngleVariation, _shardMaxAngleVariation, Random.value);
+            shard.transform.rotation = Quaternion.Euler(xRotation, yRotation, shard.transform.rotation.eulerAngles.z);
+            shard.transform.localScale *= Random.Range(0.9f, 1.1f);
+        }
+
+        _obsidianCurrentCooldown = _obsidianCooldown;
+        _inputs.SecondaryAttack = false;
+        _stopChannels = false;
+        _aiming = false;
+    }
+
+    IEnumerator AimedObsidianMagic()
+    {
+        _rb.angularVelocity = Vector3.zero;
+        _inputs.ToggleAim(true);
+        _aiming = true;
+        _inputs.inputUpdate = _inputs.Aiming;
+
+        yield return new WaitForSeconds(_obsidianAimDelay);
+
+        _movement.Cast(true);
+
+        while (!_stopChannels && _inputs.SecondaryAttack)
+        {
+            if (_inputs.launchAttack && _obsidianCurrentCooldown <= 0 && CheckAndReduceStamina(_obsidianCost))
             {
-                var individualRotationChange = j % 2 == 0 ? _shardAngleOffset * Mathf.CeilToInt(j * 0.5f) : -_shardAngleOffset * Mathf.CeilToInt(j * 0.5f);
+                yield return new WaitForSeconds(_obsidianShotDelay);
 
-                var finalRotation = transform.rotation.AddYRotation(baseRotationChange + individualRotationChange);
-
-                var shard = Instantiate(_obsidianShard, transform.position + transform.forward * 0.65f, finalRotation);
-                shard.speed = _shardSpeed;
-                shard.damage = _obsidianDamage;
-            }
-
-            float timer = 0;
-
-            while (timer < _obsidianComboInterval)
-            {
-                lookAt = Camera.main.transform.forward.MakeHorizontal();
-                transform.forward = lookAt;
-
-                timer += Time.deltaTime;
-
-                if (!_inputs.PrimaryAttack)
+                for (int i = 0; i < _obsidianShardAmount; i++)
                 {
-                    _obsidianCurrentCooldown = _obsidianCooldown;
-                    //anim.SetBool("IsAttacking", false);
-                    yield break;
+                    Vector3 dir;
+                    var cameraTransform = _cameraController.AimCamera.transform;
+
+                    Physics.Raycast(cameraTransform.position, cameraTransform.forward, out var hit);
+                    if (hit.collider)
+                    {
+                        dir = hit.point - _obsidianSpawnPoint.position;
+                    }
+                    else
+                    {
+                        dir = Camera.main.transform.forward;
+                    }
+                    
+                    var shard = Instantiate(_obsidianShard, _obsidianSpawnPoint.position, Quaternion.identity);
+                    shard.transform.forward = dir;
+                    shard.SetupStats(_obsidianDamage, _shardSpeed, _shardDuration);
+
+                    var xRotation = shard.transform.rotation.eulerAngles.x + Mathf.Lerp(-_shardMaxAngleVariation, _shardMaxAngleVariation, Random.value);
+                    var yRotation = shard.transform.rotation.eulerAngles.y + Mathf.Lerp(-_shardMaxAngleVariation, _shardMaxAngleVariation, Random.value);
+                    shard.transform.rotation = Quaternion.Euler(xRotation, yRotation, shard.transform.rotation.eulerAngles.z);
+                    shard.transform.localScale *= Random.Range(0.9f, 1.1f);
                 }
+
+                _obsidianCurrentCooldown = _obsidianCooldown;
+                _inputs.launchAttack = false;
+            }
+            else
+            {
+                _inputs.launchAttack = false;
 
                 yield return null;
             }
-
-            if (!CheckAndReduceStamina(_obsidianCost))
-            {
-                _obsidianCurrentCooldown = _obsidianCooldown;
-                break;
-            }
         }
-        //anim.SetBool("IsAttacking", false);
-        _obsidianCurrentCooldown = _obsidianCooldown;
+
+        _movement.Cast(false);
+        _inputs.ToggleAim(false);
+
+        yield return new WaitForSeconds(0.25f);
+
+        _inputs.SecondaryAttack = false;
+        _stopChannels = false;
+        _aiming = false;
     }
 
     void ManageCooldowns()
@@ -732,7 +509,7 @@ public class PlayerController : Entity
     public override void TakeDamage(float amount)
     {
         //_inputs.PrimaryAttack = false;
-        if (_usingSun) _stopSun = true;
+        if (_aiming) _stopChannels = true;
 
         if (_damageCurrentCooldown > 0) return;
         ChangeAudio(damage);

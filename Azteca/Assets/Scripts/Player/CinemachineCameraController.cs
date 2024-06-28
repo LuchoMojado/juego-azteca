@@ -5,6 +5,8 @@ using Cinemachine;
 
 public class CinemachineCameraController : MonoBehaviour
 {
+    public static CinemachineCameraController instance;
+
     [SerializeField] CinemachineFreeLook _freeLookCamera;
     [SerializeField] CinemachineVirtualCamera _aimCamera;
 
@@ -35,6 +37,14 @@ public class CinemachineCameraController : MonoBehaviour
     CinemachineBasicMultiChannelPerlin _freeNoise, _aimNoise;
 
     bool _turnPlayer = false;
+
+    private void Awake()
+    {
+        if (instance != null) Destroy(gameObject);
+
+        _mouseX = _player.transform.eulerAngles.y;
+        instance = this;
+    }
 
     private void Start()
     {
@@ -82,6 +92,11 @@ public class CinemachineCameraController : MonoBehaviour
 
         _freeLookCamera.enabled = true;
         _aimCamera.enabled = false;
+
+        if(_mouseX < 0) _freeLookCamera.m_XAxis.Value = _mouseX.Remap(-360, 0, -180, 180);
+        else _freeLookCamera.m_XAxis.Value = _mouseX.Remap(0, 360, -180, 180);
+
+        _freeLookCamera.m_YAxis.Value = Mathf.InverseLerp(_minAimRotation, _maxAimRotation, -_mouseY);
     }
 
     public void Aim()

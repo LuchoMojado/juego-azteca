@@ -663,7 +663,7 @@ public class Itztlacoliuhqui : Boss
         return false;
     }
     bool ShouldDefend() => Random.Range(0, 2) == 0;
-    bool IsPlayerUsingSun() => _player.UsingSun;
+    bool IsPlayerUsingSun() => _player.Aiming;
     bool BreakableWallInPlayerLOS()
     {
         _player.transform.position.InLineOfSightOf(_wallBlockingLOS.transform.position, _wallLayer, out var hit);
@@ -825,7 +825,9 @@ public class Itztlacoliuhqui : Boss
 
         do
         {
-            miniWallList.Add(Instantiate(_miniWall, nextSpawnPos, Quaternion.Euler(-90, 0, 0)));
+            var miniWall = Instantiate(_miniWall, nextSpawnPos, Quaternion.Euler(-90, 0, 0));
+            miniWall.transform.localScale *= Random.Range(0.9f, 1.1f);
+            miniWallList.Add(miniWall);
             nextSpawnPos += movement;
 
             yield return new WaitForSeconds(_miniWallInterval);
@@ -962,7 +964,7 @@ public class Itztlacoliuhqui : Boss
                 }
                 else if (hit.collider.gameObject.layer != Mathf.Log(_magicLayer.value, 2))
                 {
-                    Debug.Log("hit edge");
+                    if (hit.collider.TryGetComponent(out IDamageable damageable)) damageable.TakeDamage(_chargeDamage);
                     _move = false;
                 }
             }

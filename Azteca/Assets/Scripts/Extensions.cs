@@ -35,4 +35,9 @@ public static class Extensions
     {
         return new Vector3(vector.x + Random.Range(-xVariation, xVariation) * multiplier, vector.y + Random.Range(-yVariation, yVariation) * multiplier, vector.z + Random.Range(-zVariation, zVariation) * multiplier);
     }
+
+    public static float Remap(this float value, float minIn, float maxIn, float minOut, float maxOut)
+    {
+        return Mathf.Lerp(minOut, maxOut, Mathf.InverseLerp(minIn, maxIn, value));
+    }
 }

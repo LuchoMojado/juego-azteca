@@ -72,7 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   speed: 0
-  _deathTimer: 10
+  _deathTimer: 0.5
 --- !u!1 &6221387912333743656
 GameObject:
   m_ObjectHideFlags: 0

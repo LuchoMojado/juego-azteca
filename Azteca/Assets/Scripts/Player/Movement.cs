@@ -136,9 +136,14 @@ public class Movement
 
     public bool IsGrounded()
     {
-        Ray groundedRay = new Ray(_playerTransform.position, -_playerTransform.up);
-
         return Physics.BoxCast(_playerTransform.position, new Vector3(0.25f, 0.1f, 0.25f), -_playerTransform.up, Quaternion.identity, 1, _groundLayer);
+    }
+
+    public float DistanceToFloor()
+    {
+        Physics.Raycast(_playerTransform.position, -_playerTransform.up, out var hit, Mathf.Infinity, _groundLayer);
+
+        return hit.distance;
     }
 
     public void Combat(bool starts)

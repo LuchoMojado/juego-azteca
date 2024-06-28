@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class PlayerProjectile : MonoBehaviour
 {
-    [HideInInspector] public float damage, speed;
+    protected float _damage, _speed, _deathTimer;
 
-    [SerializeField] protected float _deathTimer;
+    public void SetupStats(float damage = 2, float speed = 25, float duration = 5)
+    {
+        _damage = damage;
+        _speed = speed;
+        _deathTimer = duration;
+    }
 
     protected virtual void Update()
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += transform.forward * _speed * Time.deltaTime;
 
         if (_deathTimer <= 0)
         {
@@ -31,7 +36,7 @@ public class PlayerProjectile : MonoBehaviour
 
         if (other.TryGetComponent(out IDamageable target))
         {
-            target.TakeDamage(damage);
+            target.TakeDamage(_damage);
         }
 
         Die();

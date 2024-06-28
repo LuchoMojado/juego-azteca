@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Inputs
 {
-    public System.Action inputUpdate, cameraInputs;
+    public System.Action inputUpdate, cameraInputs, prePauseUpdate;
     float _inputHorizontal, _inputVertical;
     float _inputMouseX, _inputMouseY;
     Movement _movement;
@@ -128,7 +128,7 @@ public class Inputs
 
         _inputVertical = Input.GetAxis("Vertical");
 
-        Pause();
+        Pause(Unpaused);
 
         if (Input.GetKeyDown(_kStep))
         {
@@ -144,7 +144,6 @@ public class Inputs
 
         if (Input.GetKeyDown(_kPrimaryAttack))
         {
-            Debug.Log(SecondaryAttack);
             PrimaryAttack = true;
         }
 
@@ -183,7 +182,7 @@ public class Inputs
 
         cameraInputs();
 
-        Pause();
+        Pause(Stepping);
 
         SelectSun();
 
@@ -206,7 +205,7 @@ public class Inputs
         //    inputUpdate = Unpaused;
         //}
 
-        //Pause();
+        Pause(FixedCast);
 
         /*if (Input.GetKeyDown(_Kstep))
         {
@@ -271,19 +270,19 @@ public class Inputs
 
         cameraInputs();
 
-        Pause();
+        Pause(Aiming);
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _player.Step(_inputHorizontal, _inputVertical);
-            _player.StopSun = true;
+            _player.StopChannels = true;
             SecondaryAttack = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _jump = true;
-            _player.StopSun = true;
+            _player.StopChannels = true;
             SecondaryAttack = false;
         }
 
@@ -315,13 +314,13 @@ public class Inputs
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             //UIManager.instance.SetPauseMenu(false);
-            inputUpdate = Unpaused;
+            inputUpdate = prePauseUpdate;
         }
     }
 
     public void InputsFixedUpdate()
     {
-        _movement.Move(_inputHorizontal, _inputVertical, !_player.UsingSun);
+        _movement.Move(_inputHorizontal, _inputVertical, !_player.Aiming);
 
         if (_jump)
         {
@@ -359,10 +358,11 @@ public class Inputs
         _cameraController.Aim();
     }
 
-    void Pause()
+    void Pause(System.Action prePause)
     {
         if (Input.GetKeyDown(_kPause))
         {
+            prePauseUpdate = prePause;
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

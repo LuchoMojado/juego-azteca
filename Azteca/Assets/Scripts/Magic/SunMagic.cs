@@ -14,6 +14,11 @@ public class SunMagic : PlayerProjectile
 
     bool _charging = true, _shot = false, _dead = false;
 
+    public void UpdateDamage(float add)
+    {
+        _damage += add;
+    }
+
     protected override void Update()
     {
         if (_charging)
@@ -25,7 +30,7 @@ public class SunMagic : PlayerProjectile
         }
         else if (_shot && !_dead)
         {
-            transform.position += transform.forward * speed * Time.deltaTime;
+            transform.position += transform.forward * _speed * Time.deltaTime;
 
             if (_deathTimer <= 0)
             {
@@ -49,7 +54,7 @@ public class SunMagic : PlayerProjectile
 
         if (other.TryGetComponent(out IDamageable target))
         {
-            target.TakeDamage(damage);
+            target.TakeDamage(_damage);
         }
         else
         {
@@ -57,7 +62,7 @@ public class SunMagic : PlayerProjectile
 
             if (parent != null)
             {
-                parent.TakeDamage(damage);
+                parent.TakeDamage(_damage);
             }
         }
 
@@ -71,8 +76,9 @@ public class SunMagic : PlayerProjectile
         _charging = false;
     }
 
-    public void Shoot()
+    public void Shoot(float speed)
     {
+        _speed = speed;
         _chargingParticles.Stop();
         _fireParticle.Stop();
         _trailParticle.Play();

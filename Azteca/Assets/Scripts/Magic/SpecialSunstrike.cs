@@ -61,6 +61,8 @@ public class SpecialSunstrike : SpecialMagic
             boss.TakeDamage(_damage);
         }
 
+        CinemachineCameraController.instance.CameraShake(2, 0.6f);
+
         yield return new WaitForSeconds(_linger);
 
         Object.Destroy(ray2);
