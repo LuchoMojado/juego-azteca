@@ -571,7 +571,7 @@ public class ObsidianGod : Boss
                 var shard = Instantiate(_shard, pos.VectorVariation(1, 0.5f, 0.5f), Quaternion.identity);
                 shard.transform.forward = dir.VectorVariation(1, 0.005f, 0.005f);
                 shard.transform.localScale *= Random.Range(0.9f, 1.2f);
-                shard.speed = _shardSpeed * 3.5f;
+                shard.speed = _shardSpeed * 4;
                 shard.damage = _shardDamage;
                 cooldown = 0;
             }
