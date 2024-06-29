@@ -552,14 +552,14 @@ public class PlayerController : Entity
 
     public void FightStarts(Boss boss)
     {
-        _cameraController.CameraShake(2, 1);
+        //_cameraController.CameraShake(2, 1);
         _movement.Combat(true);
         currentBoss = boss;
     }
 
     public void FightEnds()
     {
-        _cameraController.CameraShake(2, 1);
+        //_cameraController.CameraShake(2, 1);
         _movement.Combat(false);
         currentBoss = null;
     }

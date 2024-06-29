@@ -5,6 +5,7 @@ using UnityEngine;
 public class InactiveState : State
 {
     float _aggroRange;
+    float timer = 5;
 
     public InactiveState(ObsidianGod boss, float range, Animator anim)
     {
@@ -22,15 +23,23 @@ public class InactiveState : State
 
     public override void OnExit()
     {
-        _anim.SetBool("IsIdle", false);
-        _boss.StartFight();
+        //_anim.SetBool("IsIdle", false);
+        //_boss.StartFight();
     }
 
     public override void OnUpdate()
     {
-        if (_boss.GetPlayerDistance() <= _aggroRange)
+        if (_boss.inactive) return;
+
+        timer -= Time.deltaTime;
+
+        if (timer <= 0)
         {
             fsm.ChangeState(ObsidianGod.ObsidianStates.Walk);
         }
+        //if (_boss.GetPlayerDistance() <= _aggroRange)
+        //{
+        //    fsm.ChangeState(ObsidianGod.ObsidianStates.Walk);
+        //}
     }
 }

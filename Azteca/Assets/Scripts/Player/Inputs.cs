@@ -12,6 +12,8 @@ public class Inputs
     CinemachineCameraController _cameraController;
     bool _jump, _primaryAttack = false, _secondaryAttack = false, _aiming = false;
 
+    public bool trigger = false;
+
     KeyCode _kStep, _kJump, _kPrimaryAttack, _kSecondaryAttack, _kSpecial1, _kSpecial2, _kSun, _kObsidian, _kPause;
 
     public bool PrimaryAttack
@@ -118,6 +120,33 @@ public class Inputs
             _kPause = KeyCode.Escape;
         }
         
+    }
+
+    public void WaitUntilAim()
+    {
+        if (Input.GetKeyDown(_kSecondaryAttack))
+        {
+            SecondaryAttack = true;
+            trigger = true;
+        }
+    }
+
+    public void WaitUntilFirstSpecial()
+    {
+        if (Input.GetKeyDown(_kSpecial1))
+        {
+            _player.UseSpecial(0);
+            trigger = true;
+        }
+    }
+
+    public void WaitUntilSecondSpecial()
+    {
+        if (Input.GetKeyDown(_kSpecial2))
+        {
+            _player.UseSpecial(1);
+            trigger = true;
+        }
     }
 
     public void Unpaused()

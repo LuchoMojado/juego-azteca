@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image[] _specials = new Image[2];
     [SerializeField] Image[] _specialsCooldowns = new Image[2];
     [SerializeField] GameObject _crosshair;
+    [SerializeField] TextMeshProUGUI _bossName, _tutorialText;
 
     public GameObject textoFinal;
 
@@ -27,6 +29,11 @@ public class UIManager : MonoBehaviour
         if (instance != null) Destroy(gameObject);
 
         instance = this;
+    }
+
+    public void ChangeBossName(string name)
+    {
+        _bossName.text = name;
     }
 
     public void UpdateBar(Bar bar, float newValue)
@@ -86,6 +93,17 @@ public class UIManager : MonoBehaviour
     public void ToggleBossBar(bool turnOn)
     {
         _bossHpBar.gameObject.SetActive(turnOn);
+    }
+
+    public void ChangeText(bool show)
+    {
+        _tutorialText.gameObject.SetActive(show);
+    }
+
+    public void ChangeText(bool show, string newText)
+    {
+        _tutorialText.gameObject.SetActive(show);
+        _tutorialText.text = newText;
     }
 
     public void Paused()

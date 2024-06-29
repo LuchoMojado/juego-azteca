@@ -51,6 +51,10 @@ public class ObsidianGod : Boss
     [SerializeField] AudioClip stomp,dash,dashBox,dashFuerte,lanzaDardos,walk;
 
     [SerializeField] GameObject tornadoPiedras,caidaPiedras;
+
+    [SerializeField] ObsidianWall _wallToBreak;
+    [SerializeField] Transform _retreatPos;
+
     public enum ObsidianStates
     {
         Inactive,
@@ -66,7 +70,8 @@ public class ObsidianGod : Boss
 
     public Renderer renderer;
 
-    bool _lookAtPlayer, _move;
+    bool _lookAtPlayer, _move, _invulnerable = false, _lastStand = false;
+    public bool inactive;
 
     [HideInInspector] public int comboCount;
 
@@ -110,6 +115,9 @@ public class ObsidianGod : Boss
 
         _fsm.ChangeState(ObsidianStates.Inactive);
         _lastAction = ObsidianStates.Inactive;
+
+        _rb.AddForce((transform.forward + transform.up) * 700);
+        StartFight();
     }
 
     private void Update()
@@ -132,7 +140,9 @@ public class ObsidianGod : Boss
     public void StartFight()
     {
         _player.FightStarts(this);
-        _arena.gameObject.SetActive(true);
+        //_arena.gameObject.SetActive(true);
+        UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp, _maxHp);
+        UIManager.instance.ChangeBossName("Obsidian minion");
         UIManager.instance.ToggleBossBar(true);
         LookAtPlayer = true;
     }
@@ -182,11 +192,11 @@ public class ObsidianGod : Boss
 
     public void prenderTornado(bool prendo)
     {
-        tornadoPiedras.SetActive(prendo);
+        //tornadoPiedras.SetActive(prendo);
     }
     public void prenderCaidaPiedras(bool prendo)
     {
-        caidaPiedras.SetActive(prendo);
+        //caidaPiedras.SetActive(prendo);
     }
     public IEnumerator oneShotTiroPiedras()
     {
@@ -438,8 +448,19 @@ public class ObsidianGod : Boss
 
     public override void TakeDamage(float amount)
     {
+        if (_invulnerable) return;
+        else if (_lastStand) Die();
+
         prenderCaidaPiedras(true);
-        base.TakeDamage(amount);
+
+        _hp -= amount;
+
+        if (_hp <= 5)
+        {
+            _hp = 5;
+            StartCoroutine(Retreating());
+        }
+
         UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp);
     }
 
@@ -452,8 +473,8 @@ public class ObsidianGod : Boss
         //_arena.GetComponent<Animation>().Play("BajanPicos");
         //StartCoroutine(ApagarArena());
         //animacion de muerte
-        _arena.SetActive(false);
-        CineManager.instance.PlayAnimation(CineManager.cineEnum.obsidianDead);
+        //_arena.SetActive(false);
+        //CineManager.instance.PlayAnimation(CineManager.cineEnum.obsidianDead);
         Destroy(gameObject);
     }
 
@@ -469,5 +490,99 @@ public class ObsidianGod : Boss
     {
         _myAS.clip = clip;
         _myAS.PlayOneShot(_myAS.clip);
+    }
+
+    IEnumerator Retreating()
+    {
+        _invulnerable = true;
+        inactive = true;
+        _fsm.ChangeState(ObsidianStates.Inactive);
+
+        yield return new WaitForSeconds(1);
+
+        transform.LookAt(_retreatPos);
+        //transform.forward = transform.forward.MakeHorizontal();
+
+        anim.SetBool("IsStomp", true);
+        LookAtPlayer = false;
+        _rb.isKinematic = true;
+
+        Vector3 startPos = transform.position, horPos;
+        float timer = 0, yPos, highestPoint = startPos.y + 18;
+
+        while (timer < 3.5f)
+        {
+            horPos = Vector3.Lerp(startPos, _retreatPos.position, timer / 3.5f);
+
+            yPos = Mathf.Lerp(startPos.y, highestPoint, -(timer - 3.5f) * timer);
+
+            _rb.MovePosition(new Vector3(horPos.x, yPos, horPos.z));
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        _rb.isKinematic = false;
+        _wallToBreak.gameObject.SetActive(true);
+        anim.SetBool("IsStomp", false);
+        transform.forward = Vector3.forward;
+    }
+
+    public void BreakWall()
+    {
+        Vector3 basePos = new Vector3(_wallToBreak.transform.position.x, transform.position.y + 1, _wallToBreak.transform.position.z);
+        float xPosVariation = _wallToBreak.Radius;
+        Vector3 baseDir = (_player.transform.position - basePos).normalized;
+
+        _wallToBreak.Die();
+
+        for (int i = 0; i < 20; i++)
+        {
+            var shard = Instantiate(_shard, basePos.VectorVariation(1, xPosVariation, 0.25f), Quaternion.identity);
+            shard.transform.forward = baseDir.VectorVariation(i * 0.5f, 0.05f, 0.05f);
+            shard.speed = _shardSpeed;
+            shard.damage = _shardDamage;
+        }
+
+        StartCoroutine(InfiniteGatling());
+    }
+
+    IEnumerator InfiniteGatling()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        _rb.AddForce((-transform.forward * 2 + transform.up) * 250);
+
+        LookAtPlayer = true;
+        yield return new WaitForSeconds(2);
+        _invulnerable = false;
+        _lastStand = true;
+        //ChangeAudio(lanzaDardos);
+        float timer = 0, cooldown = 0;
+
+        while (true)
+        {
+            if (cooldown >= 0.05f)
+            {
+                var pos = transform.position + transform.forward * 2;
+                var dir = (_player.transform.position - pos).normalized;
+
+                var shard = Instantiate(_shard, pos.VectorVariation(1, 0.5f, 0.5f), Quaternion.identity);
+                shard.transform.forward = dir.VectorVariation(1, 0.005f, 0.005f);
+                shard.transform.localScale *= Random.Range(0.9f, 1.2f);
+                shard.speed = _shardSpeed * 3.5f;
+                shard.damage = _shardDamage;
+                cooldown = 0;
+            }
+            else
+            {
+                cooldown += Time.deltaTime;
+            }
+
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
     }
 }

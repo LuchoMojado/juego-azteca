@@ -10,6 +10,8 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     [SerializeField] float _radius, _nodeBlockRadius, _riseTime;
 
+    [SerializeField] bool _unbreakable;
+
     public float Radius
     {
         get
@@ -37,6 +39,10 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     public void Break()
     {
+        if (_unbreakable)
+        {
+            return;
+        }
         if (_rising)
         {
             Die();

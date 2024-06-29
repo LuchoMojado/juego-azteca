@@ -338,6 +338,8 @@ public class Itztlacoliuhqui : Boss
         {
             if (Vector3.Distance(transform.position, _player.transform.position) <= _aggroRange)
             {
+                UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp, _maxHp);
+                UIManager.instance.ChangeBossName("Obsidian minion");
                 _player.FightStarts(this);
                 _edgeBlock.SetActive(true);
                 UIManager.instance.ToggleBossBar(true);
