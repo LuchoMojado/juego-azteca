@@ -29,6 +29,7 @@ public class Itztlacoliuhqui : Boss
     Pathfinding _pf;
     List<Vector3> _path = new List<Vector3>();
 
+    [SerializeField] bool _playOnStart;
     [SerializeField] Animator _anim;
     [SerializeField] float _aggroRange;
     [SerializeField] Transform _eyePos;
@@ -130,7 +131,7 @@ public class Itztlacoliuhqui : Boss
 
         UIManager.instance.UpdateBar(UIManager.Bar.BossHp, _hp, _maxHp);
 
-        StartCoroutine(SetupWait());
+        if (_playOnStart) StartCoroutine(SetupWait());
     }
 
     IEnumerator SetupWait()
@@ -141,7 +142,7 @@ public class Itztlacoliuhqui : Boss
         _start = true;
     }
 
-    private void Setup()
+    public void Setup()
     {
         _rb = GetComponent<Rigidbody>();
         _myAS = GetComponent<AudioSource>();
