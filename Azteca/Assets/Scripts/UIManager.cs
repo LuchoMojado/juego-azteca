@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image _paused;
     [SerializeField] Image[] _specials = new Image[2];
     [SerializeField] Image[] _specialsCooldowns = new Image[2];
-    [SerializeField] GameObject _crosshair;
+    [SerializeField] GameObject _crosshair, _options, mainMenu;
     [SerializeField] TextMeshProUGUI _bossName, _tutorialText;
 
     public GameObject textoFinal;
@@ -116,6 +116,13 @@ public class UIManager : MonoBehaviour
         _paused.gameObject.SetActive(false);
         _joystick.gameObject.SetActive(false);
     }
+    public void Options()
+    {
+        _options.gameObject.SetActive(true);
+        _paused.gameObject.SetActive(false);
+        _joystick.gameObject.SetActive(false);
+    }
+
 
     public void Final()
     {
