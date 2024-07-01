@@ -28,7 +28,7 @@ public class PlayerController : Entity
     [Header("Sun Magic")]
     [SerializeField] SunMagic _sunMagic;
     [SerializeField] Transform _sunSpawnPoint;
-    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunMaxChargeTime, _sunCastDelay, _sunRecovery, _sunCooldown, _sunAbsorbTime, _sunMeleeDuration,_sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
+    [SerializeField] float _sunBaseDamage, _sunDamageGrowRate, _sunSpeed, _sunMaxChargeTime, _sunCastDelay, _sunShootDelay, _sunRecovery, _sunCooldown, _sunAbsorbTime, _sunMeleeDuration,_sunHitboxX, _sunHitboxY, _sunHitboxZ, _sunRange;
     Vector3 _sunHitbox;
 
     [Header("Obsidian Magic")]
@@ -257,6 +257,8 @@ public class PlayerController : Entity
         _inputs.ToggleAim(true);
         _aiming = true;
         _inputs.inputUpdate = _inputs.Aiming;
+        anim.SetTrigger("chargeSun");
+        anim.SetBool("isChargingSun", true);
 
         yield return new WaitForSeconds(_sunCastDelay);
 
@@ -267,7 +269,7 @@ public class PlayerController : Entity
 
         do
         {
-            var sun = Instantiate(_sunMagic, _sunSpawnPoint.position, Quaternion.identity, _sunSpawnPoint);
+            var sun = Instantiate(_sunMagic, _sunSpawnPoint.position, Quaternion.identity);
             sun.player = this;
             sun.SetupStats(_sunBaseDamage);
 
@@ -276,6 +278,8 @@ public class PlayerController : Entity
             while (!_stopChannels && _inputs.SecondaryAttack && !_inputs.launchAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
             {
                 timer += Time.deltaTime;
+
+                sun.transform.position = _sunSpawnPoint.position;
 
                 sun.UpdateDamage(_sunDamageGrowRate * Time.deltaTime);
 
@@ -289,13 +293,14 @@ public class PlayerController : Entity
 
             while (!_stopChannels && _inputs.SecondaryAttack && !_inputs.launchAttack)
             {
+                sun.transform.position = _sunSpawnPoint.position;
                 CheckAndReduceStamina(0);
                 yield return null;
             }
 
             if (_stopChannels || !_inputs.SecondaryAttack)
             {
-                sun.transform.SetParent(null);
+                //sun.transform.SetParent(null);
                 sun.StartCoroutine(sun.Cancel());
                 //ControlFullScreen.instance.ChangeDemond(false);
             }
@@ -303,13 +308,20 @@ public class PlayerController : Entity
             {
                 _inputs.launchAttack = false;
 
-                //anim.SetBool("IsAttacking", true);
+                anim.SetTrigger("shootSun");
 
-                yield return new WaitForSeconds(_sunCastDelay);
+                timer = 0;
 
+                //yield return new WaitForSeconds(_sunShootDelay);
+                while (timer<_sunShootDelay)
+                {
+                    sun.transform.position = _sunSpawnPoint.position;
+                    timer += Time.deltaTime;
+                    yield return null;
+                }
                 //anim.SetBool("IsAttacking", false);
 
-                sun.transform.SetParent(null);
+                //sun.transform.SetParent(null);
 
                 Vector3 dir;
                 var cameraTransform = _cameraController.AimCamera.transform;
@@ -344,6 +356,7 @@ public class PlayerController : Entity
 
         _movement.Cast(false);
         _inputs.ToggleAim(false);
+        anim.SetBool("isChargingSun", false);
         //_sunCurrentCooldown = _sunCooldown
 
         yield return new WaitForSeconds(0.25f);
@@ -572,7 +585,7 @@ public class PlayerController : Entity
 
     public void RunningAnimation(bool play)
     {
-        //anim.SetBool("IsRunning", play);
+        anim.SetBool("isRunning", play);
     }
 
     private void OnTriggerEnter(Collider other)
