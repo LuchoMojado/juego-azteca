@@ -153,7 +153,7 @@ public class PlayerController : Entity
         if (Grounded && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
         {
             //StartCoroutine(ToggleGameObject(_jumpParticles));
-            //anim.SetTrigger("IsJumping");
+            anim.SetTrigger("jump");
             _movement.Jump();
             ChangeAudio(jump);
             //anim.SetBool("IsJumping", false);
