@@ -152,7 +152,7 @@ public class PlayerController : Entity
     {
         if (Grounded && _stepCurrentCooldown <= _stepCooldown * 0.5f && CheckAndReduceStamina(_jumpCost))
         {
-            StartCoroutine(ToggleGameObject(_jumpParticles));
+            //StartCoroutine(ToggleGameObject(_jumpParticles));
             //anim.SetTrigger("IsJumping");
             _movement.Jump();
             ChangeAudio(jump);
@@ -165,7 +165,7 @@ public class PlayerController : Entity
         if (Grounded && _stepCurrentCooldown <= 0 && CheckAndReduceStamina(_stepCost))
         {
             anim.SetTrigger("step");
-            StartCoroutine(ToggleGameObject(_stepParticles));
+            //StartCoroutine(ToggleGameObject(_stepParticles));
             //anim.SetBool("IsStrafeRight", true);
             ChangeAudio(sideStep);
             _stepCurrentCooldown = _stepCooldown;
