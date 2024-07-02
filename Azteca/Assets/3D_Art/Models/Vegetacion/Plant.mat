@@ -77,12 +77,13 @@ Material:
     m_Floats:
     - _Alpha_Clip_Threshold: 0.5
     - _Bend_Intensity: 0.3
-    - _Brightness: 0.7
+    - _Brightness: 0.75
     - _Clip_Threshold: 0.5
     - _Divide: 100
+    - _Hue: -13.14
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Saturation: 1
+    - _Saturation: 0.9
     - _Smoothness: 0.3
     - _Smoothness_1: 0.5
     - _Tiling: 1
