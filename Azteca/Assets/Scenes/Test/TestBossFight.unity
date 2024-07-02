@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2453,6 +2453,8 @@ MonoBehaviour:
   - {fileID: 176206293}
   - {fileID: 222138070}
   _crosshair: {fileID: 1926443810}
+  _options: {fileID: 0}
+  mainMenu: {fileID: 0}
   _bossName: {fileID: 1924178566}
   _tutorialText: {fileID: 2137024563}
   textoFinal: {fileID: 1933457101}
@@ -2982,7 +2984,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988649508}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000004082413, y: 0.99775195, z: -0.06701514, w: -0.00000006078083}
+  m_LocalRotation: {x: -0.0000000017762368, y: 0.99775195, z: -0.06701514, w: -0.000000026445433}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3142,7 +3144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1076052581}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000011071025, y: 0.9996452, z: -0.026638275, w: -0.000000041545846}
+  m_LocalRotation: {x: -0.0000000012216895, y: 0.9996452, z: -0.026638273, w: -0.000000045845916}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3712,9 +3714,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.02
+  near clip plane: 0.1
   far clip plane: 5000
-  field of view: 50
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -3740,8 +3742,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288836407}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000011071024, y: 0.9996452, z: -0.026638277, w: -0.000000041545846}
-  m_LocalPosition: {x: 0.0000003934025, y: 2.09, z: 50.54}
+  m_LocalRotation: {x: -0.0025242106, y: 0.9972481, z: 0.040625464, w: 0.061962724}
+  m_LocalPosition: {x: -1.1891723, y: 1.5809983, z: 47.25657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4376,8 +4378,11 @@ MonoBehaviour:
   dash: {fileID: 8300000, guid: 94ef692956e44dd48bfe4eb0758aa7a8, type: 3}
   dashBox: {fileID: 8300000, guid: db6b9f809e99a0c4199c61e909917ef9, type: 3}
   dashFuerte: {fileID: 8300000, guid: be6a1f5b715497f49b673c32d01d9708, type: 3}
-  lanzaDardos: {fileID: 8300000, guid: 199174227bbf6604eb2caf7927b739f7, type: 3}
+  lanzaDardos: {fileID: 8300000, guid: 6503d89ef5fe4c742a5e9a921d87ff23, type: 3}
   walk: {fileID: 8300000, guid: fe71ef97af6ae2045af05afeb3c780cb, type: 3}
+  RunTowards: {fileID: 8300000, guid: e2d02a5f6313efd49a8f8a0b39afe8f1, type: 3}
+  PinchosPiso: {fileID: 8300000, guid: f0b5fce96a8fadb4b85e6aa081cbbea1, type: 3}
+  TemblorArenaSpiking: {fileID: 8300000, guid: 848489bcf7b724746adf1d260b1a55e7, type: 3}
   tornadoPiedras: {fileID: 2102096122}
   caidaPiedras: {fileID: 1352781192}
 --- !u!4 &1478627710
@@ -5037,7 +5042,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1644540633}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000012216895, y: 0.9996452, z: -0.026638273, w: -0.000000045845916}
+  m_LocalRotation: {x: -0.0000000011071025, y: 0.9996452, z: -0.026638275, w: -0.000000041545846}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

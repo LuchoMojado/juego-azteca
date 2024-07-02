@@ -94,7 +94,7 @@ public class PlayerController : Entity
     public Animator anim;
 
     AudioSource _myAS;
-    [SerializeField] AudioClip sideStep,jump, damage, chargingSun;
+    [SerializeField] AudioClip sideStep,jump, damage, chargingSun, Walking;
     [SerializeField] GameObject _stepParticles, _jumpParticles;
 
     public enum MagicType
@@ -586,6 +586,7 @@ public class PlayerController : Entity
     public void RunningAnimation(bool play)
     {
         anim.SetBool("isRunning", play);
+        //ChangeAudio(Walking);
     }
 
     private void OnTriggerEnter(Collider other)

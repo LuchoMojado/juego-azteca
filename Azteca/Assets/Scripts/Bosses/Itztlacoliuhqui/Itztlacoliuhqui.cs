@@ -107,7 +107,7 @@ public class Itztlacoliuhqui : Boss
     //[SerializeField] Animator anim;
 
     AudioSource _myAS;
-    [SerializeField] AudioClip stomp, dash, dashBox, dashFuerte, lanzaDardos, walk;
+    [SerializeField] AudioClip stomp, dash, dashBox, dashFuerte, lanzaDardos, walk, RunTowards, PinchosPiso, TemblorArenaSpiking;
 
     [SerializeField] GameObject tornadoPiedras, caidaPiedras;
 
@@ -814,7 +814,7 @@ public class Itztlacoliuhqui : Boss
         LookAtPlayer = true;
         prenderTornado(true);
         yield return new WaitForSeconds(_wallSpikePreparation);
-        ChangeAudio(lanzaDardos);
+        ChangeAudio(PinchosPiso);
         LookAtPlayer = false;
 
         Vector3 target = _player.transform.position;
@@ -933,7 +933,7 @@ public class Itztlacoliuhqui : Boss
         //preparacion
         prenderCaidaPiedras(true);
         yield return new WaitForSeconds(_chargePreparation);
-        ChangeAudio(dash);
+        ChangeAudio(RunTowards);
         LookAtPlayer = false;
         FixRotation(true);
         _anim.SetBool("IsDashing", true);
@@ -987,6 +987,7 @@ public class Itztlacoliuhqui : Boss
     IEnumerator ArenaSpiking()
     {
         //animacion de golpear el piso
+        ChangeAudio(TemblorArenaSpiking);
 
         yield return new WaitForSeconds(_arenaSpikesPreparation);
 
