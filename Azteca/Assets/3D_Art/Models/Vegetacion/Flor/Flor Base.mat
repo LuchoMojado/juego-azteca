@@ -109,7 +109,7 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Alpha_Clip_Threshold: 0.5
-    - _Bend_Intensity: 0
+    - _Bend_Intensity: 2
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _Brightness: 1
@@ -148,7 +148,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Bend_Direction: {r: 0, g: 0, b: 0, a: 0}
+    - _Bend_Direction: {r: -14.24, g: 0.92, b: 19.18, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

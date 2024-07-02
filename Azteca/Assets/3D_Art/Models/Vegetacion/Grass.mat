@@ -86,7 +86,7 @@ Material:
     - _AO: 0
     - _Alpha_Clip_Threshold: 0.5
     - _Brightness: 1
-    - _Hue: 5
+    - _Hue: 10
     - _Normal_Strength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
