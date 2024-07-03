@@ -843,7 +843,7 @@ Transform:
   m_GameObject: {fileID: 1517780888451821623}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3944,14 +3944,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8254380824010536276}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 50.601288, y: -0.0000009536743, z: -30.390465}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8243669917801798062}
   - {fileID: 537493075098822974}
-  - {fileID: 6713424934228976661}
+  - {fileID: 6530317410447819775}
   - {fileID: 6611934243002119534}
   - {fileID: 3601807024320679996}
   m_Father: {fileID: 0}
@@ -4481,7 +4481,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60fdbfd1416a1624eb2942a891e08ef1, type: 3}
---- !u!4 &6713424934228976661 stripped
+--- !u!4 &6530317410447819775 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 60fdbfd1416a1624eb2942a891e08ef1,
     type: 3}
