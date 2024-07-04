@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class TutorialManager : MonoBehaviour
 {
+    [SerializeField] PlayableDirector _timeline;
     [SerializeField] PlayerController _player;
     [SerializeField] ObsidianGod _enemy;
     [SerializeField] string _movement, _jump, _step, _sun, _supernova, _sunstrike, _switch;
@@ -98,6 +100,16 @@ public class TutorialManager : MonoBehaviour
         UIManager.instance.ChangeText(false);
     }
 
+    IEnumerator MainFightStart()
+    {
+        _player.Inputs.inputUpdate = _player.Inputs.Nothing;
+        _timeline.Play();
+
+        yield return new WaitWhile(() => _timeline.state == PlayState.Playing);
+
+        _player.Inputs.inputUpdate = _player.Inputs.Unpaused;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 6)
@@ -122,7 +134,12 @@ public class TutorialManager : MonoBehaviour
                     break;
                 case 3:
                     _colliders[_colliderCounter].enabled = false;
+                    _colliderCounter++;
                     StartCoroutine(PostFight());
+                    break;
+                case 4:
+                    _colliders[_colliderCounter].enabled = false;
+                    StartCoroutine(MainFightStart());
                     break;
                 default:
                     break;

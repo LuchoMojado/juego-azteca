@@ -140,7 +140,6 @@ public class Itztlacoliuhqui : Boss
         yield return new WaitForSeconds(1);
 
         Setup();
-        _start = true;
     }
 
     public void Setup()
@@ -588,6 +587,8 @@ public class Itztlacoliuhqui : Boss
         _treeStart = new QuestionNode(arenaSpikesNode, playerInLOS, ShouldUseUltimate);
 
         #endregion
+
+        _start = true;
     }
 
     private void Update()

@@ -428,7 +428,9 @@ public class Inputs
 
     public void Nothing()
     {
+        _inputHorizontal = 0;
 
+        _inputVertical = 0;
     }
 
     public void Paused()
