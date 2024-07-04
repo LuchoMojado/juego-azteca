@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider _hpBar, _staminaBar, _bossHpBar;
     [SerializeField] Button _joystick;
     [SerializeField] Image _paused;
+    [SerializeField] GameObject _sunActive, _obsidianActive;
     [SerializeField] Image[] _specials = new Image[2];
     [SerializeField] Image[] _specialsCooldowns = new Image[2];
     [SerializeField] GameObject _crosshair, _options, mainMenu;
@@ -68,6 +69,23 @@ public class UIManager : MonoBehaviour
             case Bar.BossHp:
                 _bossHpBar.maxValue = maxValue;
                 _bossHpBar.value = newValue;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void UpdateBasicSpell(PlayerController.MagicType type)
+    {
+        switch (type)
+        {
+            case PlayerController.MagicType.Sun:
+                _sunActive.SetActive(true);
+                _obsidianActive.SetActive(false);
+                break;
+            case PlayerController.MagicType.Obsidian:
+                _sunActive.SetActive(false);
+                _obsidianActive.SetActive(true);
                 break;
             default:
                 break;

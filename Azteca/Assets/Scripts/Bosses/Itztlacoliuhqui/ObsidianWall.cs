@@ -25,7 +25,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     List<Node> _overlappingNodes = new List<Node>();
 
-    bool _broken = false, _rising = true;
+    bool _broken = false, _rising = false;
 
     public bool Broken
     {
@@ -38,7 +38,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
     private void Start()
     {
         _myAS = GetComponent<AudioSource>();
-        StartCoroutine(Rise());
+        //StartCoroutine(Rise());
     }
 
     public void Break()

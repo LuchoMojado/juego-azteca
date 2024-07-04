@@ -314,6 +314,7 @@ GameObject:
   - component: {fileID: 3640622803330300723}
   - component: {fileID: 4512302602141651466}
   - component: {fileID: 2421400106317847985}
+  - component: {fileID: 8178834677146555962}
   m_Layer: 0
   m_Name: Obsidian Wall
   m_TagString: Untagged
@@ -457,6 +458,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!111 &8178834677146555962
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8844907471187623210}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 05d4a1288e4d07547aeb211adcc02105, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 05d4a1288e4d07547aeb211adcc02105, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1001 &1600886458317360522
 PrefabInstance:
   m_ObjectHideFlags: 0
