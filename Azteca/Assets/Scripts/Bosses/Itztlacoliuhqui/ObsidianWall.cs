@@ -12,6 +12,9 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     [SerializeField] bool _unbreakable;
 
+    [SerializeField] ParticleSystem piedritas, piedras, humo;
+
+    AudioSource _myAS;
     public float Radius
     {
         get
@@ -34,6 +37,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     private void Start()
     {
+        _myAS = GetComponent<AudioSource>();
         StartCoroutine(Rise());
     }
 
@@ -50,7 +54,10 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
         _completeWall.SetActive(false);
         _brokenWall.SetActive(true);
-
+        piedras.Play();
+        piedritas.Play();
+        humo.Play();
+        _myAS.Play();
         _broken = true;
     }
 
@@ -74,7 +81,10 @@ public class ObsidianWall : MonoBehaviour, IDamageable
         }
 
         boss.WallDestroyed(this);
-
+        _myAS.Play();
+        piedras.Play();
+        piedritas.Play();
+        humo.Play();
         Destroy(gameObject);
     }
 
