@@ -38,7 +38,15 @@ public class ObsidianWall : MonoBehaviour, IDamageable
     private void Start()
     {
         _myAS = GetComponent<AudioSource>();
-        //StartCoroutine(Rise());
+
+        foreach (var item in ObsidianPathfindManager.instance.allNodes)
+        {
+            if (Vector3.Distance(transform.position, item.transform.position) <= _nodeBlockRadius)
+            {
+                _overlappingNodes.Add(item);
+                item.SetBlock(true);
+            }
+        }
     }
 
     public void Break()

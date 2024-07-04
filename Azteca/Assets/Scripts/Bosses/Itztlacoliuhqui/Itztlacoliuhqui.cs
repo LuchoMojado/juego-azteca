@@ -832,8 +832,8 @@ public class Itztlacoliuhqui : Boss
 
         do
         {
-            var miniWall = Instantiate(_miniWall, nextSpawnPos, Quaternion.Euler(-90, 0, 0));
-            miniWall.transform.localScale *= Random.Range(0.9f, 1.1f);
+            var miniWall = Instantiate(_miniWall, nextSpawnPos, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+            miniWall.transform.localScale *= Random.Range(0.9f, 1.2f);
             miniWallList.Add(miniWall);
             nextSpawnPos += movement;
 
@@ -990,7 +990,7 @@ public class Itztlacoliuhqui : Boss
 
     IEnumerator ArenaSpiking()
     {
-        //animacion de golpear el piso
+        _anim.SetBool("IsRoaring", true);
         ChangeAudio(TemblorArenaSpiking);
 
         yield return new WaitForSeconds(_arenaSpikesPreparation);
@@ -1038,6 +1038,8 @@ public class Itztlacoliuhqui : Boss
         {
             Destroy(item);
         }
+
+        _anim.SetBool("IsRoaring", false);
 
         yield return new WaitForSeconds(_arenaSpikesRecovery);
 

@@ -116,7 +116,7 @@ public class ObsidianGod : Boss
         _fsm.ChangeState(ObsidianStates.Inactive);
         _lastAction = ObsidianStates.Inactive;
 
-        _rb.AddForce((transform.forward + transform.up) * 700);
+        _rb.AddForce((transform.forward + transform.up) * 600);
         StartFight();
     }
 
