@@ -26,6 +26,15 @@ public class Hazard : MonoBehaviour
         {
             player.TakeDamage(damage);
         }
+        else
+        {
+            var wall = other.GetComponentInParent<ObsidianWall>();
+
+            if (wall != null && wall.Broken)
+            {
+                wall.TakeDamage(damage);
+            }
+        }
     }
 
     IEnumerator Die()
