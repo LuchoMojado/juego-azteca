@@ -114,6 +114,7 @@ public class PlayerController : Entity
         _activeMagic = MagicType.Sun;
         renderer.material.color = Color.red;
         _sunHitbox = new Vector3(_sunHitboxX, _sunHitboxY, _sunHitboxZ);
+        _inputs.inputUpdate = _inputs.Unpaused;
     }
 
     void Start()
@@ -123,7 +124,6 @@ public class PlayerController : Entity
         _stamina = _maxStamina;
         UIManager.instance.UpdateBar(UIManager.Bar.PlayerStamina, _stamina, _maxStamina);
 
-        _inputs.inputUpdate = _inputs.Unpaused;
         Joistick();
     }
 
@@ -277,6 +277,8 @@ public class PlayerController : Entity
 
             while (!_stopChannels && _inputs.SecondaryAttack && !_inputs.launchAttack && timer < _sunMaxChargeTime && CheckAndReduceStamina(_sunHoldCost * Time.deltaTime))
             {
+                _rb.angularVelocity = Vector3.zero;
+
                 timer += Time.deltaTime;
 
                 sun.transform.position = _sunSpawnPoint.position;
@@ -293,6 +295,8 @@ public class PlayerController : Entity
 
             while (!_stopChannels && _inputs.SecondaryAttack && !_inputs.launchAttack)
             {
+                _rb.angularVelocity = Vector3.zero;
+
                 sun.transform.position = _sunSpawnPoint.position;
                 CheckAndReduceStamina(0);
                 yield return null;
@@ -431,6 +435,8 @@ public class PlayerController : Entity
 
         while (!_stopChannels && _inputs.SecondaryAttack)
         {
+            _rb.angularVelocity = Vector3.zero;
+
             if (_inputs.launchAttack && _obsidianCurrentCooldown <= 0 && CheckAndReduceStamina(_obsidianCost))
             {
                 yield return new WaitForSeconds(_obsidianShotDelay);

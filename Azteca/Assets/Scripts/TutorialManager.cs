@@ -19,7 +19,11 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator FirstSection()
     {
+        _player.Inputs.inputUpdate = _player.Inputs.Nothing;
+
         yield return new WaitForSeconds(_firstWait);
+
+        _player.Inputs.inputUpdate = _player.Inputs.NoAttackInputs;
 
         UIManager.instance.ChangeText(true, _movement);
 
@@ -68,7 +72,7 @@ public class TutorialManager : MonoBehaviour
         {
             yield return null;
         }
-
+        
         _player.Inputs.trigger = false;
         UIManager.instance.ChangeText(false);
         Time.timeScale = 1;
@@ -109,9 +113,14 @@ public class TutorialManager : MonoBehaviour
                 case 1:
                     _colliders[_colliderCounter].enabled = false;
                     _colliderCounter++;
-                    StartCoroutine(Specials());
+                    _player.Inputs.inputUpdate = _player.Inputs.NoJump;
                     break;
                 case 2:
+                    _colliders[_colliderCounter].enabled = false;
+                    _colliderCounter++;
+                    StartCoroutine(Specials());
+                    break;
+                case 3:
                     _colliders[_colliderCounter].enabled = false;
                     StartCoroutine(PostFight());
                     break;

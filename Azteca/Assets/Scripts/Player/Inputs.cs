@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Inputs
 {
-    public System.Action inputUpdate, cameraInputs, prePauseUpdate;
+    public System.Action inputUpdate, cameraInputs, previousUpdate;
     float _inputHorizontal, _inputVertical;
     float _inputMouseX, _inputMouseY;
     Movement _movement;
@@ -31,11 +31,12 @@ public class Inputs
 
                 if (value)
                 {
+                    previousUpdate = inputUpdate;
                     _player.ActivateMagic();
                 }
                 else
                 {
-                    inputUpdate = Unpaused;
+                    inputUpdate = previousUpdate;
                 }
             }
         }
@@ -56,11 +57,12 @@ public class Inputs
 
                 if (value)
                 {
+                    previousUpdate = inputUpdate;
                     _player.ActivateSecondaryMagic();
                 }
                 else
                 {
-                    inputUpdate = Unpaused;
+                    inputUpdate = previousUpdate;
                 }
             }
         }
@@ -126,6 +128,7 @@ public class Inputs
     {
         if (Input.GetKeyDown(_kSecondaryAttack))
         {
+            inputUpdate = JustBasicAttack;
             SecondaryAttack = true;
             trigger = true;
         }
@@ -146,6 +149,100 @@ public class Inputs
         {
             _player.UseSpecial(1);
             trigger = true;
+        }
+    }
+
+    public void NoAttackInputs()
+    {
+        cameraInputs();
+
+        _inputHorizontal = Input.GetAxis("Horizontal");
+
+        _inputVertical = Input.GetAxis("Vertical");
+
+        Pause(NoAttackInputs);
+
+        if (Input.GetKeyDown(_kStep))
+        {
+            _player.Step(_inputHorizontal, _inputVertical);
+
+            PrimaryAttack = false;
+        }
+
+        if (Input.GetKeyDown(_kJump))
+        {
+            _jump = true;
+        }
+    }
+
+    public void JustBasicAttack()
+    {
+        cameraInputs();
+
+        _inputHorizontal = Input.GetAxis("Horizontal");
+
+        _inputVertical = Input.GetAxis("Vertical");
+
+        Pause(JustBasicAttack);
+
+        if (Input.GetKeyDown(_kStep))
+        {
+            _player.Step(_inputHorizontal, _inputVertical);
+
+            PrimaryAttack = false;
+        }
+
+        if (Input.GetKeyDown(_kJump))
+        {
+            _jump = true;
+        }
+
+        if (Input.GetKeyDown(_kPrimaryAttack))
+        {
+            PrimaryAttack = true;
+        }
+
+        if (Input.GetKeyUp(_kPrimaryAttack))
+        {
+            PrimaryAttack = false;
+        }
+
+        if (Input.GetKeyDown(_kSecondaryAttack))
+        {
+            SecondaryAttack = true;
+        }
+    }
+
+    public void NoJump()
+    {
+        cameraInputs();
+
+        _inputHorizontal = Input.GetAxis("Horizontal");
+
+        _inputVertical = Input.GetAxis("Vertical");
+
+        Pause(NoJump);
+
+        if (Input.GetKeyDown(_kStep))
+        {
+            _player.Step(_inputHorizontal, _inputVertical);
+
+            PrimaryAttack = false;
+        }
+
+        if (Input.GetKeyDown(_kPrimaryAttack))
+        {
+            PrimaryAttack = true;
+        }
+
+        if (Input.GetKeyUp(_kPrimaryAttack))
+        {
+            PrimaryAttack = false;
+        }
+
+        if (Input.GetKeyDown(_kSecondaryAttack))
+        {
+            SecondaryAttack = true;
         }
     }
 
@@ -343,7 +440,7 @@ public class Inputs
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             //UIManager.instance.SetPauseMenu(false);
-            inputUpdate = prePauseUpdate;
+            inputUpdate = previousUpdate;
         }
     }
 
@@ -391,7 +488,7 @@ public class Inputs
     {
         if (Input.GetKeyDown(_kPause))
         {
-            prePauseUpdate = prePause;
+            previousUpdate = prePause;
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
