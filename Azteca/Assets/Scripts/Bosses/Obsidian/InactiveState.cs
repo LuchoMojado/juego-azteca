@@ -23,7 +23,7 @@ public class InactiveState : State
 
     public override void OnExit()
     {
-        //_anim.SetBool("IsIdle", false);
+        _anim.SetBool("IsIdle", false);
         //_boss.StartFight();
     }
 
