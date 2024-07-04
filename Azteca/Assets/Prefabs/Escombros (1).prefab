@@ -192,13 +192,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573455136208291391}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.46257848, y: -0.8406172, z: -0.07557663, w: -0.2714259}
-  m_LocalPosition: {x: -1479.2, y: 1750.8, z: 195.8}
-  m_LocalScale: {x: 6.0281587, y: 5.6723866, z: 11.795722}
+  m_LocalRotation: {x: -0.51130825, y: -0.84390473, z: -0.013734479, w: -0.16186431}
+  m_LocalPosition: {x: -1479.2102, y: 1750.8052, z: 195.80789}
+  m_LocalScale: {x: 5.627763, y: 5.627763, z: 5.627763}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 90949053635663821}
-  m_LocalEulerAnglesHint: {x: -71.267, y: -131.891, z: 202.383}
+  m_LocalEulerAnglesHint: {x: -188.184, y: -16.869995, z: 241.206}
 --- !u!198 &8832417660277494909
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -208,7 +208,7 @@ ParticleSystem:
   m_GameObject: {fileID: 573455136208291391}
   serializedVersion: 8
   lengthInSec: 0.5
-  simulationSpeed: 1
+  simulationSpeed: 0.7
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -917,7 +917,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.75
+      value: 0.4
       mode: 0
       spread: 0
       speed:
@@ -1502,8 +1502,8 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.990566, g: 0.40969825, b: 0.28502133, a: 0.11764706}
-        key1: {r: 1, g: 0.9371726, b: 0, a: 0.654902}
-        key2: {r: 1, g: 1, b: 0.8915094, a: 0.015686275}
+        key1: {r: 1, g: 0.9371726, b: 0, a: 0.49803922}
+        key2: {r: 1, g: 1, b: 0.8915094, a: 0.30980393}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -2546,7 +2546,7 @@ ParticleSystem:
     randomizePerFrame: 0
   ExternalForcesModule:
     serializedVersion: 2
-    enabled: 0
+    enabled: 1
     multiplierCurve:
       serializedVersion: 2
       minMaxState: 0
@@ -2878,7 +2878,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   NoiseModule:
-    enabled: 1
+    enabled: 0
     strength:
       serializedVersion: 2
       minMaxState: 0
@@ -3038,7 +3038,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    separateAxes: 1
+    separateAxes: 0
     frequency: 0.0001
     damping: 1
     octaves: 1
