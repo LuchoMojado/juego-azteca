@@ -108,6 +108,7 @@ public class Itztlacoliuhqui : Boss
 
     AudioSource _myAS;
     [SerializeField] AudioClip stomp, dash, dashBox, dashFuerte, lanzaDardos, walk, RunTowards, PinchosPiso, TemblorArenaSpiking;
+    [SerializeField] AudioClip[] _gatlingSounds;
 
     [SerializeField] GameObject tornadoPiedras, caidaPiedras;
 
@@ -869,13 +870,15 @@ public class Itztlacoliuhqui : Boss
         LookAtPlayer = true;
         prenderTornado(true);
         yield return new WaitForSeconds(_gatlingPreparation);
-        ChangeAudio(lanzaDardos);
+        
         float timer = 0, cooldown = 0;
 
         while (timer < _gatlingDuration)
         {
             if (cooldown >= _gatlingShardInterval)
             {
+                ChangeAudio(_gatlingSounds[Random.Range(0, _gatlingSounds.Length)]);
+
                 var pos = _handPos.transform.position;
                 var dir = (_player.transform.position - pos).normalized;
 
@@ -1014,8 +1017,8 @@ public class Itztlacoliuhqui : Boss
                 {
                     Vector3 pos = item.transform.position + new Vector3(Random.Range(-0.1f, 0.1f), 0, Random.Range(-0.1f, 0.1f));
 
-                    var spike = Instantiate(_arenaSpikePrefab, pos, Quaternion.Euler(new Vector3(-90, Random.Range(0f, 360f))));
-                    spike.transform.localScale *= 5;
+                    var spike = Instantiate(_arenaSpikePrefab, pos, Quaternion.Euler(new Vector3(0, Random.Range(0f, 360f))));
+                   // spike.transform.localScale *= 5;
                     spawnedSpikes.Add(spike);
 
                     if (!hit && Physics.CheckCapsule(pos, pos + Vector3.up * 5, _pfManager.neighborDistance * 0.45f, _playerLayer))

@@ -83,16 +83,25 @@ public class ObsidianWall : MonoBehaviour, IDamageable
 
     public void Die()
     {
+        StartCoroutine(Death());
+    }
+
+    public IEnumerator Death()
+    {
         foreach (var item in _overlappingNodes)
         {
             item.SetBlock(false);
         }
 
+        gameObject.SetActive(false);
         boss.WallDestroyed(this);
         _myAS.Play();
         piedras.Play();
         piedritas.Play();
         humo.Play();
+
+        yield return new WaitForSeconds(1.5f);
+
         Destroy(gameObject);
     }
 
