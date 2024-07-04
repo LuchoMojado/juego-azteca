@@ -3,7 +3,12 @@ guid: 2ef4a4b9e79d6964eb3ea43c73ba7387
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Obsidiana
+    second: {fileID: 2100000, guid: 088558c2ab33ad84fac61e0b01c4bb3f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
