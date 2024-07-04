@@ -169,6 +169,20 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void StartPlaceholderDemoEnd()
+    {
+        StartCoroutine(PlaceholderDemoEnd());
+    }
+
+    IEnumerator PlaceholderDemoEnd()
+    {
+        StartCoroutine(FadeToBlack());
+
+        yield return new WaitForSeconds(2);
+
+        ChangeText(true, "Final de la demo, gracias por jugar");
+    }
+
     public void Paused()
     {
         _paused.gameObject.SetActive(true);

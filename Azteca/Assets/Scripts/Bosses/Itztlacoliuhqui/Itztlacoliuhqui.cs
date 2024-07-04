@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Playables;
 
 public class Itztlacoliuhqui : Boss
 {
@@ -111,6 +112,8 @@ public class Itztlacoliuhqui : Boss
     [SerializeField] AudioClip[] _gatlingSounds;
 
     [SerializeField] GameObject tornadoPiedras, caidaPiedras;
+
+    [SerializeField] PlayableDirector _outroTimeline;
 
     public bool LookAtPlayer
     {
@@ -1152,10 +1155,16 @@ public class Itztlacoliuhqui : Boss
 
     public override void Die()
     {
+        StopAllCoroutines();
+        _anim.SetTrigger("Dead");
         UIManager.instance.ToggleBossBar(false);
-        prenderCaidaPiedras(true);
-        CineManager.instance.PlayAnimation(CineManager.cineEnum.obsidianDead);
-        Destroy(gameObject);
+        UIManager.instance.HideUI(true);
+        _player.Inputs.inputUpdate = _player.Inputs.Nothing;
+        _outroTimeline.Play();
+
+        //prenderCaidaPiedras(true);
+        //CineManager.instance.PlayAnimation(CineManager.cineEnum.obsidianDead);
+        //Destroy(gameObject);
     }
     public void ChangeAudio(AudioClip clip)
     {
