@@ -573,6 +573,7 @@ public class PlayerController : Entity
     public void FightStarts(Boss boss)
     {
         //_cameraController.CameraShake(2, 1);
+        //SoundManager.instance.ChangeAudioBossFight();
         _movement.Combat(true);
         currentBoss = boss;
     }
