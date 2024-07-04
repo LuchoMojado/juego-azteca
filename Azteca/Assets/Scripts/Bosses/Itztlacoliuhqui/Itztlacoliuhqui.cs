@@ -410,6 +410,10 @@ public class Itztlacoliuhqui : Boss
             //_anim.SetBool("IsShooting", false);
             if (!_takingAction) _treeStart.Execute();
         };
+        breakWall.OnExit += x =>
+        {
+            _anim.SetBool("IsShooting", false);
+        };
 
         shield.OnEnter += x =>
         {
