@@ -49,6 +49,7 @@ public class ObsidianGod : Boss
 
     AudioSource _myAS;
     [SerializeField] AudioClip stomp,dash,dashBox,dashFuerte,lanzaDardos,walk;
+    [SerializeField] AudioClip[] _gatlingSounds;
 
     [SerializeField] GameObject tornadoPiedras,caidaPiedras;
 
@@ -555,7 +556,9 @@ public class ObsidianGod : Boss
         _rb.AddForce((-transform.forward * 2 + transform.up) * 250);
 
         LookAtPlayer = true;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
+
+        anim.SetBool("IsBoxAttack", true);
         _invulnerable = false;
         _lastStand = true;
         //ChangeAudio(lanzaDardos);
@@ -565,6 +568,8 @@ public class ObsidianGod : Boss
         {
             if (cooldown >= 0.05f)
             {
+                ChangeAudio(_gatlingSounds[Random.Range(0, _gatlingSounds.Length)]);
+
                 var pos = transform.position + transform.forward * 2;
                 var dir = (_player.transform.position - pos).normalized;
 

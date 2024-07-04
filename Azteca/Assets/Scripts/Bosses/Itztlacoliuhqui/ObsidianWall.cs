@@ -58,6 +58,7 @@ public class ObsidianWall : MonoBehaviour, IDamageable
         if (_rising)
         {
             Die();
+            return;
         }
 
         _completeWall.SetActive(false);
@@ -93,12 +94,13 @@ public class ObsidianWall : MonoBehaviour, IDamageable
             item.SetBlock(false);
         }
 
-        gameObject.SetActive(false);
         boss.WallDestroyed(this);
         _myAS.Play();
         piedras.Play();
         piedritas.Play();
         humo.Play();
+        _completeWall.SetActive(false);
+        _brokenWall.SetActive(false);
 
         yield return new WaitForSeconds(1.5f);
 

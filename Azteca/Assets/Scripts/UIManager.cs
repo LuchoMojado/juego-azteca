@@ -9,8 +9,8 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     [SerializeField] Slider _hpBar, _staminaBar, _bossHpBar;
     [SerializeField] Button _joystick;
-    [SerializeField] Image _paused;
-    [SerializeField] GameObject _sunActive, _obsidianActive;
+    [SerializeField] Image _paused, _black;
+    [SerializeField] GameObject _uiParent, _sunActive, _obsidianActive;
     [SerializeField] Image[] _specials = new Image[2];
     [SerializeField] Image[] _specialsCooldowns = new Image[2];
     [SerializeField] GameObject _crosshair, _options, mainMenu;
@@ -35,6 +35,11 @@ public class UIManager : MonoBehaviour
     public void ChangeBossName(string name)
     {
         _bossName.text = name;
+    }
+
+    public void HideUI(bool hide)
+    {
+        _uiParent.SetActive(!hide);
     }
 
     public void UpdateBar(Bar bar, float newValue)
@@ -122,6 +127,46 @@ public class UIManager : MonoBehaviour
     {
         _tutorialText.gameObject.SetActive(show);
         _tutorialText.text = newText;
+    }
+
+    public void Fade(bool into)
+    {
+        if (into)
+        {
+            StartCoroutine(FadeToBlack());
+        }
+        else
+        {
+            StartCoroutine(FadeFromBlack());
+        }
+    }
+
+    IEnumerator FadeToBlack()
+    {
+        float timer = 0;
+
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+
+            _black.color = Color.black - new Color(0, 0, 0, Mathf.Lerp(1, 0, timer));
+
+            yield return null;
+        }
+    }
+
+    IEnumerator FadeFromBlack()
+    {
+        float timer = 0;
+
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+
+            _black.color = Color.black - new Color(0, 0, 0, Mathf.Lerp(0, 1, timer));
+
+            yield return null;
+        }
     }
 
     public void Paused()

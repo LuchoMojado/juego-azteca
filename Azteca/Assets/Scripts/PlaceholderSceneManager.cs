@@ -1,11 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PlaceholderSceneManager : MonoBehaviour
 {
     [SerializeField] GameObject _options, mainMenu;
+    [SerializeField] Image _black;
+
+    public void StartFadeToBlack()
+    {
+        StartCoroutine(FadeToBlack());
+    }
+
+    IEnumerator FadeToBlack()
+    {
+        float timer = 0;
+
+        while(timer < 1)
+        {
+            timer += Time.deltaTime;
+
+            _black.color = Color.black - new Color(0, 0, 0, Mathf.Lerp(1, 0, timer));
+
+            yield return null;
+        }
+
+        ChangeScene("TenoParacine");
+    }
+
     public void MainMenu()
     {
         mainMenu.gameObject.SetActive(true);

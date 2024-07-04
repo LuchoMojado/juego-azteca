@@ -16,6 +16,9 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
+        UIManager.instance.HideUI(true);
+        UIManager.instance.Fade(false);
+
         StartCoroutine(FirstSection());
     }
 
@@ -25,6 +28,7 @@ public class TutorialManager : MonoBehaviour
 
         yield return new WaitForSeconds(_firstWait);
 
+        UIManager.instance.HideUI(false);
         _player.Inputs.inputUpdate = _player.Inputs.NoAttackInputs;
 
         UIManager.instance.ChangeText(true, _movement);
@@ -102,12 +106,14 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator MainFightStart()
     {
+        UIManager.instance.HideUI(true);
         _player.Inputs.inputUpdate = _player.Inputs.Nothing;
         _timeline.Play();
 
         yield return new WaitWhile(() => _timeline.state == PlayState.Playing);
 
         _player.Inputs.inputUpdate = _player.Inputs.Unpaused;
+        UIManager.instance.HideUI(false);
     }
 
     private void OnTriggerEnter(Collider other)
