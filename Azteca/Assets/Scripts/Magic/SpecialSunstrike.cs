@@ -5,12 +5,16 @@ using UnityEngine;
 public class SpecialSunstrike : SpecialMagic
 {
     GameObject _firstRay, _secondRay;
+    AudioSource _audioSource;
+    AudioClip _audioClip;
     float _damage, _radius, _preparation, _delay, _linger, _cooldown;
 
-    public SpecialSunstrike(PlayerController player, Inputs inputs, GameObject firstRay, GameObject secondRay, float cost, float damage, float radius, float preparation, float delay, float linger, float cooldown)
+    public SpecialSunstrike(PlayerController player, Inputs inputs, GameObject firstRay, GameObject secondRay, AudioSource audio, AudioClip clip, float cost, float damage, float radius, float preparation, float delay, float linger, float cooldown)
     {
         _firstRay = firstRay;
         _secondRay = secondRay;
+        _audioSource = audio;
+        _audioClip = clip;
         _player = player;
         _inputs = inputs;
         staminaCost = cost;
@@ -49,6 +53,9 @@ public class SpecialSunstrike : SpecialMagic
 
         Vector3 strikePos = boss.transform.position - Vector3.up * boss.DistFromPivotToFloor;
         var ray1 = Object.Instantiate(_firstRay, strikePos, Quaternion.identity);
+        var audioSource = Object.Instantiate(_audioSource, strikePos, Quaternion.identity);
+        audioSource.clip = _audioClip;
+        audioSource.Play();
 
         yield return new WaitForSeconds(_delay);
 
@@ -65,6 +72,7 @@ public class SpecialSunstrike : SpecialMagic
 
         yield return new WaitForSeconds(_linger);
 
+        Object.Destroy(audioSource);
         Object.Destroy(ray2);
     }
 }

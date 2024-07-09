@@ -14,10 +14,13 @@ public class SpecialsManager : MonoBehaviour
     Dictionary<Specials, (SpecialMagic, Sprite)> _allSpecials = new();
     SpecialMagic[] _equippedSpecials = new SpecialMagic[2];
 
+    [SerializeField] AudioSource _audioSpawner;
+
     [Header("Sunstrike")]
     [SerializeField] Sprite _sunstrikeIcon;
     [SerializeField] GameObject _sunstrikeFirstRay;
     [SerializeField] GameObject _sunstrikeSecondRay;
+    [SerializeField] AudioClip _sunstrikeSound;
     [SerializeField] float _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown;
 
     [Header("Supernova")]
@@ -47,7 +50,7 @@ public class SpecialsManager : MonoBehaviour
         _player = GetComponent<PlayerController>();
         _inputs = _player.Inputs;
 
-        var sunstrike = new SpecialSunstrike(_player, _inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown);
+        var sunstrike = new SpecialSunstrike(_player, _inputs, _sunstrikeFirstRay, _sunstrikeSecondRay, _audioSpawner, _sunstrikeSound, _sunstrikeCost, _sunstrikeDamage, _sunstrikeRadius, _sunstrikePreparation, _sunstrikeDelay, _sunstrikeLinger, _sunstrikeCooldown);
         var supernova = new SpecialSupernova(_player, _inputs, _supernova, _supernovaCost, _supernovaRadius, _supernovaDamage, _supernovaPreparation, _supernovaDuration, _supernovaRecovery, _supernovaCooldown);
         var obsTrap = new SpecialObsidianTrap(_player, _inputs, _obsidianTrap, _obsidianTrapCost, _obsidianTrapShardDamage, _obsidianTrapShardSpeed, _obsidianTrapPreparation, _obsidianTrapRecovery, _obsidianTrapCooldown);
         var rockToss = new SpecialRockToss(_player, _inputs, _rock, _rockTossPos, _rockTossCost, _rockTossDamage, _rockTossStrength, _rockTossAngle, _rockTossPreparation, _rockTossRecovery, _rockTossCooldown);
